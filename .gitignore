@@ -1,0 +1,12 @@
+# Laravel ignores
+/backend/vendor
+/backend/node_modules
+/backend/.env
+/backend/storage/*.key
+
+# React ignores
+/frontend/node_modules
+
+# Editor ignores
+/.idea
+/.vscode
