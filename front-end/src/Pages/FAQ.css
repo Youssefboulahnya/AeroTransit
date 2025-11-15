@@ -1,0 +1,93 @@
+.FAQ {
+    padding: 10%;
+    max-width: 80%;
+    background: #a2a1a117;
+    margin: 0 auto;
+    line-height: 1;
+    padding-top: 200px;
+
+    h1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+        color: black;
+        margin-bottom: 5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: black;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: rgba(0, 0, 0, 0.597);
+        font-weight: 600;
+        font-family: 'Times New Roman', Times, serif;
+        display: flex;
+        align-items: center;
+    }
+
+    section {
+        padding: 1rem 0;
+    }
+
+    p {
+        padding: .5rem;
+        font-size: 1.2rem;
+
+        ul {
+            margin-left: 1rem;
+        }
+
+    }
+
+    .Q {
+        font-weight: 500;
+        color: grey;
+    }
+
+    .FAQ_Update {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width:590px) {
+    .FAQ {
+        padding: 10% 2%;
+        max-width: 100%;
+        padding-top: 200px;
+    
+
+    h1 {
+        font-size: 2rem;
+        /* justify-content: center; */
+        
+        text-align: center;
+        
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        
+    }
+    h3{
+        font-size: 1.2rem;
+    }
+
+    p {
+        font-size: .9rem;
+    }
+    .faq_icon{
+        display: none;
+    }
+}
+}

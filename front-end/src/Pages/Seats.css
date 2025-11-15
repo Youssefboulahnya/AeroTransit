@@ -1,0 +1,101 @@
+.seats-page {
+    padding:10%;
+    max-width: 90%;
+    background:#a2a1a117;
+    margin:0 auto;
+    line-height: 1;
+    padding-top: 220px;
+
+    h2 {
+        font-size: 1.5rem;
+        color: #f3a217;
+        margin-top: 2rem;
+
+    }
+
+    p {
+        color: black;
+    }
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    P {
+        color: #555;
+    }
+}
+
+.hero-section h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    color: black;
+    margin-bottom: 0.5rem;
+}
+
+.schema-section {
+    display: grid;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+.schema-pics {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 1);
+    transition: transform 0.4s ease;
+    display: block;
+    margin: 4% 0;
+}
+
+.schema-pics:hover {
+    transform: scale(1.2);
+}
+
+.pics-text {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.pics-text.reverse {
+    grid-template-columns: repeat(2, 1fr);
+    direction: rtl;
+}
+
+.pics-text.reverse .text-block {
+    direction: ltr;
+}
+
+.text-block {
+    font-size: 1rem;
+    color: black;
+}
+
+.picture {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    transition: transform 0.4s ease;
+}
+
+.picture:hover {
+    transform: scale(1.1);
+}
+
+
+
+
+
+@media screen and (max-width:650px) {
+    .seats-page {
+        .pics-text {
+
+            grid-template-columns: repeat(1, 1fr);
+
+        }
+    }
+}

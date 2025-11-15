@@ -1,0 +1,26 @@
+.not_found{
+    padding:30% 0;
+    width:80%;
+    margin: auto;
+    h1{
+    font-family: "segoe UI","Helvetica Neue", Arial, sans-serif;
+    font-weight:700;
+    color: #16124c;
+    font-size: 5.5vw;
+    text-align: center;
+    margin-top: 100px;
+    letter-spacing: -0.5px;
+
+}
+}
+ /* h1 {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  color: #1b1b3a; 
+  font-size: 2.5rem; 
+  text-align: center;
+  margin-top: 100px;
+  letter-spacing: -0.5px;
+  text-transform: none; 
+}  */
+

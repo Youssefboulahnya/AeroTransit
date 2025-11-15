@@ -1,0 +1,71 @@
+.about {
+    padding:10%;
+    max-width: 80%;
+    background:#a2a1a117;
+    margin:0 auto;
+    line-height: 1;
+    padding-top: 220px;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+        color: black;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.plane-icon {
+    margin: 0;
+    color: #111;
+    font-size: 2rem;
+}
+
+
+
+.about-section {
+    margin-bottom: 2.5rem;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #f3a217;
+        font-weight: 600;
+
+    }
+
+    p {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: black;
+    }
+}
+
+blockquote {
+    font-style: italic;
+    border-left: 4px solid #2f2f2f;
+    padding-left: 1rem;
+    color: #2f2f2f;
+    margin: 1.5rem 0;
+    background: #ccb99d75;
+    display: inline;
+}
+
+hr {
+    color: black;
+    border: 1px solid white;
+}
+
+@media screen and (max-width:710px) {
+    .plane-icon {
+        display: none;
+    }
+}

@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap');
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Spartan", sans-serif;
+}
+
+.dashboard {
+    width: 100%;
+    padding: 20px;
+}
+
+.bloc1 {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.Logo1 {
+    width: 7rem;
+    height: 5rem;
+}
+
+.bloc1_2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.add_flight {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #f2f5fa;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid rgb(180, 179, 179);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add_flight:hover {
+    background: #0984e3;
+    border-color: #0984e3;
+    color: white;
+}
+
+.add_flight:active {
+    background: #0985e389;
+}
+
+/* table */
+.flight_list {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    width: 95%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.flight_list thead {
+    background-color: #f2f5fa;
+    color: #333;
+    font-weight: bold;
+}
+
+.flight_list th,
+.flight_list td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.flight_list tbody tr:nth-child(even) {
+    background-color: #f9fbff;
+}
+
+/* ===================== ACTIONS ===================== */
+.flight_list .actions {
+    color: #d63031;
+    font-weight: 500;
+}
+
+.flight_list .edit {
+    color: #0984e3;
+    cursor: pointer;
+}
+
+.flight_list .delete {
+    cursor: pointer;
+}
+
+.flight_list .edit:hover,
+.flight_list .delete:hover {
+    text-decoration: underline;
+}
+
+/* ===================== EDIT FORM ===================== */
+.edit-form {
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    width: 30%;
+    background: #f2f5fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 100px rgba(0, 0, 0, 1);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-form h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.edit-form label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.edit-form input {
+    padding: 6px;
+    margin-top: 4px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.save {
+    background-color: #007bff;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+/* --- TABLET MODE (entre 768px et 1200px) --- */
+@media screen and (max-width: 1200px) {
+
+    .Logo1 {
+        width: 6rem;
+        height: 4rem;
+        margin: auto;
+    }
+
+   
+
+    .edit-form {
+        left: 25%;
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 830px) {
+    .bloc1 {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 15px 0;
+    }
+
+    .bloc1_2 {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111;
+        margin-top: 8px;
+    }
+
+    .Logo1 {
+        width: 80px;
+        height: auto;
+    }
+
+    .edit-form {
+        top: 10%;
+        left: 10%;
+        width: 80%;
+    }
+
+    .flight_list {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        display: block;
+    }
+
+    .flight_list thead {
+        display: none;
+    }
+
+    .flight_list tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .flight_list tr {
+        display: flex;
+        flex-direction: column;
+        background-color: #f9fbff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .flight_list td {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        padding: 8px 0;
+        border: none;
+    }
+
+    .flight_list td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+    }
+
+    .actions {
+        display: block;
+        margin: auto;
+
+        margin-top: 8px;
+        font-size: 1.3rem;
+        text-align: center;
+    }
+}

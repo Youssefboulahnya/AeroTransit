@@ -1,0 +1,181 @@
+.Manage_ {
+    background-image: url("../pictures/get_in.png");
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+
+    .check_card {
+        box-shadow: 0 0 60px rgba(0, 0, 0, 1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        flex-direction: row;
+        color: black;
+        width: 80%;
+        margin: 100px auto;
+        padding: 40px;
+        border: 1px solid rgba(225, 225, 225, 0.4);
+        border-radius: 30px;
+        backdrop-filter: blur(8px);
+
+        h1 {
+            text-align: center;
+        }
+        span{
+            font-size: 12px;
+            color:white;
+            display: flex; 
+            align-items: center ;
+            
+
+        }
+
+        .label_input {
+            display: grid;
+            flex-direction: row;
+            line-height: 2;
+            margin: 1rem 0px;
+            background: transparent;
+
+            input {
+                width: 100%;
+                text-align: center;
+                height: 40px;
+                border-radius: 6px;
+                border: 1px solid rgba(225, 225, 225, 0.4);
+                transition: 1s ease infinite;
+                color:black;
+
+                &:hover {
+                    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+                    border-radius: 8px;
+                    transition: 0.6s ease infinite;
+                    border: 2px solid black;
+                    background: transparent;
+                }
+
+                &:focus {
+                    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+                    border-radius: 8px;
+                    transition: 0.6s ease infinite;
+                    border: 2px solid black;
+                    background: transparent;
+                }
+            }
+        }
+
+        .button_log_div {
+            display: flex;
+            justify-content: center;
+
+            button {
+                margin: 10px auto;
+                text-align: center;
+                font-size: 1.2rem;
+                padding: 6px 8px;
+                border-radius: 6px;
+                border: 1px solid white;
+                background-color: #D8DEE3;
+
+                &:active {
+                    background-color: #d8dee3aa;
+                    cursor: pointer;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    color: #5F88A6;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width:510px) {
+    .Manage_ {
+        .check_card {
+
+            h1 {
+                font-size: 50px;
+            }
+            span{
+            font-size: 15px;
+            
+            
+
+        }
+
+            .label_input {
+                label {
+                    font-size: 20px;
+                }
+            }
+
+            .button_log_div {
+                button {
+                    padding: 8px 16px;
+                    font-size: 1.4rem;
+                }
+            }
+
+            width:80%;
+        }
+
+
+    }
+
+
+}
+
+@media screen and (min-width:610px) {
+    .Manage_ {
+        .check_card {
+
+            width: 70%;
+        }
+
+    }
+
+
+}
+
+@media screen and (min-width:730px) {
+    .Manage_ {
+        .check_card {
+
+            width: 60%;
+        }
+
+    }
+
+
+}
+
+@media screen and (min-width:900px) {
+    .Manage_ {
+        .check_card {
+
+            width: 50%;
+        }
+
+    }
+
+
+}
+
+
+@media screen and (min-width:1020px) {
+    .Manage_ {
+        .check_card {
+
+            width: 550px;
+        }
+
+    }
+
+
+}
