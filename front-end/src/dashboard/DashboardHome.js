@@ -1,243 +1,3 @@
-// import { useState } from "react";
-// import Logo from "../pictures/iconV3.png";
-// import "./DashboardHome.css";
-
-// export default function DashboardHome() {
-//   const data = [
-//     {
-//       id: 1,
-//       serial: "#A1001",
-//       origine: "Paris",
-//       destination: "Londres",
-//       date: "12/11/2025",
-//       heure: "08:45",
-//     },
-
-//   ];
-
-//   const [selectedFlight, setSelectedFlight] = useState(null);
-//   const [newFlight, setNewFlight] = useState(null);
-//   const closeForm = () => setSelectedFlight(null);
-//   const [dataChanged, setDataChanged] = useState({
-//     id: "",
-//     serial: "",
-//     origine: "",
-//     destination: "",
-//     date: "",
-//     heure: "",
-//     delete: false,
-//   });
-//   const [addFlight,setAddFlight]=useState({
-//     id: "",
-//     serial: "",
-//     origine: "",
-//     destination: "",
-//     date: "",
-//     heure: "",
-//     delete: false,
-//   });
-
-//   return (
-//     <div className="dashboard">
-//       <div className="bloc1">
-//         <div className="bloc1_1">
-//           <img src={Logo} alt="logo" className="Logo1" />
-//         </div>
-//         <div className="bloc1_2">AeroTransit Dashboard</div>
-//       </div>
-//       <div>
-//         <button
-//           className="add_flight"
-//           onClick={() => {
-//             setNewFlight(1);
-//           }}
-//         >
-//           Add Flight
-//         </button>
-//       </div>
-//       <table className="flight_list">
-//         <thead>
-//           <tr>
-//             <th>ID</th>
-//             <th>Serial</th>
-//             <th>Origine</th>
-//             <th>Destination</th>
-//             <th>Date</th>
-//             <th>Heure</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {data.map((flight) => (
-//             <tr key={flight.id}>
-//               <td data-label="ID">{flight.id}</td>
-//               <td data-label="Serial">{flight.serial}</td>
-//               <td data-label="Origine">{flight.origine}</td>
-//               <td data-label="Destination">{flight.destination}</td>
-//               <td data-label="Date">{flight.date}</td>
-//               <td data-label="Heure">{flight.heure}</td>
-//               <td className="actions">
-//                 <span
-//                   className="edit"
-//                   onClick={() => {
-//                     setSelectedFlight(flight);
-//                     setDataChanged({
-//                       id: flight.id,
-//                       serial: flight.serial,
-//                       origine: flight.origine,
-//                       destination: flight.destination,
-//                       date: flight.date,
-//                       heure: flight.heure,
-//                     });
-//                   }}
-//                 >
-//                   Modifier
-//                 </span>{" "}
-//                 | <span className="delete">Supprimer</span>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
-//       {selectedFlight && (
-//         <div className="edit-form">
-//           <h3>Modifier le vol #{selectedFlight.id}</h3>
-
-//           <label>ID:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.id}
-//             onChange={(event) =>
-//               setDataChanged({ ...dataChanged, id: event.target.value })
-//             }
-//           />
-
-//           <label>Serial:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.serial}
-//             onChange={(event) =>
-//               setDataChanged({ ...dataChanged, serial: event.target.value })
-//             }
-//           />
-
-//           <label>Origine:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.origine}
-//             onChange={(event) =>
-//               setDataChanged({ ...dataChanged, origine: event.target.value })
-//             }
-//           />
-
-//           <label>Destination:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.destination}
-//             onChange={(event) =>
-//               setDataChanged({
-//                 ...dataChanged,
-//                 destination: event.target.value,
-//               })
-//             }
-//           />
-
-//           <label>Date:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.date}
-//             onChange={(event) =>
-//               setDataChanged({ ...dataChanged, date: event.target.value })
-//             }
-//           />
-
-//           <label>Heure:</label>
-//           <input
-//             type="text"
-//             value={dataChanged.heure}
-//             onChange={(event) =>
-//               setDataChanged({ ...dataChanged, heure: event.target.value })
-//             }
-//           />
-
-//           <div className="form-buttons">
-//             <button onClick={closeForm}>Fermer</button>
-//             <button className="save">Sauvegarder</button>
-//           </div>
-//         </div>
-//       )}
-
-//       {newFlight && (
-//         <div className="edit-form">
-//           <h3>Add Your New Flight</h3>
-
-//           <label>ID:</label>
-//           <input
-//             type="text"
-//             value={addFlight.id}
-//             onChange={(event) =>
-//               setAddFlight({ ...addFlight, id: event.target.value })
-//             }
-//           />
-
-//           <label>Serial:</label>
-//           <input
-//             type="text"
-//             value={addFlight.serial}
-//             onChange={(event) =>
-//               setAddFlight({ ...addFlight, serial: event.target.value })
-//             }
-//           />
-
-//           <label>Origine:</label>
-//           <input
-//             type="text"
-//             value={addFlight.origine}
-//             onChange={(event) =>
-//               setAddFlight({ ...addFlight, origine: event.target.value })
-//             }
-//           />
-
-//           <label>Destination:</label>
-//           <input
-//             type="text"
-//             value={addFlight.destination}
-//             onChange={(event) =>
-//               setAddFlight({
-//                 ...addFlight,
-//                 destination: event.target.value,
-//               })
-//             }
-//           />
-
-//           <label>Date:</label>
-//           <input
-//             type="text"
-//             value={addFlight.date}
-//             onChange={(event) =>
-//               setAddFlight({ ...addFlight, date: event.target.value })
-//             }
-//           />
-
-//           <label>Heure:</label>
-//           <input
-//             type="text"
-//             value={addFlight.heure}
-//             onChange={(event) =>
-//               setAddFlight({ ...addFlight, heure: event.target.value })
-//             }
-//           />
-
-//           <div className="form-buttons">
-//             <button onClick={() => setNewFlight(null)}>Fermer</button>
-//             <button className="save">Sauvegarder</button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 import { useEffect, useState } from "react";
 import Logo from "../pictures/iconV3.png";
 import "./DashboardHome.css";
@@ -250,7 +10,7 @@ export default function DashboardHome() {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [newFlight, setNewFlight] = useState(null);
 
-  // ====== fetch flights from backend ======
+  // ====== fetch flights ======
   const fetchFlights = async () => {
     try {
       const res = await api.get("/flights");
@@ -272,7 +32,7 @@ export default function DashboardHome() {
 
     try {
       await api.delete(`/flights/${id}`);
-      setFlights(flights.filter((f) => f.ID_flight !== id));
+      setFlights((prev) => prev.filter((f) => f.ID_flight !== id));
     } catch (err) {
       console.error("Delete error:", err);
     }
@@ -281,8 +41,8 @@ export default function DashboardHome() {
   // ====== values for editing ======
   const [dataChanged, setDataChanged] = useState({
     ID_flight: "",
-    Origin: "",
-    Destination: "",
+    origin: "",
+    destination: "",
     temps_aller: "",
     temps_arriver: "",
     price: "",
@@ -290,10 +50,10 @@ export default function DashboardHome() {
     seats: "",
   });
 
-  // ====== values for adding new flight ======
+  // ====== values for adding ======
   const [addFlight, setAddFlight] = useState({
-    Origin: "",
-    Destination: "",
+    origin: "",
+    destination: "",
     temps_aller: "",
     temps_arriver: "",
     price: "",
@@ -304,8 +64,18 @@ export default function DashboardHome() {
   // ====== update flight ======
   const saveEdit = async () => {
     try {
-      await api.put(`/flights/${dataChanged.ID_flight}`, dataChanged);
-      fetchFlights();
+      const res = await api.put(
+        `/flights/${dataChanged.ID_flight}`,
+        dataChanged
+      );
+
+      // update front-end
+      setFlights((prev) =>
+        prev.map((f) =>
+          f.ID_flight === dataChanged.ID_flight ? res.data.flight : f
+        )
+      );
+
       setSelectedFlight(null);
     } catch (err) {
       console.error("Update error:", err);
@@ -327,7 +97,7 @@ export default function DashboardHome() {
 
   return (
     <div className="dashboard">
-      {/* ===== HEADER ===== */}
+      {/* HEADER */}
       <div className="bloc1">
         <div className="bloc1_1">
           <img src={Logo} alt="logo" className="Logo1" />
@@ -335,20 +105,20 @@ export default function DashboardHome() {
         <div className="bloc1_2">AeroTransit Dashboard</div>
       </div>
 
-      {/* ===== ADD FLIGHT BUTTON ===== */}
+      {/* BUTTON ADD */}
       <button className="add_flight" onClick={() => setNewFlight(true)}>
         Add Flight
       </button>
 
-      {/* ===== FLIGHT TABLE ===== */}
+      {/* TABLE */}
       <table className="flight_list">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Origine</th>
+            <th>Origin</th>
             <th>Destination</th>
-            <th>Temps Aller</th>
-            <th>Temps Arriver</th>
+            <th>Departure</th>
+            <th>Arrival</th>
             <th>Seats</th>
             <th>Price</th>
             <th>Status</th>
@@ -391,30 +161,30 @@ export default function DashboardHome() {
         </tbody>
       </table>
 
-      {/* ===== EDIT FLIGHT POPUP ===== */}
+      {/* EDIT POPUP */}
       {selectedFlight && (
         <div className="edit-form">
-          <h3>Modifier le vol #{selectedFlight.ID_flight}</h3>
+          <h3>Edit Flight #{selectedFlight.ID_flight}</h3>
 
-          <label>Origine:</label>
+          <label>Origin:</label>
           <input
             type="text"
-            value={dataChanged.Origin}
+            value={dataChanged.origin}
             onChange={(e) =>
-              setDataChanged({ ...dataChanged, Origin: e.target.value })
+              setDataChanged({ ...dataChanged, origin: e.target.value })
             }
           />
 
           <label>Destination:</label>
           <input
             type="text"
-            value={dataChanged.Destination}
+            value={dataChanged.destination}
             onChange={(e) =>
-              setDataChanged({ ...dataChanged, Destination: e.target.value })
+              setDataChanged({ ...dataChanged, destination: e.target.value })
             }
           />
 
-          <label>Temps Aller:</label>
+          <label>Departure Time:</label>
           <input
             type="text"
             value={dataChanged.temps_aller}
@@ -423,7 +193,7 @@ export default function DashboardHome() {
             }
           />
 
-          <label>Temps Arriver:</label>
+          <label>Arrival Time:</label>
           <input
             type="text"
             value={dataChanged.temps_arriver}
@@ -450,48 +220,50 @@ export default function DashboardHome() {
             }
           />
 
-          <label>Flight Status :</label>
-          <input
-            type="status"
+          <label>Status:</label>
+          <select
             value={dataChanged.status}
             onChange={(e) =>
               setDataChanged({ ...dataChanged, status: e.target.value })
             }
-          />
+          >
+            <option value="scheduled">scheduled</option>
+            <option value="arrived">arrived</option>
+          </select>
 
           <div className="form-buttons">
             <button onClick={() => setSelectedFlight(null)}>Fermer</button>
             <button className="save" onClick={saveEdit}>
-              Sauvegarder
+              Save
             </button>
           </div>
         </div>
       )}
 
-      {/* ===== ADD NEW FLIGHT POPUP ===== */}
+      {/* ADD POPUP */}
       {newFlight && (
         <div className="edit-form">
           <h3>Add New Flight</h3>
 
-          <label>Origine:</label>
+          <label>Origin:</label>
           <input
             type="text"
-            value={addFlight.Origin}
+            value={addFlight.origin}
             onChange={(e) =>
-              setAddFlight({ ...addFlight, Origin: e.target.value })
+              setAddFlight({ ...addFlight, origin: e.target.value })
             }
           />
 
           <label>Destination:</label>
           <input
             type="text"
-            value={addFlight.Destination}
+            value={addFlight.destination}
             onChange={(e) =>
-              setAddFlight({ ...addFlight, Destination: e.target.value })
+              setAddFlight({ ...addFlight, destination: e.target.value })
             }
           />
 
-          <label>Temps Aller:</label>
+          <label>Departure Time:</label>
           <input
             type="text"
             value={addFlight.temps_aller}
@@ -500,7 +272,7 @@ export default function DashboardHome() {
             }
           />
 
-          <label>Temps Arriver:</label>
+          <label>Arrival Time:</label>
           <input
             type="text"
             value={addFlight.temps_arriver}
@@ -527,19 +299,21 @@ export default function DashboardHome() {
             }
           />
 
-          <label>Flight Status :</label>
-          <input
-            type="status"
+          <label>Status:</label>
+          <select
             value={addFlight.status}
             onChange={(e) =>
               setAddFlight({ ...addFlight, status: e.target.value })
             }
-          />
+          >
+            <option value="scheduled">scheduled</option>
+            <option value="arrived">arrived</option>
+          </select>
 
           <div className="form-buttons">
-            <button onClick={() => setNewFlight(null)}>Fermer</button>
+            <button onClick={() => setNewFlight(null)}>back</button>
             <button className="save" onClick={saveNewFlight}>
-              Sauvegarder
+              Save
             </button>
           </div>
         </div>

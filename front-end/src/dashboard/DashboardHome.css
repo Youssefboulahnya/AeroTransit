@@ -139,6 +139,17 @@
     border: 1px solid #aaa;
     border-radius: 4px;
 }
+.edit-form select {
+    padding: 6px;
+    margin-top: 4px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background: white;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
 
 .form-buttons {
     display: flex;
