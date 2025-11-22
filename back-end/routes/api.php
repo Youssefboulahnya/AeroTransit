@@ -11,3 +11,6 @@ Route::post('/admin-login', [AdminController::class, 'login']);
 Route::post('/admin-create', [AdminController::class, 'createAdmin']);
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+});

@@ -6,7 +6,8 @@ use App\Models\Admin;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 class AdminController extends Controller
 {
     public function createAdmin(Request $request){
@@ -32,18 +33,33 @@ class AdminController extends Controller
     }
 
 
-    public function login(Request $request){
-          $admin = Admin::find($request->id);
+    public function login(Request $request)
+    {
+    $request->validate([
+        'ID_admin' => 'required',
+        'password' => 'required',
+    ]);
 
-          if(!$admin){
-            return response()->json(['message' => 'Id not found !']);
-          }
+    $admin = Admin::find($request->ID_admin);
 
-        if (Hash::check($request->password, $admin->password)) {
-        return response()->json(['message' => 'Access granted !']);
+    
+    if (!$admin || !Hash::check($request->password, $admin->password)) {
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-        return response()->json(['message' => 'wrong password !']);
+    // Start a session
+    
+
+    return response()->json(['message' => 'Access granted!']);
+    }
+
+    public function logout(Request $request)
+    {
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Logged out']);
     }
 
 }
