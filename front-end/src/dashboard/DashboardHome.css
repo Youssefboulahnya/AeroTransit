@@ -172,6 +172,67 @@ button.save {
 button:hover {
     opacity: 0.8;
 }
+/* ===== DELETE POPUP OVERLAY ===== */
+.delete-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); /* Transparence */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Au-dessus de tout */
+}
+
+/* ===== BOX DU POPUP ===== */
+.delete-popup .popup-box {
+  background: white;
+  padding: 25px 35px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.25);
+  animation: popup-appear 0.2s ease-out;
+}
+
+/* Animation d'apparition */
+@keyframes popup-appear {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Boutons */
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-buttons .yes {
+  background: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.popup-buttons .no {
+  background: #ccc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.popup-buttons .yes:hover {
+  background: #f3a217;
+}
+.popup-buttons .no:hover {
+  background: #b5b5b5;
+}
 
 /* ===================== RESPONSIVE ===================== */
 
