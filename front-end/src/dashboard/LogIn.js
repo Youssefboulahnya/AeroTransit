@@ -102,6 +102,7 @@
 import "./LogIn.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api"; // your Axios instance
 
 export default function LogIn() {
   const [show, setShow] = useState("password");
@@ -127,30 +128,28 @@ export default function LogIn() {
     setLoading(true);
 
     try {
-      
-      const res = await fetch("http://127.0.0.1:8000/api/admin-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ ID_admin, password }),
+      const res = await api.post("/admin-login", {
+        ID_admin,
+        password,
       });
-      console.log("data:",res);
-    
 
-      const data = await res.json();
+      const data = res.data;
 
-      if (res.ok) {
-        // ✅ Login success → go to /dashboard/Home
+      if (res.status === 200 && data.message === "Access granted!") {
+        // ✅ Login success → go to dashboard home
         navigate("/dashboard/Home");
       } else {
+        // Shouldn't happen if backend returns proper 401, but just in case
         setError(data.message || "Invalid ID or password.");
-        navigate("/dashboard");
       }
     } catch (err) {
-      setError("Network error — check your backend or CORS settings.");
-      navigate("/dashboard"); // fallback in case of network failure
+      if (err.response) {
+        // Backend returned an error response
+        setError(err.response.data.message || "Invalid ID or password.");
+      } else {
+        // Network or CORS issue
+        setError("Network error — check your backend or CORS settings.");
+      }
     } finally {
       setLoading(false);
     }
