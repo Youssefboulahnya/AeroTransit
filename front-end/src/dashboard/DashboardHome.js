@@ -63,6 +63,17 @@ export default function DashboardHome() {
 
   // ====== update flight ======
   const saveEdit = async () => {
+    // 🚨 Vérification logique avant d'envoyer au backend
+    if (
+      dataChanged.origin.trim().toLowerCase() ===
+      dataChanged.destination.trim().toLowerCase()
+    ) {
+      alert(
+        "⚠️ Attention : la destination ne peut pas être identique à l'origine."
+      );
+      return;
+    }
+
     try {
       const res = await api.put(
         `/flights/${dataChanged.ID_flight}`,
