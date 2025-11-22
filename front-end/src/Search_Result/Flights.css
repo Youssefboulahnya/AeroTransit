@@ -1,0 +1,104 @@
+/* ================================
+   PAGE
+===================================*/
+.flights-page {
+    width: 100%;
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    padding: 15% 0;
+    background-color: #f4f6fa;
+}
+
+/* ================================
+   CONTENEUR CENTRAL
+===================================*/
+.flights-container {
+    width: 100%;
+    max-width: 850px;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e0e5ec;
+}
+
+/* ================================
+   TITRE
+===================================*/
+.title-center {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #1f1f1f;
+}
+
+/* ================================
+   CARTE VOL
+===================================*/
+.flight-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e3e6ee;
+    margin-bottom: 22px;
+    transition: 0.25s ease;
+}
+
+.flight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.flight-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.flight-logo {
+    width: 70px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* ================================
+   RIGHT SIDE
+===================================*/
+.flight-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.price {
+    font-size: 24px;
+    color: #ec9600;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* ================================
+   SELECT BUTTON
+===================================*/
+.select-btn {
+    padding: 8px 26px;
+    background: #ec9600;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.select-btn:hover {
+    background: #d78400;
+    transform: translateY(-2px);
+}

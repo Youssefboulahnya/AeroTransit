@@ -1,0 +1,212 @@
+/* ===========================
+   GLOBAL PAGE
+=========================== */
+.details-page {
+    width: 100%;
+    padding: 15% 0 80px;
+    background: #f4f7fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+}
+
+/* ===========================
+   TOP BAR
+=========================== */
+.top-selected-bar {
+    width: 85%;
+    max-width: 1050px;
+    background: white;
+    padding: 18px 25px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+.top-selected-logo {
+    width: 45px;
+}
+
+.top-selected-text {
+    flex-grow: 1;
+    margin-left: 18px;
+}
+
+.top-selected-text .small {
+    font-size: 14px;
+    color: #444;
+}
+
+.top-selected-right {
+    text-align: right;
+}
+
+.price-small {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ec9600;
+}
+
+/* ===========================
+   DETAILS CARD
+=========================== */
+.details-card {
+    width: 85%;
+    max-width: 1050px;
+    background: white;
+    padding: 25px 35px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+.details-card h2 {
+    margin-bottom: 20px;
+}
+
+.grid-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+/* ===========================
+   CABIN BUTTONS
+=========================== */
+.cabin-tabs {
+    display: flex;
+    gap: 12px;
+}
+
+.cabin-tab {
+    padding: 10px 20px;
+    border: 1px solid #d3d7e1;
+    background: #f3f5fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-size: 15px;
+}
+
+.cabin-tab:hover {
+    background: #ececec;
+}
+
+.cabin-tab.active {
+    background: #ec9600;
+    color: white;
+    border-color: #ec9600;
+}
+
+/* ===========================
+   CABIN + BAGGAGE SECTION
+=========================== */
+.cabin-and-baggage {
+    width: 85%;
+    max-width: 1050px;
+}
+
+.cabin-card,
+.baggage-card {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.muted {
+    color: #666;
+}
+
+.fare-line {
+    margin: 18px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.price-large {
+    font-size: 22px;
+    color: #ec9600;
+    font-weight: 700;
+}
+
+/* ===========================
+   SERVICES + MEALS
+=========================== */
+.service-section h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 17px;
+}
+
+.service-section ul {
+    padding-left: 18px;
+    margin-top: 5px;
+}
+
+.service-section li {
+    margin-bottom: 5px;
+}
+
+/* ===========================
+   BAGGAGE
+=========================== */
+.baggage-card ul {
+    padding-left: 18px;
+    margin-top: 10px;
+}
+
+/* ===========================
+   FARE SUMMARY
+=========================== */
+.fare-breakdown {
+    width: 85%;
+    max-width: 1050px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin: 25px 0;
+}
+
+.fare-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.fare-row.total {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===========================
+   NEXT BUTTON
+=========================== */
+.bottom-actions {
+    width: 85%;
+    max-width: 1050px;
+    display: flex;
+    justify-content: center;
+}
+
+.next-btn {
+    padding: 12px 45px;
+    border: none;
+    background: #ec9600;
+    color: white;
+    border-radius: 10px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.next-btn:hover {
+    background: #d78400;
+}

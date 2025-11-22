@@ -4,13 +4,17 @@ import { FaPlaneArrival } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
 import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useState } from "react";
-
-
+import { useNavigate } from "react-router-dom"; 
 
 export default function Search() {
-  const [inputDisabel, setInputDisabel] = useState({disabled:"",icon:"iconDiv"});
+  const navigate = useNavigate();
+  const [inputDisabel, setInputDisabel] = useState({
+    disabled: "",
+    icon: "iconDiv",
+  });
   const [color1, setColor1] = useState("singleBtn");
   const [color2, setColor2] = useState("singleBtn");
+
   const [search, setSearch] = useState({
     direction: "",
     origin: "",
@@ -20,28 +24,33 @@ export default function Search() {
     passangers: 1,
     cabine: "",
   });
+
   const condition =
     search.direction === "" ||
     search.origin === "" ||
     search.destination === "" ||
     search.depurture === "" ||
-    search.arrival === "" ||
-   
+    (search.direction === "Return" && search.arrival === "") ||
     search.cabine === "";
-   
-   
 
+  const handleSearch = () => {
+    navigate("/flights", {
+      state: {
+        ...search,
+      },
+    });
+  };
 
   return (
     <div className="search container section">
       <div className="sectionContainer grid">
-        <div className=" btns dFlex">
+        <div className="btns dFlex">
           <div
             className={color1}
             onClick={() => {
               setColor1("singleBtn clicked");
               setColor2("singleBtn");
-              setSearch({ ...search, direction: "One Way" });
+              setSearch({ ...search, direction: "One Way", arrival: "" });
               setInputDisabel({
                 ...inputDisabel,
                 disabled: "disabled",
@@ -51,6 +60,7 @@ export default function Search() {
           >
             <span>One Way</span>
           </div>
+
           <div
             className={color2}
             onClick={() => {
@@ -70,6 +80,7 @@ export default function Search() {
 
         <div className="searchInputs dFlex">
           <div className="into">
+            {/* Coming from */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -81,16 +92,15 @@ export default function Search() {
                     value={search.origin}
                     type="text"
                     placeholder="From..."
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        origin: event.target.value,
-                      });
-                    }}
+                    onChange={(e) =>
+                      setSearch({ ...search, origin: e.target.value })
+                    }
                   />
                 </div>
               </div>
             </div>
+
+            {/* Going to */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -102,16 +112,15 @@ export default function Search() {
                     value={search.destination}
                     type="text"
                     placeholder="To..."
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        destination: event.target.value,
-                      });
-                    }}
+                    onChange={(e) =>
+                      setSearch({ ...search, destination: e.target.value })
+                    }
                   />
                 </div>
               </div>
             </div>
+
+            {/* Check in */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -122,17 +131,15 @@ export default function Search() {
                   <input
                     value={search.depurture}
                     type="date"
-                    placeholder="Add date"
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        depurture: event.target.value,
-                      });
-                    }}
+                    onChange={(e) =>
+                      setSearch({ ...search, depurture: e.target.value })
+                    }
                   />
                 </div>
               </div>
             </div>
+
+            {/* Check out */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className={inputDisabel.icon}>
@@ -144,17 +151,16 @@ export default function Search() {
                     disabled={inputDisabel.disabled}
                     value={search.arrival}
                     type="date"
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        arrival: event.target.value,
-                      });
-                    }}
+                    onChange={(e) =>
+                      setSearch({ ...search, arrival: e.target.value })
+                    }
                   />
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Passengers & Cabin */}
           <div className="into exception">
             <div className="border">
               <div className="singleInput dFlex">
@@ -166,18 +172,16 @@ export default function Search() {
                   <input
                     value={search.passangers}
                     type="number"
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        passangers: event.target.value,
-                      });
-                    }}
+                    min="1"
+                    onChange={(e) =>
+                      setSearch({ ...search, passangers: e.target.value })
+                    }
                   />
-                  
                 </div>
               </div>
             </div>
 
+            {/* Cabin */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -185,17 +189,14 @@ export default function Search() {
                 </div>
                 <div className="texts">
                   <h4>Cabine</h4>
-                  {/* <input type="text" /> */}
                   <select
                     value={search.cabine}
                     style={{ border: "none" }}
-                    onChange={(event) => {
-                      setSearch({
-                        ...search,
-                        cabine: event.target.value,
-                      });
-                    }}
+                    onChange={(e) =>
+                      setSearch({ ...search, cabine: e.target.value })
+                    }
                   >
+                    <option value="">Choose...</option>
                     <option>Economy</option>
                     <option>Business</option>
                   </select>
@@ -204,10 +205,13 @@ export default function Search() {
             </div>
           </div>
 
+          {/* BUTTON */}
           <button
+            disabled={condition}
             className={
               condition ? "btnDisabled btnBlock dFlex" : "btn btnBlock dFlex"
             }
+            onClick={handleSearch}
           >
             Searching
           </button>

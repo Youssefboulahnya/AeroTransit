@@ -14,7 +14,10 @@ import NotFound from "./Pages/NotFound";
 import ProgRules from "./Pages/ProgRules";
 import FAQ from "./Pages/FAQ";
 import LogIn from "./dashboard/LogIn";
-import DashboardHome from "./dashboard/DashboardHome"
+import DashboardHome from "./dashboard/DashboardHome";
+import Flights from "./Search_Result/Flights";
+import FlightDetails from "./Search_Result/FlightDetails";
+import FlightPassengers from "./Search_Result/PassangersInfos";
 import { Route, Routes, useLocation } from "react-router-dom";
 // import Footer from "./Components/Footerr";
 
@@ -23,8 +26,6 @@ function App() {
   const hideNavAndFooter =
     location.pathname.startsWith("/Manage") ||
     location.pathname.startsWith("/dashboard");
-
-
   return (
     <div>
       {!hideNavAndFooter && <NavBar />}
@@ -52,6 +53,9 @@ function App() {
         <Route path="/FAQ" element={<FAQ />} />
         <Route path="/dashboard" element={<LogIn />} />
         <Route path="/dashboard/Home" element={<DashboardHome />} />
+        <Route path="/Flights" element={<Flights />} />
+        <Route path="/flight-details" element={<FlightDetails />} />
+        <Route path="/flight-passengers" element={<FlightPassengers />} />
       </Routes>
       {!hideNavAndFooter && <Footerr />}
       {/* <LogIn/> */}
