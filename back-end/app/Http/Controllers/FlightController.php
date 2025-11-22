@@ -15,6 +15,31 @@ class FlightController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    // the modifier_flight function
+
+   public function modifier_flight(Request $request, $id)
+    {
+        $flight = Flight::findOrFail($id);
+
+        $request->validate([
+            'Origin' => 'required|string',
+            'Destination' => 'required|string|different:Origin',
+            'temps_aller' => 'required|date',
+            'temps_arriver' => 'required|date|after:temps_aller',
+            'seats' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'status' => 'required|in:scheduled,arrived',
+        ]);
+
+        $flight->update($request->all());
+
+        return response()->json([
+            'message' => 'Flight updated successfully',
+            'flight' => $flight
+        ]);
+    }
+    //idk lmao
     public function index()
     {
         //
