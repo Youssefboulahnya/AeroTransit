@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('passengers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->enum('class', ['economy', 'business'])->change();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('passengers');
+        Schema::table('reservations', function (Blueprint $table) {
+            //
+        });
     }
 };

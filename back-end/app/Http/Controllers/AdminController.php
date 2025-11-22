@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function createAdmin(Request $request){
-            
 
         try{
             $request->validate([
