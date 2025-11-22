@@ -24,7 +24,7 @@ class FlightController extends Controller
 
         $request->validate([
             'origin' => 'required|string',
-            'destination' => 'required|string|different:Origin',
+            'destination' => 'required|string|different:origin',
             'temps_aller' => 'required|date',
             'temps_arriver' => 'required|date|after:temps_aller',
             'seats' => 'required|integer|min:0',
