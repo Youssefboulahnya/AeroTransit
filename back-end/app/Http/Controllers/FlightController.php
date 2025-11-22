@@ -23,8 +23,8 @@ class FlightController extends Controller
         $flight = Flight::findOrFail($id);
 
         $request->validate([
-            'Origin' => 'required|string',
-            'Destination' => 'required|string|different:Origin',
+            'origin' => 'required|string',
+            'destination' => 'required|string|different:Origin',
             'temps_aller' => 'required|date',
             'temps_arriver' => 'required|date|after:temps_aller',
             'seats' => 'required|integer|min:0',
