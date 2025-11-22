@@ -136,7 +136,7 @@ export default function LogIn() {
       const data = res.data;
 
       if (res.status === 200 && data.message === "Access granted!") {
-        // ✅ Login success → go to dashboard home
+        // Login success → go to dashboard home
         navigate("/dashboard/Home");
       } else {
         // Shouldn't happen if backend returns proper 401, but just in case
