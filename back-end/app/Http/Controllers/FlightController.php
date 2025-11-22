@@ -40,56 +40,66 @@ class FlightController extends Controller
         ]);
     }
     //idk lmao
-    public function index()
-    {
-        //
+   // creation d'une flight 
+    public function creer_flight(Request $request)
+{
+    // ✅ Validations
+    $validated = $request->validate([
+        'origin'        => 'required|string',
+        'destination'   => 'required|string|different:origin',  // origin != destination
+        'temps_aller'   => 'required|date',
+        'temps_arriver' => 'required|date|after:temps_aller',   // arrival > departure
+        'seats'         => 'required|integer|min:0',            // no negative values
+        'price'         => 'required|numeric|min:0',            // no negative price
+        'status'        => 'required|in:scheduled,arrived',     // two only
+    ]);
+
+    // ✅ Create the flight
+    $flight = Flight::create([
+        'origin'        => $validated['origin'],
+        'destination'   => $validated['destination'],
+        'temps_aller'   => $validated['temps_aller'],
+        'temps_arriver' => $validated['temps_arriver'],
+        'seats'         => $validated['seats'],
+        'price'         => $validated['price'],
+        'status'        => $validated['status'],
+    ]);
+
+    // ✅ Response sent to React
+    return response()->json([
+        'message' => 'Flight created successfully',
+        'flight'  => $flight
+    ], 201);
+}
+
+
+public function delete_flight($id)
+{
+    // 1. Look for the flight
+    $flight = Flight::find($id);
+
+    // 2. If it does not exist
+    if (!$flight) {
+        return response()->json([
+            'message' => 'Flight not found'
+        ], 404);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    // 3. Delete the flight
+    $flight->delete();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // 4. Return a success response
+    return response()->json([
+        'message' => 'Flight deleted successfully'
+    ], 200);
+}
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Flight $flight)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Flight $flight)
-    {
-        //
-    }
+    
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Flight $flight)
-    {
-        //
-    }
+    
+    
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Flight $flight)
-    {
-        //
-    }
+    
+    
 }
