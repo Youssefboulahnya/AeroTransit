@@ -51,19 +51,22 @@ class FlightController extends Controller
         'temps_arriver' => 'required|date|after:temps_aller',   // arrival > departure
         'seats'         => 'required|integer|min:0',            // no negative values
         'price'         => 'required|numeric|min:0',            // no negative price
-        'status'        => 'required|in:scheduled,arrived',     // two only
+        'status'        => 'required|in:scheduled,arrived',     // only scheduled or arrived
+        'created_by'    => 'required|exists:admins,ID_admin',   // ensure this admin exists
     ]);
 
     // ✅ Create the flight
     $flight = Flight::create([
-        'origin'        => $validated['origin'],
-        'destination'   => $validated['destination'],
-        'temps_aller'   => $validated['temps_aller'],
-        'temps_arriver' => $validated['temps_arriver'],
-        'seats'         => $validated['seats'],
-        'price'         => $validated['price'],
-        'status'        => $validated['status'],
+        'origin'        => $request->origin,
+        'destination'   => $request->destination,
+        'temps_aller'   => $request->temps_aller,
+        'temps_arriver' => $request->temps_arriver,
+        'seats'         => $request->seats,
+        'price'         => $request->price,
+        'status'        => $request->status,
+        'created_by'    => $request->created_by,
     ]);
+
 
     // ✅ Response sent to React
     return response()->json([
