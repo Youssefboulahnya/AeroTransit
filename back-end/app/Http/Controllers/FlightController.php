@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class FlightController extends Controller
 {
+
+    public function liste_flight(){
+        $flights = Flight::all();
+        return response()->json($flights);
+    }
     /**
      * Display a listing of the resource.
      */
