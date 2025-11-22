@@ -286,6 +286,7 @@ export default function DashboardHome() {
     temps_aller: "",
     temps_arriver: "",
     price: "",
+    status: "",
     seats: "",
   });
 
@@ -296,6 +297,7 @@ export default function DashboardHome() {
     temps_aller: "",
     temps_arriver: "",
     price: "",
+    status: "",
     seats: "",
   });
 
@@ -349,6 +351,7 @@ export default function DashboardHome() {
             <th>Temps Arriver</th>
             <th>Seats</th>
             <th>Price</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -363,6 +366,7 @@ export default function DashboardHome() {
               <td>{f.temps_arriver}</td>
               <td>{f.seats}</td>
               <td>{f.price} €</td>
+              <td>{f.status}</td>
 
               <td className="actions">
                 <span
@@ -446,6 +450,15 @@ export default function DashboardHome() {
             }
           />
 
+          <label>Flight Status :</label>
+          <input
+            type="status"
+            value={dataChanged.status}
+            onChange={(e) =>
+              setDataChanged({ ...dataChanged, status: e.target.value })
+            }
+          />
+
           <div className="form-buttons">
             <button onClick={() => setSelectedFlight(null)}>Fermer</button>
             <button className="save" onClick={saveEdit}>
@@ -511,6 +524,15 @@ export default function DashboardHome() {
             value={addFlight.price}
             onChange={(e) =>
               setAddFlight({ ...addFlight, price: e.target.value })
+            }
+          />
+
+          <label>Flight Status :</label>
+          <input
+            type="status"
+            value={addFlight.status}
+            onChange={(e) =>
+              setAddFlight({ ...addFlight, status: e.target.value })
             }
           />
 
