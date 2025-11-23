@@ -39,7 +39,6 @@ export default function DashboardHome() {
     try {
       await api.delete(`/flights/${deletePopup.id}`);
 
-      // remove from list instantly
       setFlights((prev) => prev.filter((f) => f.ID_flight !== deletePopup.id));
 
       setDeletePopup({ show: false, id: null });
@@ -70,6 +69,19 @@ export default function DashboardHome() {
     status: "",
     seats: "",
   });
+
+  // ===== VALIDATION: Add Flight Form =====
+  const isAddFormValid = () => {
+    return (
+      addFlight.origin.trim() !== "" &&
+      addFlight.destination.trim() !== "" &&
+      addFlight.temps_aller.trim() !== "" &&
+      addFlight.temps_arriver.trim() !== "" &&
+      addFlight.seats !== "" &&
+      addFlight.price !== "" &&
+      addFlight.status.trim() !== ""
+    );
+  };
 
   // ===== UPDATE FLIGHT =====
   const saveEdit = async () => {
@@ -110,11 +122,11 @@ export default function DashboardHome() {
         seats: addFlight.seats,
         price: addFlight.price,
         status: addFlight.status,
-        created_by: localStorage.getItem("admin_id"), // <-- added here
+        created_by: localStorage.getItem("admin_id"),
       });
 
-      fetchFlights(); // refresh list after creation
-      setNewFlight(null); // close popup
+      fetchFlights();
+      setNewFlight(null);
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors);
@@ -210,9 +222,9 @@ export default function DashboardHome() {
 
       {/* DELETE POPUP */}
       {deletePopup.show && (
-        <div className="delete-popup">
-          <div className="popup-box">
-            <h3>Voulez-vous supprimer ce vol ?</h3>
+        <div className="overlay">
+          <div className="center-popup">
+            <h3>Do you want to cancel this flight?</h3>
 
             <div className="popup-buttons">
               <button
@@ -259,7 +271,7 @@ export default function DashboardHome() {
 
           <label>Departure Time:</label>
           <input
-            type="text"
+            type="datetime-local"
             value={dataChanged.temps_aller}
             onChange={(e) =>
               setDataChanged({ ...dataChanged, temps_aller: e.target.value })
@@ -271,7 +283,7 @@ export default function DashboardHome() {
 
           <label>Arrival Time:</label>
           <input
-            type="text"
+            type="datetime-local"
             value={dataChanged.temps_arriver}
             onChange={(e) =>
               setDataChanged({ ...dataChanged, temps_arriver: e.target.value })
@@ -351,7 +363,7 @@ export default function DashboardHome() {
 
           <label>Departure Time:</label>
           <input
-            type="text"
+            type="datetime-local"
             value={addFlight.temps_aller}
             onChange={(e) =>
               setAddFlight({ ...addFlight, temps_aller: e.target.value })
@@ -363,7 +375,7 @@ export default function DashboardHome() {
 
           <label>Arrival Time:</label>
           <input
-            type="text"
+            type="datetime-local"
             value={addFlight.temps_arriver}
             onChange={(e) =>
               setAddFlight({ ...addFlight, temps_arriver: e.target.value })
@@ -407,8 +419,17 @@ export default function DashboardHome() {
 
           <div className="form-buttons">
             <button onClick={() => setNewFlight(null)}>back</button>
-            <button className="save" onClick={saveNewFlight}>
-              Save
+
+            <button
+              className="save"
+              onClick={saveNewFlight}
+              disabled={!isAddFormValid()}
+              style={{
+                opacity: isAddFormValid() ? 1 : 0.5,
+                cursor: isAddFormValid() ? "pointer" : "not-allowed",
+              }}
+            >
+              Add
             </button>
           </div>
         </div>
