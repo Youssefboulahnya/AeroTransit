@@ -40,9 +40,7 @@ export default function DashboardHome() {
       await api.delete(`/flights/${deletePopup.id}`);
 
       // remove from list instantly
-      setFlights((prev) =>
-        prev.filter((f) => f.ID_flight !== deletePopup.id)
-      );
+      setFlights((prev) => prev.filter((f) => f.ID_flight !== deletePopup.id));
 
       setDeletePopup({ show: false, id: null });
     } catch (err) {
@@ -104,10 +102,19 @@ export default function DashboardHome() {
     setErrors({});
 
     try {
-      await api.post("/flights", addFlight);
+      await api.post("/flights", {
+        origin: addFlight.origin,
+        destination: addFlight.destination,
+        temps_aller: addFlight.temps_aller,
+        temps_arriver: addFlight.temps_arriver,
+        seats: addFlight.seats,
+        price: addFlight.price,
+        status: addFlight.status,
+        created_by: localStorage.getItem("admin_id"), // <-- added here
+      });
 
-      fetchFlights();
-      setNewFlight(null);
+      fetchFlights(); // refresh list after creation
+      setNewFlight(null); // close popup
     } catch (err) {
       if (err.response?.status === 422) {
         setErrors(err.response.data.errors);
@@ -246,7 +253,9 @@ export default function DashboardHome() {
               setDataChanged({ ...dataChanged, destination: e.target.value })
             }
           />
-          {errors.destination && <p className="error">{errors.destination[0]}</p>}
+          {errors.destination && (
+            <p className="error">{errors.destination[0]}</p>
+          )}
 
           <label>Departure Time:</label>
           <input
@@ -256,7 +265,9 @@ export default function DashboardHome() {
               setDataChanged({ ...dataChanged, temps_aller: e.target.value })
             }
           />
-          {errors.temps_aller && <p className="error">{errors.temps_aller[0]}</p>}
+          {errors.temps_aller && (
+            <p className="error">{errors.temps_aller[0]}</p>
+          )}
 
           <label>Arrival Time:</label>
           <input
@@ -300,6 +311,7 @@ export default function DashboardHome() {
             <option value="scheduled">scheduled</option>
             <option value="arrived">arrived</option>
           </select>
+          {errors.status && <p className="error">{errors.status[0]}</p>}
 
           <div className="form-buttons">
             <button onClick={() => setSelectedFlight(null)}>Fermer</button>
@@ -345,7 +357,9 @@ export default function DashboardHome() {
               setAddFlight({ ...addFlight, temps_aller: e.target.value })
             }
           />
-          {errors.temps_aller && <p className="error">{errors.temps_aller[0]}</p>}
+          {errors.temps_aller && (
+            <p className="error">{errors.temps_aller[0]}</p>
+          )}
 
           <label>Arrival Time:</label>
           <input
@@ -389,6 +403,7 @@ export default function DashboardHome() {
             <option value="scheduled">scheduled</option>
             <option value="arrived">arrived</option>
           </select>
+          {errors.status && <p className="error">{errors.status[0]}</p>}
 
           <div className="form-buttons">
             <button onClick={() => setNewFlight(null)}>back</button>
