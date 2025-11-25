@@ -21,8 +21,8 @@ export default function Manage() {
             <input type="email" placeholder="Your email..." />
           </div>
           <div className="label_input">
-            <label>Serial Of Your Ticket</label>
-            <input type={show} placeholder="Ex: #123423788" />
+            <label>Your Reservation Id</label>
+            <input type={show} placeholder="Ex: 23788" />
           </div>
           <span style={{ display: "flex", alignItems: "center" }}>
             <input type="checkbox" onClick={handleCheckbox} className="password"/>

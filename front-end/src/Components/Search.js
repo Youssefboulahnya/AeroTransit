@@ -2,36 +2,27 @@ import { RxCalendar } from "react-icons/rx";
 import { FaPlaneDeparture } from "react-icons/fa";
 import { FaPlaneArrival } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
-import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 
 export default function Search() {
   const navigate = useNavigate();
-  const [inputDisabel, setInputDisabel] = useState({
-    disabled: "",
-    icon: "iconDiv",
-  });
   const [color1, setColor1] = useState("singleBtn");
   const [color2, setColor2] = useState("singleBtn");
 
   const [search, setSearch] = useState({
-    direction: "",
+    cabine: "",
     origin: "",
     destination: "",
-    depurture: "",
-    arrival: "",
-    passangers: 1,
-    cabine: "",
+    departure: "",
+    passengers: 1,
   });
 
   const condition =
-    search.direction === "" ||
+    search.cabine === "" ||
     search.origin === "" ||
     search.destination === "" ||
-    search.depurture === "" ||
-    (search.direction === "Return" && search.arrival === "") ||
-    search.cabine === "";
+    search.departure === "" ;
 
   const handleSearch = () => {
     navigate("/flights", {
@@ -50,15 +41,10 @@ export default function Search() {
             onClick={() => {
               setColor1("singleBtn clicked");
               setColor2("singleBtn");
-              setSearch({ ...search, direction: "One Way", arrival: "" });
-              setInputDisabel({
-                ...inputDisabel,
-                disabled: "disabled",
-                icon: "iconDisabled",
-              });
+              setSearch({ ...search, cabine: "Business"});
             }}
           >
-            <span>One Way</span>
+            <span>Business</span>
           </div>
 
           <div
@@ -66,15 +52,10 @@ export default function Search() {
             onClick={() => {
               setColor2("singleBtn clicked");
               setColor1("singleBtn");
-              setSearch({ ...search, direction: "Return" });
-              setInputDisabel({
-                ...inputDisabel,
-                disabled: "",
-                icon: "iconDiv",
-              });
+              setSearch({ ...search, cabine: "Economy" });
             }}
           >
-            <span>Return</span>
+            <span>Economy</span>
           </div>
         </div>
 
@@ -129,77 +110,32 @@ export default function Search() {
                 <div className="texts">
                   <h4>Check in</h4>
                   <input
-                    value={search.depurture}
+                    value={search.departure}
                     type="date"
                     onChange={(e) =>
-                      setSearch({ ...search, depurture: e.target.value })
+                      setSearch({ ...search, departure: e.target.value })
                     }
                   />
                 </div>
               </div>
             </div>
 
-            {/* Check out */}
-            <div className="border">
-              <div className="singleInput dFlex">
-                <div className={inputDisabel.icon}>
-                  <RxCalendar className="icon" />
-                </div>
-                <div className="texts">
-                  <h4>Check out</h4>
-                  <input
-                    disabled={inputDisabel.disabled}
-                    value={search.arrival}
-                    type="date"
-                    onChange={(e) =>
-                      setSearch({ ...search, arrival: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Passengers & Cabin */}
-          <div className="into exception">
+            {/* Passengers */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
                   <FiUser className="icon" />
                 </div>
                 <div className="texts">
-                  <h4>Passangers</h4>
+                  <h4>Passengers</h4>
                   <input
-                    value={search.passangers}
+                    value={search.passengers}
                     type="number"
                     min="1"
                     onChange={(e) =>
-                      setSearch({ ...search, passangers: e.target.value })
+                      setSearch({ ...search, passengers: e.target.value })
                     }
                   />
-                </div>
-              </div>
-            </div>
-
-            {/* Cabin */}
-            <div className="border">
-              <div className="singleInput dFlex">
-                <div className="iconDiv">
-                  <MdAirlineSeatReclineExtra className="icon" />
-                </div>
-                <div className="texts">
-                  <h4>Cabine</h4>
-                  <select
-                    value={search.cabine}
-                    style={{ border: "none" }}
-                    onChange={(e) =>
-                      setSearch({ ...search, cabine: e.target.value })
-                    }
-                  >
-                    <option value="">Choose...</option>
-                    <option>Economy</option>
-                    <option>Business</option>
-                  </select>
                 </div>
               </div>
             </div>

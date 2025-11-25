@@ -1,5 +1,5 @@
-import aeroplane from "../pictures/planee.png";
-import video from "../pictures/video.mp4";
+// import aeroplane from "../pictures/planee.png";
+// import video from "../pictures/video.mp4";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <div className="mainText">
         <h1>Fly Higher, Go Further and Turn Every Destination Into a Lifetime Memory</h1>
       </div>
-      <div className="homeImages dFlex">
+      {/* <div className="homeImages dFlex">
         <div className="videoDiv">
           <video
             src={video}
@@ -19,7 +19,7 @@ export default function Home() {
           />
         </div>
         <img src={aeroplane} alt="" className="plane" />
-      </div>
+      </div> */}
     </div>
   );
 }

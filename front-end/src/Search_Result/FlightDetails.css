@@ -3,7 +3,7 @@
 =========================== */
 .details-page {
     width: 100%;
-    padding: 15% 0 80px;
+    padding: 180px 0 80px;
     background: #f4f7fc;
     display: flex;
     flex-direction: column;
@@ -209,4 +209,110 @@
 
 .next-btn:hover {
     background: #d78400;
+}
+
+/* ===========================
+   RESPONSIVE - TABLET
+=========================== */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .details-page {
+        padding: 160px 0 60px;
+    }
+
+    .top-selected-bar,
+    .details-card,
+    .cabin-and-baggage,
+    .fare-breakdown,
+    .bottom-actions {
+        width: 90%;
+    }
+}
+
+/* ===========================
+   RESPONSIVE - MOBILE
+=========================== */
+@media screen and (max-width: 768px) {
+    .details-page {
+        padding: 180px 0 50px;
+    }
+
+    .top-selected-bar {
+        width: 90%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px 20px;
+    }
+
+    .top-selected-text {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .top-selected-right {
+        text-align: left;
+        width: 100%;
+    }
+
+    .details-card,
+    .cabin-and-baggage,
+    .fare-breakdown,
+    .bottom-actions {
+        width: 90%;
+    }
+
+    .details-card {
+        padding: 20px 25px;
+    }
+
+    .grid-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .cabin-tabs {
+        flex-direction: column;
+    }
+
+    .cabin-tab {
+        width: 100%;
+        text-align: center;
+    }
+
+    .next-btn {
+        width: 100%;
+        padding: 12px 24px;
+    }
+}
+
+/* ===========================
+   RESPONSIVE - SMALL MOBILE
+=========================== */
+@media screen and (max-width: 480px) {
+    .details-page {
+        padding: 160px 0 40px;
+    }
+
+    .top-selected-bar,
+    .details-card,
+    .cabin-and-baggage,
+    .fare-breakdown,
+    .bottom-actions {
+        width: 95%;
+    }
+
+    .details-card,
+    .cabin-card,
+    .baggage-card,
+    .fare-breakdown {
+        padding: 15px 20px;
+    }
+
+    .top-selected-logo {
+        width: 40px;
+    }
+
+    .price-small {
+        font-size: 18px;
+    }
 }

@@ -1,0 +1,442 @@
+.confirmation-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 180px 20px 80px;
+    background: linear-gradient(135deg, #f4f7fc 0%, #e8f5e9 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirmation-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Success Header */
+.success-header {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.15);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-header h1 {
+    font-size: 32px;
+    color: #4CAF50;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.success-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+}
+
+/* Credentials Card */
+.credentials-card {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--PrimaryColor);
+}
+
+.credentials-card h2 {
+    font-size: 24px;
+    color: var(--PrimaryColor);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.credentials-intro {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+.credential-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #e0e5ec;
+    transition: all 0.3s;
+}
+
+.credential-item:hover {
+    border-color: var(--PrimaryColor);
+    box-shadow: 0 4px 12px rgba(255, 119, 48, 0.1);
+}
+
+.credential-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.credential-label svg {
+    color: var(--PrimaryColor);
+}
+
+.credential-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--blackColor);
+    word-break: break-all;
+}
+
+.credential-value.booking-id {
+    font-family: 'Courier New', monospace;
+    color: var(--PrimaryColor);
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.info-box {
+    display: flex;
+    gap: 12px;
+    background: #fff3e0;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border-left: 4px solid #ff9800;
+}
+
+.info-box svg {
+    flex-shrink: 0;
+    color: #ff9800;
+    margin-top: 2px;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Booking Details Card */
+.booking-details-card {
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.booking-details-card h3 {
+    font-size: 22px;
+    color: var(--blackColor);
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e5ec;
+}
+
+.detail-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e5ec;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.detail-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: var(--PrimaryColor);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.detail-section h4 svg {
+    color: var(--PrimaryColor);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 15px;
+}
+
+.detail-row .label {
+    color: #666;
+}
+
+.detail-row .value {
+    font-weight: 600;
+    color: var(--blackColor);
+    text-align: right;
+}
+
+.total-section {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.total-row {
+    padding: 0;
+}
+
+.total-row .label {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--blackColor);
+}
+
+.total-amount {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: var(--PrimaryColor) !important;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.manage-booking-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    padding: 16px 32px;
+    background: var(--PrimaryColor);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(255, 119, 48, 0.3);
+}
+
+.manage-booking-btn:hover {
+    background: var(--HoverColor);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 119, 48, 0.4);
+}
+
+.manage-booking-btn svg {
+    fill: white;
+}
+
+.cta-description {
+    margin: 20px 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-link-btn {
+    background: transparent;
+    color: var(--PrimaryColor);
+    border: 2px solid var(--PrimaryColor);
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.home-link-btn:hover {
+    background: var(--PrimaryColor);
+    color: white;
+}
+
+/* Error Container */
+.error-container {
+    text-align: center;
+    background: white;
+    padding: 60px 40px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.error-container h2 {
+    color: #d32f2f;
+    margin-bottom: 30px;
+}
+
+.home-btn {
+    padding: 14px 32px;
+    background: var(--PrimaryColor);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.home-btn:hover {
+    background: var(--HoverColor);
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .confirmation-page {
+        padding: 160px 20px 60px;
+    }
+
+    .confirmation-container {
+        max-width: 700px;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    .confirmation-page {
+        padding: 180px 15px 50px;
+    }
+
+    .success-header {
+        padding: 30px 15px;
+    }
+
+    .success-header h1 {
+        font-size: 26px;
+    }
+
+    .success-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .credentials-card,
+    .booking-details-card,
+    .cta-section {
+        padding: 25px;
+    }
+
+    .credentials-card h2 {
+        font-size: 20px;
+    }
+
+    .credential-value {
+        font-size: 16px;
+    }
+
+    .credential-value.booking-id {
+        font-size: 17px;
+    }
+
+    .booking-details-card h3 {
+        font-size: 20px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 8px 0;
+    }
+
+    .detail-row .value {
+        text-align: left;
+    }
+
+    .manage-booking-btn {
+        font-size: 16px;
+        padding: 14px 24px;
+    }
+
+    .cta-description {
+        font-size: 14px;
+    }
+}
+
+/* Small Mobile */
+@media screen and (max-width: 480px) {
+    .confirmation-page {
+        padding: 160px 10px 40px;
+    }
+
+    .success-header h1 {
+        font-size: 24px;
+    }
+
+    .success-subtitle {
+        font-size: 14px;
+    }
+
+    .credentials-card,
+    .booking-details-card,
+    .cta-section {
+        padding: 20px;
+    }
+
+    .credential-item {
+        padding: 15px;
+    }
+
+    .credential-value.booking-id {
+        font-size: 15px;
+    }
+
+    .total-amount {
+        font-size: 20px !important;
+    }
+
+    .manage-booking-btn {
+        font-size: 15px;
+        padding: 12px 20px;
+    }
+}
