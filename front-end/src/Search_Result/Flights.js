@@ -1,38 +1,84 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import "./Flights.css";
 import co_logo from "../pictures/iconV2.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { mockFlights } from "../data/mockFlights";
+import api from "../api"; // your axios instance
 
 const Flights_infos = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = location.state || {};
 
-  const { origin, destination, departure, passengers, cabine } = searchParams;
+  const { origin, destination, departure, passengers, cabine, reservation_id } =
+    searchParams;
 
-  const filteredFlights = useMemo(() => {
-    if (!origin || !destination || !departure) return [];
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    return mockFlights.filter((flight) => {
-      const matchOrigin = flight.origin.toLowerCase() === origin.toLowerCase();
-      const matchDest =
-        flight.destination.toLowerCase() === destination.toLowerCase();
-      const matchDate = flight.departureDate === departure;
+  useEffect(() => {
+    const fetchFlights = async () => {
+      if (!origin || !destination || !departure) return;
 
-      return matchOrigin && matchDest && matchDate;
-    });
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await api.post("/flights/search", {
+          coming_from: origin,
+          going_to: destination,
+          check_in: departure,
+        });
+
+        if (res.data.flights.length === 0) {
+          setError("No flights available for these criteria.");
+        }
+
+        setFlights(res.data.flights);
+      } catch (err) {
+        console.error("Error fetching flights:", err);
+        setError(
+          err.response?.data?.message ||
+            "Something went wrong while fetching flights."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFlights();
   }, [origin, destination, departure]);
 
-  const handleSelect = (flight) => {
-    // Pass the flight AND the passenger count AND cabin to the next page
-    navigate("/flight-details", {
-      state: {
-        ...flight,
-        passengers: passengers || 1,
-        cabine: cabine || "Economy",
-      },
-    });
+  const handleSelect = async (flight) => {
+    if (!reservation_id) {
+      console.error("No reservation ID found to assign flight.");
+      return;
+    }
+
+    try {
+      const res = await api.put(
+        `/reservations/${reservation_id}/assign-flight`,
+        {
+          ID_flight: flight.ID_flight,
+        }
+      );
+
+      // Navigate to next page or show success message
+      navigate("/flight-details", {
+        state: {
+          ...flight,
+          passengers: passengers || 1,
+          cabine: cabine || "Economy",
+          reservation_id,
+        },
+      });
+    } catch (err) {
+      console.error("Error assigning flight:", err);
+      alert(
+        err.response?.data?.message ||
+          "Something went wrong while assigning flight."
+      );
+    }
   };
 
   return (
@@ -49,26 +95,27 @@ const Flights_infos = () => {
           {passengers} passengers)
         </div>
 
-        {filteredFlights.length === 0 ? (
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "2rem" }}>
+            Loading flights...
+          </div>
+        ) : error ? (
           <div
             className="no-flights"
             style={{ textAlign: "center", padding: "2rem" }}
           >
-            <h3>No flights found for these dates.</h3>
-            <p>
-              Try changing your search criteria (e.g. Paris to London on
-              2025-11-25).
-            </p>
+            <h3>{error}</h3>
+            <p>Try changing your search criteria.</p>
           </div>
         ) : (
-          filteredFlights.map((flight) => (
-            <div key={flight.id} className="flight-card">
+          flights.map((flight) => (
+            <div key={flight.ID_flight} className="flight-card">
               <div className="flight-left">
                 <img src={co_logo} alt="AeroTransit" className="flight-logo" />
                 <div>
-                  <strong>{flight.company}</strong>
+                  <strong>{flight.company || "AeroTransit"}</strong>
                   <p className="flight-info">
-                    {flight.departure} → {flight.arrival}
+                    {flight.temps_aller} → {flight.temps_arriver}
                   </p>
                 </div>
               </div>
