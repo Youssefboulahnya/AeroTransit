@@ -25,10 +25,10 @@ class Flight extends Model
     // If you don't want Laravel to auto-manage timestamps (created_at, updated_at)
     public $timestamps = true; // or false if you don't have those columns
 
-    protected $appends = ['places_total'];
+     protected $appends = ['seats'];
 
 
-     public function places_total()
+      public function getSeatsAttribute()
     {
         return $this->places_business_classe + $this->places_business_economy;
     }

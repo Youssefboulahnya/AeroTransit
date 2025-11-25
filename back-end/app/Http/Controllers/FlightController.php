@@ -27,8 +27,8 @@ class FlightController extends Controller
             'destination' => 'required|string|different:origin',
             'temps_aller' => 'required|date',
             'temps_arriver' => 'required|date|after:temps_aller',
-            'places_business_economy' => 'required|integer|min:0',
-            'places_business_classe' => 'required|integer|min:0',
+            'places_business_economy' => 'required|integer|min:1|max:150',
+            'places_business_classe' => 'required|integer|min:1|max:30',
             'price' => 'required|numeric|min:0',
             'status' => 'required|in:scheduled,arrived',
         ]);
@@ -50,8 +50,8 @@ class FlightController extends Controller
         'destination'   => 'required|string|different:origin',  // origin != destination
         'temps_aller'   => 'required|date',
         'temps_arriver' => 'required|date|after:temps_aller',   // arrival > departure
-        'places_business_economy' => 'required|integer|min:0',            // no negative values
-        'places_business_classe' => 'required|integer|min:0',            // no negative values
+        'places_business_economy' => 'required|integer|min:0|max:150',            // no negative values
+        'places_business_classe' => 'required|integer|min:0|max:30',            // no negative values
         'price'         => 'required|numeric|min:0',            // no negative price
         'status'        => 'required|in:scheduled,arrived',     // only scheduled or arrived
         'created_by'    => 'required|exists:admins,ID_admin',   // ensure this admin exists
