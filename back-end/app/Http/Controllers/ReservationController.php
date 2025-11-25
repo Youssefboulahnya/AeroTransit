@@ -12,8 +12,8 @@ class ReservationController extends Controller
         'coming_from'    => 'required|string',
         'going_to'       => 'required|string|different:coming_from',
         'check_in'       => 'required|date',
-        'nombre_passagers' => 'required|integer|min:1',
-        'classe'         => 'required|in:business,economy',
+        'passenger_nbr' => 'required|integer|min:1',
+        'class'         => 'required|in:business,economy',
     ]);
 
     $reservation = Reservation::create($validated);
@@ -27,7 +27,7 @@ class ReservationController extends Controller
 public function choisir_Flight(Request $request, $reservation_id)
 {
     $request->validate([
-        'flight_id' => 'required|exists:flights,ID_flight',
+        'ID_flight' => 'required|exists:flights,ID_flight',
     ]);
 
     $reservation = Reservation::findOrFail($reservation_id);

@@ -72,10 +72,10 @@ class FlightController extends Controller
             
         ]);
 
-        // ✅ Attempt to create the flight
+        
         $flight = Flight::create($validated);
 
-        // ✅ Log the successful creation
+        
         Log::info('Flight created successfully', ['flight' => $flight]);
 
         return response()->json([
