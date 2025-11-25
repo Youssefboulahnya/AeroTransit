@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../pictures/iconV3.png";
 import "./DashboardHome.css";
 import api from "../api";
 
 export default function DashboardHome() {
+  const navigate = useNavigate();
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,8 +14,15 @@ export default function DashboardHome() {
 
   const [errors, setErrors] = useState({});
 
-  // For delete popup
   const [deletePopup, setDeletePopup] = useState({ show: false, id: null });
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_email");
+    localStorage.removeItem("admin_id");
+
+    // Redirect to home page
+    navigate("/");
+  };
 
   const fetchFlights = async () => {
     try {
@@ -47,7 +56,6 @@ export default function DashboardHome() {
     }
   };
 
-  
   const [dataChanged, setDataChanged] = useState({
     ID_flight: "",
     origin: "",
@@ -59,7 +67,6 @@ export default function DashboardHome() {
     seats: "",
   });
 
-
   const [addFlight, setAddFlight] = useState({
     origin: "",
     destination: "",
@@ -70,7 +77,7 @@ export default function DashboardHome() {
     seats: "",
   });
 
-  // la validation d'ajouter une flight
+  // validation pour l'ajout de vol
   const isAddFormValid = () => {
     return (
       addFlight.origin.trim() !== "" &&
@@ -83,7 +90,7 @@ export default function DashboardHome() {
     );
   };
 
-  //modifier le vol
+  // update fligt
   const saveEdit = async () => {
     setErrors({});
 
@@ -109,7 +116,7 @@ export default function DashboardHome() {
     }
   };
 
-  // ===== CREATE FLIGHT =====
+  // create flight
   const saveNewFlight = async () => {
     setErrors({});
 
@@ -140,15 +147,29 @@ export default function DashboardHome() {
 
   return (
     <div className="dashboard">
-      {/* HEADER */}
       <div className="bloc1">
         <div className="bloc1_1">
           <img src={Logo} alt="logo" className="Logo1" />
         </div>
         <div className="bloc1_2">AeroTransit Dashboard</div>
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+          style={{
+            marginLeft: "auto",
+            padding: "8px 16px",
+            backgroundColor: "#ff4444",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontWeight: "500",
+          }}
+        >
+          Déconnexion
+        </button>
       </div>
 
-      {/* ADD BUTTON */}
       <button
         className="add_flight"
         onClick={() => {
@@ -168,7 +189,6 @@ export default function DashboardHome() {
         Add Flight
       </button>
 
-      {/* TABLE */}
       <table className="flight_list">
         <thead>
           <tr>
@@ -220,7 +240,6 @@ export default function DashboardHome() {
         </tbody>
       </table>
 
-      {/* DELETE POPUP */}
       {deletePopup.show && (
         <div className="overlay">
           <div className="center-popup">
@@ -242,7 +261,6 @@ export default function DashboardHome() {
         </div>
       )}
 
-      {/* EDIT POPUP */}
       {selectedFlight && (
         <div className="edit-form">
           <h3>Edit Flight #{selectedFlight.ID_flight}</h3>
@@ -334,7 +352,6 @@ export default function DashboardHome() {
         </div>
       )}
 
-      {/* ADD POPUP */}
       {newFlight && (
         <div className="edit-form">
           <h3>Add New Flight</h3>
