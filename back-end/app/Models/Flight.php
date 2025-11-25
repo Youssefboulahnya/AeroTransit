@@ -19,7 +19,7 @@ class Flight extends Model
         'places_business_economy',
         'price',
         'status',
-        'created_by', // foreign key to Admin
+        
     ];
 
     // If you don't want Laravel to auto-manage timestamps (created_at, updated_at)

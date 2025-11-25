@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class FlightController extends Controller
 {
@@ -53,39 +55,51 @@ class FlightController extends Controller
    // creation d'une flight 
     public function creer_flight(Request $request)
 {
-    // ✅ Validations
-    $validated = $request->validate([
-        'origin'        => 'required|string',
-        'destination'   => 'required|string|different:origin',  // origin != destination
-        'temps_aller'   => 'required|date',
-        'temps_arriver' => 'required|date|after:temps_aller',   // arrival > departure
-        'places_business_economy' => 'required|integer|min:0|max:150',            // no negative values
-        'places_business_classe' => 'required|integer|min:0|max:30',            // no negative values
-        'price'         => 'required|numeric|min:0',            // no negative price
-        'status'        => 'required|in:scheduled,arrived',     // only scheduled or arrived
-        'created_by'    => 'required|exists:admins,ID_admin',   // ensure this admin exists
-    ]);
+    try {
+        // ✅ Log the incoming request for debugging
+        Log::info('Create flight request data:', $request->all());
 
-    // ✅ Create the flight
-    $flight = Flight::create([
-        'origin'        => $request->origin,
-        'destination'   => $request->destination,
-        'temps_aller'   => $request->temps_aller,
-        'temps_arriver' => $request->temps_arriver,
-        'places_business_economy' => $request->places_business_economy,
-        'places_business_classe' => $request->places_business_classe,
-        'price'         => $request->price,
-        'status'        => $request->status,
-        'created_by'    => $request->created_by,
-    ]);
+        // ✅ Validate the request
+        $validated = $request->validate([
+            'origin'        => 'required|string',
+            'destination'   => 'required|string|different:origin',
+            'temps_aller'   => 'required|date',
+            'temps_arriver' => 'required|date|after:temps_aller',
+            'places_business_economy' => 'required|integer|min:0|max:150',
+            'places_business_classe' => 'required|integer|min:0|max:30',
+            'price'         => 'required|numeric|min:0',
+            'status'        => 'required|in:scheduled,arrived',
+            
+        ]);
 
+        // ✅ Attempt to create the flight
+        $flight = Flight::create($validated);
 
-    // ✅ Response sent to React
-    return response()->json([
-        'message' => 'Flight created successfully',
-        'flight'  => $flight
-    ], 201);
+        // ✅ Log the successful creation
+        Log::info('Flight created successfully', ['flight' => $flight]);
+
+        return response()->json([
+            'message' => 'Flight created successfully',
+            'flight'  => $flight
+        ], 201);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Return validation errors
+        Log::warning('Validation failed for flight creation', ['errors' => $e->errors()]);
+        return response()->json([
+            'message' => 'Validation error',
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        // Catch all other errors (DB connection, foreign key, etc.)
+        Log::error('Flight creation failed', ['exception' => $e->getMessage()]);
+        return response()->json([
+            'message' => 'Failed to create flight',
+            'error'   => $e->getMessage()
+        ], 500);
+    }
 }
+
 
 
 public function delete_flight($id)
