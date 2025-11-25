@@ -10,8 +10,6 @@ use App\Http\Controllers\FlightController;
 Route::post('/admin-login', [AdminController::class, 'login']); //anyone can access the log in page
 
 
-
-
     Route::post('/admin-create', [AdminController::class, 'createAdmin']);
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/flights', [FlightController::class, 'liste_flight']);
