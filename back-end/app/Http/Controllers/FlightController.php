@@ -27,7 +27,8 @@ class FlightController extends Controller
             'destination' => 'required|string|different:origin',
             'temps_aller' => 'required|date',
             'temps_arriver' => 'required|date|after:temps_aller',
-            'seats' => 'required|integer|min:0',
+            'places_business_economy' => 'required|integer|min:0',
+            'places_business_classe' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'status' => 'required|in:scheduled,arrived',
         ]);
@@ -49,7 +50,8 @@ class FlightController extends Controller
         'destination'   => 'required|string|different:origin',  // origin != destination
         'temps_aller'   => 'required|date',
         'temps_arriver' => 'required|date|after:temps_aller',   // arrival > departure
-        'seats'         => 'required|integer|min:0',            // no negative values
+        'places_business_economy' => 'required|integer|min:0',            // no negative values
+        'places_business_classe' => 'required|integer|min:0',            // no negative values
         'price'         => 'required|numeric|min:0',            // no negative price
         'status'        => 'required|in:scheduled,arrived',     // only scheduled or arrived
         'created_by'    => 'required|exists:admins,ID_admin',   // ensure this admin exists
@@ -61,7 +63,8 @@ class FlightController extends Controller
         'destination'   => $request->destination,
         'temps_aller'   => $request->temps_aller,
         'temps_arriver' => $request->temps_arriver,
-        'seats'         => $request->seats,
+        'places_business_economy' => $request->places_business_economy,
+        'places_business_classe' => $request->places_business_classe,
         'price'         => $request->price,
         'status'        => $request->status,
         'created_by'    => $request->created_by,
@@ -98,11 +101,4 @@ public function delete_flight($id)
 }
 
 
-    
-
-    
-    
-
-    
-    
 }

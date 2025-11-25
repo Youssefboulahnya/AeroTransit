@@ -33,33 +33,41 @@ class AdminController extends Controller
     }
 
 
-    public function login(Request $request)
-    {
+   public function login(Request $request)
+{
     $request->validate([
-        'ID_admin' => 'required',
+        'email' => 'required|email',
         'password' => 'required',
     ]);
 
-    $admin = Admin::find($request->ID_admin);
+    // CORRECTION 1: Use 'where' to find by email, not 'find'
+    $admin = Admin::where('email', $request->email)->first();
 
-    
+    // Verify the password
     if (!$admin || !Hash::check($request->password, $admin->password)) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    // Start a session
+    // Create the token
+    $token = $admin->createToken('admin-login')->plainTextToken;
+
+    // CORRECTION 2: Only one return statement. 
+    // We send the token and the user info to React.
+    return response()->json([
+        'message' => 'Login successful',
+        'access_token' => $token, 
+        'admin' => $admin
+    ], 200);
+}
+
+public function logout(Request $request)
+{
+    // CORRECTION 3: Revoke the Token
+    // We do not invalidate sessions in an API. We delete the token from the database.
     
+    // Note: This requires the route to be protected by middleware('auth:sanctum')
+    $request->user()->currentAccessToken()->delete();
 
-    return response()->json(['message' => 'Access granted!']);
-    }
-
-    public function logout(Request $request)
-    {
-        
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return response()->json(['message' => 'Logged out']);
-    }
-
+    return response()->json(['message' => 'Logged out successfully']);
+}
 }
