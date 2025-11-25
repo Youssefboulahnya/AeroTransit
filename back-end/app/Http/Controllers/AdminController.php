@@ -54,9 +54,8 @@ class AdminController extends Controller
     // CORRECTION 2: Only one return statement. 
     // We send the token and the user info to React.
     return response()->json([
-        'message' => 'Login successful',
-        
-        'admin' => $admin
+        'status' => 'success',
+        'message' => 'Access granted!'
     ], 200);
 }
 
