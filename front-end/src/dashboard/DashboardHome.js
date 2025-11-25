@@ -64,7 +64,8 @@ export default function DashboardHome() {
     temps_arriver: "",
     price: "",
     status: "",
-    seats: "",
+    places_business_economy: "",
+    places_business_classe: "",
   });
 
   const [addFlight, setAddFlight] = useState({
@@ -73,21 +74,57 @@ export default function DashboardHome() {
     temps_aller: "",
     temps_arriver: "",
     price: "",
-    status: "",
-    seats: "",
+    status: "scheduled",
+    businessSeats: "",
+    economySeats: "",
   });
 
   // validation pour l'ajout de vol
   const isAddFormValid = () => {
-    return (
+    const businessSeats = Number(addFlight.businessSeats);
+    const economySeats = Number(addFlight.economySeats);
+
+    const businessValid = businessSeats >= 1 && businessSeats <= 30;
+    const economyValid = economySeats >= 31 && economySeats <= 160;
+
+    console.log("=== Validation Debug ===");
+    console.log(
+      "Business Seats:",
+      addFlight.businessSeats,
+      "->",
+      businessSeats,
+      "Valid:",
+      businessValid
+    );
+    console.log(
+      "Economy Seats:",
+      addFlight.economySeats,
+      "->",
+      economySeats,
+      "Valid:",
+      economyValid
+    );
+    console.log("Origin:", addFlight.origin);
+    console.log("Destination:", addFlight.destination);
+    console.log("Departure:", addFlight.temps_aller);
+    console.log("Arrival:", addFlight.temps_arriver);
+    console.log("Price:", addFlight.price);
+    console.log("Status:", addFlight.status);
+
+    const isValid =
       addFlight.origin.trim() !== "" &&
       addFlight.destination.trim() !== "" &&
       addFlight.temps_aller.trim() !== "" &&
       addFlight.temps_arriver.trim() !== "" &&
-      addFlight.seats !== "" &&
+      addFlight.businessSeats !== "" &&
+      addFlight.economySeats !== "" &&
+      businessValid &&
+      economyValid &&
       addFlight.price !== "" &&
-      addFlight.status.trim() !== ""
-    );
+      addFlight.status.trim() !== "";
+
+    console.log("Form Valid:", isValid);
+    return isValid;
   };
 
   // update fligt
@@ -126,7 +163,8 @@ export default function DashboardHome() {
         destination: addFlight.destination,
         temps_aller: addFlight.temps_aller,
         temps_arriver: addFlight.temps_arriver,
-        seats: addFlight.seats,
+        businessSeats: addFlight.businessSeats,
+        economySeats: addFlight.economySeats,
         price: addFlight.price,
         status: addFlight.status,
         created_by: localStorage.getItem("admin_id"),
@@ -180,8 +218,9 @@ export default function DashboardHome() {
             temps_aller: "",
             temps_arriver: "",
             price: "",
-            status: "",
-            seats: "",
+            status: "scheduled",
+            businessSeats: "",
+            economySeats: "",
           });
           setNewFlight(true);
         }}
@@ -402,15 +441,41 @@ export default function DashboardHome() {
             <p className="error">{errors.temps_arriver[0]}</p>
           )}
 
-          <label>Seats:</label>
+          <label>Business Seats (1-30):</label>
           <input
             type="number"
-            value={addFlight.seats}
+            min="1"
+            max="30"
+            value={addFlight.businessSeats}
             onChange={(e) =>
-              setAddFlight({ ...addFlight, seats: e.target.value })
+              setAddFlight({ ...addFlight, businessSeats: e.target.value })
             }
           />
-          {errors.seats && <p className="error">{errors.seats[0]}</p>}
+          {errors.businessSeats && (
+            <p className="error">{errors.businessSeats[0]}</p>
+          )}
+          {addFlight.businessSeats &&
+            (addFlight.businessSeats < 1 || addFlight.businessSeats > 30) && (
+              <p className="error">Business seats must be between 1 and 30</p>
+            )}
+
+          <label>Economy Seats (31-160):</label>
+          <input
+            type="number"
+            min="31"
+            max="160"
+            value={addFlight.economySeats}
+            onChange={(e) =>
+              setAddFlight({ ...addFlight, economySeats: e.target.value })
+            }
+          />
+          {errors.economySeats && (
+            <p className="error">{errors.economySeats[0]}</p>
+          )}
+          {addFlight.economySeats &&
+            (addFlight.economySeats < 31 || addFlight.economySeats > 160) && (
+              <p className="error">Economy seats must be between 31 and 160</p>
+            )}
 
           <label>Price (€):</label>
           <input
