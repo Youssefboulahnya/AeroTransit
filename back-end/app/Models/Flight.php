@@ -15,7 +15,8 @@ class Flight extends Model
         'destination',
         'temps_aller',
         'temps_arriver',
-        'seats',
+        'places_business_classe',
+        'places_business_economy',
         'price',
         'status',
         'created_by', // foreign key to Admin
