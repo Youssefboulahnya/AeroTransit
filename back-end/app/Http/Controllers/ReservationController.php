@@ -14,6 +14,8 @@ class ReservationController extends Controller
         'check_in'       => 'required|date',
         'passenger_nbr' => 'required|integer|min:1',
         'class'         => 'required|in:business,economy',
+        
+
     ]);
 
     $reservation = Reservation::create($validated);
