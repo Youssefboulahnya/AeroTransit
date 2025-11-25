@@ -3,7 +3,8 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { FaPlaneArrival } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import api from "../api"; // 👈 IMPORTANT : ton instance axios
 
 export default function Search() {
   const navigate = useNavigate();
@@ -22,15 +23,33 @@ export default function Search() {
     search.cabine === "" ||
     search.origin === "" ||
     search.destination === "" ||
-    search.departure === "" ;
+    search.departure === "";
 
-  const handleSearch = () => {
+const handleSearch = async () => {
+  try {
+    const res = await api.post("/reservations", {
+      coming_from: search.origin,
+      going_to: search.destination,
+      check_in: search.departure,
+      passenger_nbr: search.passengers,
+      class: search.cabine.toLowerCase(),
+    });
+
+    const reservation = res.data.reservation;
+
+    // Navigate to flights list and send search filters + reservation ID
     navigate("/flights", {
       state: {
         ...search,
+        reservation_id: reservation.reservation_ID, // IMPORTANT
       },
     });
-  };
+  } catch (error) {
+    console.log("Erreur réservation :", error.response?.data || error);
+  }
+};
+
+
 
   return (
     <div className="search container section">
@@ -41,7 +60,7 @@ export default function Search() {
             onClick={() => {
               setColor1("singleBtn clicked");
               setColor2("singleBtn");
-              setSearch({ ...search, cabine: "Business"});
+              setSearch({ ...search, cabine: "Business" });
             }}
           >
             <span>Business</span>
@@ -61,7 +80,6 @@ export default function Search() {
 
         <div className="searchInputs dFlex">
           <div className="into">
-            {/* Coming from */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -81,7 +99,6 @@ export default function Search() {
               </div>
             </div>
 
-            {/* Going to */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -101,7 +118,6 @@ export default function Search() {
               </div>
             </div>
 
-            {/* Check in */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -120,7 +136,6 @@ export default function Search() {
               </div>
             </div>
 
-            {/* Passengers */}
             <div className="border">
               <div className="singleInput dFlex">
                 <div className="iconDiv">
@@ -141,7 +156,6 @@ export default function Search() {
             </div>
           </div>
 
-          {/* BUTTON */}
           <button
             disabled={condition}
             className={
