@@ -1,7 +1,7 @@
 import "./LogIn.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; 
+import api from "../api";
 
 export default function LogIn() {
   const [show, setShow] = useState("password");
@@ -19,7 +19,7 @@ export default function LogIn() {
     e.preventDefault();
     setError(null);
 
-    if (!email|| !password) {
+    if (!email || !password) {
       setError("Please provide both ID and password.");
       return;
     }
@@ -34,11 +34,8 @@ export default function LogIn() {
 
       const data = res.data;
 
-      if (res.status === 200 && data.message === "Access granted!") {
-
-        localStorage.setItem("admin_email", email);  
-
-        // si Login success → go to dashboard home
+      if (res.status === 200 && data.status === "success") {
+        localStorage.setItem("admin_email", email);
         navigate("/dashboard/Home");
       } else {
         setError(data.message || "Invalid ID or password.");
