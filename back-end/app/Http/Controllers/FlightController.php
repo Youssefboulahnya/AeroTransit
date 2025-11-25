@@ -19,27 +19,36 @@ class FlightController extends Controller
     // the modifier_flight function
 
    public function modifier_flight(Request $request, $id)
-    {
-        $flight = Flight::findOrFail($id);
+{
+    $flight = Flight::findOrFail($id);
 
-        $request->validate([
-            'origin' => 'required|string',
-            'destination' => 'required|string|different:origin',
-            'temps_aller' => 'required|date',
-            'temps_arriver' => 'required|date|after:temps_aller',
-            'places_business_economy' => 'required|integer|min:1|max:150',
-            'places_business_classe' => 'required|integer|min:1|max:30',
-            'price' => 'required|numeric|min:0',
-            'status' => 'required|in:scheduled,arrived',
-        ]);
+    $request->validate([
+        'origin' => 'required|string',
+        'destination' => 'required|string|different:origin',
+        'temps_aller' => 'required|date',
+        'temps_arriver' => 'required|date|after:temps_aller',
+        'places_business_economy' => 'required|integer|min:1|max:150',
+        'places_business_classe' => 'required|integer|min:1|max:30',
+        'price' => 'required|numeric|min:0',
+        'status' => 'required|in:scheduled,arrived',
+    ]);
 
-        $flight->update($request->all());
+    $flight->update([
+        'origin' => $request->origin,
+        'destination' => $request->destination,
+        'temps_aller' => $request->temps_aller,
+        'temps_arriver' => $request->temps_arriver,
+        'places_business_economy' => $request->places_business_economy,
+        'places_business_classe' => $request->places_business_classe,
+        'price' => $request->price,
+        'status' => $request->status,
+    ]);
 
-        return response()->json([
-            'message' => 'Flight updated successfully',
-            'flight' => $flight
-        ]);
-    }
+    return response()->json([
+        'message' => 'Flight updated successfully',
+        'flight' => $flight
+    ]);
+}
     //idk lmao
    // creation d'une flight 
     public function creer_flight(Request $request)
