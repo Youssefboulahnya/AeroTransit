@@ -1,11 +1,11 @@
 import "./LogIn.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // your Axios instance
+import api from "../api"; 
 
 export default function LogIn() {
   const [show, setShow] = useState("password");
-  const [Email_admin, setEmailAdmin] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export default function LogIn() {
     e.preventDefault();
     setError(null);
 
-    if (!Email_admin || !password) {
+    if (!email|| !password) {
       setError("Please provide both ID and password.");
       return;
     }
@@ -28,18 +28,17 @@ export default function LogIn() {
 
     try {
       const res = await api.post("/admin-login", {
-        Email_admin,
+        email,
         password,
       });
 
       const data = res.data;
 
       if (res.status === 200 && data.message === "Access granted!") {
-        //  Save admin email in localStorage
-        // ############################################# faut savoir que ca
-        localStorage.setItem("admin_email", Email_admin);  
 
-        // Login success → go to dashboard home
+        localStorage.setItem("admin_email", email);  
+
+        // si Login success → go to dashboard home
         navigate("/dashboard/Home");
       } else {
         setError(data.message || "Invalid ID or password.");
@@ -66,8 +65,8 @@ export default function LogIn() {
             <input
               type="email"
               placeholder="Your email..."
-              value={Email_admin}
-              onChange={(e) => setEmailAdmin(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 

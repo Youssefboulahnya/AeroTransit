@@ -88,7 +88,7 @@
     background-color: #f9fbff;
 }
 
-/* ===================== ACTIONS ===================== */
+/* les actions de dashboard */
 .flight_list .actions {
     color: #d63031;
     font-weight: 500;
@@ -108,7 +108,7 @@
     text-decoration: underline;
 }
 
-/* ===================== EDIT FORM ===================== */
+/* le formulaire de modification*/
 .edit-form {
     position: fixed;
     top: 20%;
@@ -172,7 +172,7 @@ button.save {
 button:hover {
     opacity: 0.8;
 }
-/* === Overlay sombre === */
+
 .overlay {
   position: fixed;
   top: 0;
@@ -186,7 +186,7 @@ button:hover {
   z-index: 5000;
 }
 
-/* === Popup centré === */
+
 .center-popup {
   background: white;
   padding: 25px 40px;
@@ -222,13 +222,13 @@ button:hover {
   cursor: pointer;
 }
 
-/* Petite animation */
+
 @keyframes fadeIn {
   from { transform: scale(0.8); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
 
-/* Boutons */
+
 .popup-buttons {
   margin-top: 20px;
   display: flex;
@@ -259,9 +259,7 @@ button:hover {
   background: #b5b5b5;
 }
 
-/* ===================== RESPONSIVE ===================== */
 
-/* --- TABLET MODE (entre 768px et 1200px) --- */
 @media screen and (max-width: 1200px) {
 
     .Logo1 {

@@ -91,7 +91,6 @@ export default function infos() {
               Where Every Journey Becomes a Story, So Start Collecting Moments
               Not Just Miles
             </h2>
-            {/* <button className="btn ">View All</button> */}
           </div>
           <div className="cardsDiv grid">
             {/*  */}{" "}
