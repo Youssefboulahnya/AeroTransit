@@ -10,19 +10,20 @@ class Reservation extends Model
     protected $primaryKey = 'reservation_ID'; // set primary key
 
     protected $fillable = [
+        'ID_flight',
         'coming_from',
         'going_to',
         'check_in',
-        'nombre_passages',
-        'email',
+        'passenger_nbr',
         'class',
-        'flight_id', // if you want to link to a flight
+        'email',
+        // if you want to link to a flight
     ];
 
     // Optional: relation to Flight
     public function flight()
     {
-        return $this->belongsTo(\App\Models\Flight::class, 'flight_id', 'ID_flight');
+        return $this->belongsTo(\App\Models\Flight::class, 'ID_flight', 'ID_flight');
     }
 
     public function estComplete(): bool
@@ -42,6 +43,6 @@ class Reservation extends Model
 
     public static function total_passengers_all(): int
     {
-        return self::sum('passengers_nbr');
+        return self::sum('passenger_nbr');
     }
 }
