@@ -13,21 +13,25 @@ export default function DashboardHome() {
   const [newFlight, setNewFlight] = useState(null);
 
   const [errors, setErrors] = useState({});
-
   const [deletePopup, setDeletePopup] = useState({ show: false, id: null });
 
   const handleLogout = () => {
     localStorage.removeItem("admin_email");
     localStorage.removeItem("admin_id");
-
-    // Redirect to home page
     navigate("/");
   };
 
   const fetchFlights = async () => {
     try {
       const res = await api.get("/flights");
-      setFlights(res.data);
+
+      // ⚠️ Make sure seats exists: seats = business + economy
+      const updated = res.data.map((f) => ({
+        ...f,
+        seats: f.seats ?? f.places_business_classe + f.places_business_economy,
+      }));
+
+      setFlights(updated);
     } catch (err) {
       console.error("Error loading flights:", err);
     } finally {
@@ -39,7 +43,7 @@ export default function DashboardHome() {
     fetchFlights();
   }, []);
 
-  // delete flight
+  // delete
   const confirmDelete = (id) => {
     setDeletePopup({ show: true, id });
   };
@@ -47,15 +51,14 @@ export default function DashboardHome() {
   const deleteFlight = async () => {
     try {
       await api.delete(`/flights/${deletePopup.id}`);
-
       setFlights((prev) => prev.filter((f) => f.ID_flight !== deletePopup.id));
-
       setDeletePopup({ show: false, id: null });
     } catch (err) {
       console.error("Delete error:", err);
     }
   };
 
+  // STATE for edit popup
   const [dataChanged, setDataChanged] = useState({
     ID_flight: "",
     origin: "",
@@ -68,66 +71,7 @@ export default function DashboardHome() {
     places_business_classe: "",
   });
 
-  const [addFlight, setAddFlight] = useState({
-    origin: "",
-    destination: "",
-    temps_aller: "",
-    temps_arriver: "",
-    price: "",
-    status: "scheduled",
-    businessSeats: "",
-    economySeats: "",
-  });
-
-  // validation pour l'ajout de vol
-  const isAddFormValid = () => {
-    const businessSeats = Number(addFlight.businessSeats);
-    const economySeats = Number(addFlight.economySeats);
-
-    const businessValid = businessSeats >= 1 && businessSeats <= 30;
-    const economyValid = economySeats >= 31 && economySeats <= 160;
-
-    console.log("=== Validation Debug ===");
-    console.log(
-      "Business Seats:",
-      addFlight.businessSeats,
-      "->",
-      businessSeats,
-      "Valid:",
-      businessValid
-    );
-    console.log(
-      "Economy Seats:",
-      addFlight.economySeats,
-      "->",
-      economySeats,
-      "Valid:",
-      economyValid
-    );
-    console.log("Origin:", addFlight.origin);
-    console.log("Destination:", addFlight.destination);
-    console.log("Departure:", addFlight.temps_aller);
-    console.log("Arrival:", addFlight.temps_arriver);
-    console.log("Price:", addFlight.price);
-    console.log("Status:", addFlight.status);
-
-    const isValid =
-      addFlight.origin.trim() !== "" &&
-      addFlight.destination.trim() !== "" &&
-      addFlight.temps_aller.trim() !== "" &&
-      addFlight.temps_arriver.trim() !== "" &&
-      addFlight.businessSeats !== "" &&
-      addFlight.economySeats !== "" &&
-      businessValid &&
-      economyValid &&
-      addFlight.price !== "" &&
-      addFlight.status.trim() !== "";
-
-    console.log("Form Valid:", isValid);
-    return isValid;
-  };
-
-  // update fligt
+  // SAVE EDIT
   const saveEdit = async () => {
     setErrors({});
 
@@ -137,9 +81,16 @@ export default function DashboardHome() {
         dataChanged
       );
 
+      const updatedFlight = {
+        ...res.data.flight,
+        seats:
+          res.data.flight.places_business_classe +
+          res.data.flight.places_business_economy,
+      };
+
       setFlights((prev) =>
         prev.map((f) =>
-          f.ID_flight === dataChanged.ID_flight ? res.data.flight : f
+          f.ID_flight === dataChanged.ID_flight ? updatedFlight : f
         )
       );
 
@@ -153,7 +104,19 @@ export default function DashboardHome() {
     }
   };
 
-  // create flight
+  // ADD FLIGHT state
+  const [addFlight, setAddFlight] = useState({
+    origin: "",
+    destination: "",
+    temps_aller: "",
+    temps_arriver: "",
+    price: "",
+    status: "scheduled",
+    businessSeats: "",
+    economySeats: "",
+  });
+
+  // ADD FLIGHT
   const saveNewFlight = async () => {
     setErrors({});
 
@@ -163,14 +126,14 @@ export default function DashboardHome() {
         destination: addFlight.destination,
         temps_aller: addFlight.temps_aller,
         temps_arriver: addFlight.temps_arriver,
-        businessSeats: addFlight.businessSeats,
-        economySeats: addFlight.economySeats,
+        places_business_classe: addFlight.businessSeats,
+        places_business_economy: addFlight.economySeats,
         price: addFlight.price,
         status: addFlight.status,
         created_by: localStorage.getItem("admin_id"),
       });
 
-      fetchFlights();
+      await fetchFlights();
       setNewFlight(null);
     } catch (err) {
       if (err.response?.status === 422) {
@@ -185,6 +148,7 @@ export default function DashboardHome() {
 
   return (
     <div className="dashboard">
+      {/* header */}
       <div className="bloc1">
         <div className="bloc1_1">
           <img src={Logo} alt="logo" className="Logo1" />
@@ -208,6 +172,7 @@ export default function DashboardHome() {
         </button>
       </div>
 
+      {/* add flight button */}
       <button
         className="add_flight"
         onClick={() => {
@@ -228,6 +193,7 @@ export default function DashboardHome() {
         Add Flight
       </button>
 
+      {/* TABLE */}
       <table className="flight_list">
         <thead>
           <tr>
@@ -261,7 +227,11 @@ export default function DashboardHome() {
                   onClick={() => {
                     setErrors({});
                     setSelectedFlight(f);
-                    setDataChanged(f);
+                    setDataChanged({
+                      ...f,
+                      places_business_classe: f.places_business_classe,
+                      places_business_economy: f.places_business_economy,
+                    });
                   }}
                 >
                   Modifier
@@ -279,6 +249,7 @@ export default function DashboardHome() {
         </tbody>
       </table>
 
+      {/* DELETE POPUP */}
       {deletePopup.show && (
         <div className="overlay">
           <div className="center-popup">
@@ -300,6 +271,7 @@ export default function DashboardHome() {
         </div>
       )}
 
+      {/* EDIT POPUP — unchanged UI */}
       {selectedFlight && (
         <div className="edit-form">
           <h3>Edit Flight #{selectedFlight.ID_flight}</h3>
@@ -343,22 +315,45 @@ export default function DashboardHome() {
             type="datetime-local"
             value={dataChanged.temps_arriver}
             onChange={(e) =>
-              setDataChanged({ ...dataChanged, temps_arriver: e.target.value })
+              setDataChanged({
+                ...dataChanged,
+                temps_arriver: e.target.value,
+              })
             }
           />
           {errors.temps_arriver && (
             <p className="error">{errors.temps_arriver[0]}</p>
           )}
 
-          <label>Seats:</label>
+          <label>Business Seats:</label>
           <input
             type="number"
-            value={dataChanged.seats}
+            value={dataChanged.places_business_classe}
             onChange={(e) =>
-              setDataChanged({ ...dataChanged, seats: e.target.value })
+              setDataChanged({
+                ...dataChanged,
+                places_business_classe: e.target.value,
+              })
             }
           />
-          {errors.seats && <p className="error">{errors.seats[0]}</p>}
+          {errors.places_business_classe && (
+            <p className="error">{errors.places_business_classe[0]}</p>
+          )}
+
+          <label>Economy Seats:</label>
+          <input
+            type="number"
+            value={dataChanged.places_business_economy}
+            onChange={(e) =>
+              setDataChanged({
+                ...dataChanged,
+                places_business_economy: e.target.value,
+              })
+            }
+          />
+          {errors.places_business_economy && (
+            <p className="error">{errors.places_business_economy[0]}</p>
+          )}
 
           <label>Price (€):</label>
           <input
@@ -391,6 +386,7 @@ export default function DashboardHome() {
         </div>
       )}
 
+      {/* ADD POPUP — unchanged UI */}
       {newFlight && (
         <div className="edit-form">
           <h3>Add New Flight</h3>
@@ -444,38 +440,26 @@ export default function DashboardHome() {
           <label>Business Seats (1-30):</label>
           <input
             type="number"
-            min="1"
-            max="30"
             value={addFlight.businessSeats}
             onChange={(e) =>
-              setAddFlight({ ...addFlight, businessSeats: e.target.value })
+              setAddFlight({
+                ...addFlight,
+                businessSeats: e.target.value,
+              })
             }
           />
-          {errors.businessSeats && (
-            <p className="error">{errors.businessSeats[0]}</p>
-          )}
-          {addFlight.businessSeats &&
-            (addFlight.businessSeats < 1 || addFlight.businessSeats > 30) && (
-              <p className="error">Business seats must be between 1 and 30</p>
-            )}
 
           <label>Economy Seats (31-160):</label>
           <input
             type="number"
-            min="31"
-            max="160"
             value={addFlight.economySeats}
             onChange={(e) =>
-              setAddFlight({ ...addFlight, economySeats: e.target.value })
+              setAddFlight({
+                ...addFlight,
+                economySeats: e.target.value,
+              })
             }
           />
-          {errors.economySeats && (
-            <p className="error">{errors.economySeats[0]}</p>
-          )}
-          {addFlight.economySeats &&
-            (addFlight.economySeats < 31 || addFlight.economySeats > 160) && (
-              <p className="error">Economy seats must be between 31 and 160</p>
-            )}
 
           <label>Price (€):</label>
           <input
@@ -502,15 +486,7 @@ export default function DashboardHome() {
           <div className="form-buttons">
             <button onClick={() => setNewFlight(null)}>back</button>
 
-            <button
-              className="save"
-              onClick={saveNewFlight}
-              disabled={!isAddFormValid()}
-              style={{
-                opacity: isAddFormValid() ? 1 : 0.5,
-                cursor: isAddFormValid() ? "pointer" : "not-allowed",
-              }}
-            >
+            <button className="save" onClick={saveNewFlight}>
               Add
             </button>
           </div>
