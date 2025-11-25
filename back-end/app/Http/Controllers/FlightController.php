@@ -123,5 +123,27 @@ public function delete_flight($id)
     ], 200);
 }
 
+public function searchFlights(Request $request)
+{
+    //verifier si l'origin n'est pas la destination
+    $request->validate([
+        'coming_from' => 'required|string',
+        'going_to'    => 'required|string',
+    ]);
+    //filtrer les vols
+    $flights = Flight::where('origin', $request->coming_from)->where('destination', $request->going_to)->where('temps_aller', '>=', $request->check_in)->where('status', 'scheduled')->get();
+    //si aucune vol n'était sélectionné 
+    if ($flights->isEmpty()) {
+        return response()->json([
+            'message' => 'No flights available for the selected route.',
+            'flights' => []
+        ], 404);  
+    }
+    //sinon l'envoi d'une reponse JSON
+    return response()->json([
+        'flights' => $flights
+    ]);
+}
+
 
 }
