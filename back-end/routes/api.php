@@ -13,7 +13,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin-create', [AdminController::class, 'createAdmin']);
-    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/dashboard/home', [AdminController::class, 'dashboard']);
     Route::get('/flights', [FlightController::class, 'liste_flight']);
     Route::delete('/flights/{id}', [FlightController::class, 'delete_flight']);
     Route::put('/flights/{id}', [FlightController::class, 'modifier_flight']);
