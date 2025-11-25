@@ -49,13 +49,13 @@ class AdminController extends Controller
     }
 
     // Create the token
-    $token = $admin->createToken('admin-login')->plainTextToken;
+    
 
     // CORRECTION 2: Only one return statement. 
     // We send the token and the user info to React.
     return response()->json([
         'message' => 'Login successful',
-        'access_token' => $token, 
+        
         'admin' => $admin
     ], 200);
 }
