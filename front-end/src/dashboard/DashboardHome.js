@@ -30,7 +30,7 @@ export default function DashboardHome() {
     fetchFlights();
   }, []);
 
-  // ===== DELETE FLIGHT =====
+  // delete flight
   const confirmDelete = (id) => {
     setDeletePopup({ show: true, id });
   };
@@ -47,7 +47,7 @@ export default function DashboardHome() {
     }
   };
 
-  // DATA FOR EDITING
+  
   const [dataChanged, setDataChanged] = useState({
     ID_flight: "",
     origin: "",
@@ -59,7 +59,7 @@ export default function DashboardHome() {
     seats: "",
   });
 
-  // DATA FOR ADDING
+
   const [addFlight, setAddFlight] = useState({
     origin: "",
     destination: "",
@@ -70,7 +70,7 @@ export default function DashboardHome() {
     seats: "",
   });
 
-  // ===== VALIDATION: Add Flight Form =====
+  // la validation d'ajouter une flight
   const isAddFormValid = () => {
     return (
       addFlight.origin.trim() !== "" &&
@@ -83,7 +83,7 @@ export default function DashboardHome() {
     );
   };
 
-  // ===== UPDATE FLIGHT =====
+  //modifier le vol
   const saveEdit = async () => {
     setErrors({});
 
