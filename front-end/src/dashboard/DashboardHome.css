@@ -61,7 +61,7 @@
 /* table */
 .flight_list {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    width: 95%;
+    width: 98%;
     margin: 30px auto;
     border-collapse: collapse;
     box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
@@ -111,9 +111,12 @@
 /* le formulaire de modification*/
 .edit-form {
     position: fixed;
-    top: 20%;
-    left: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(0, -50%); 
     width: 30%;
+    max-height: 90vh; 
+    overflow-y: auto;
     background: #f2f5fa;
     border-radius: 10px;
     padding: 20px;
@@ -122,6 +125,7 @@
     display: flex;
     flex-direction: column;
 }
+
 
 .edit-form h3 {
     text-align: center;
@@ -260,7 +264,7 @@ button:hover {
 }
 
 
-@media screen and (max-width: 1200px) {
+@media screen and (min-width: 1000px) {
 
     .Logo1 {
         width: 6rem;
@@ -276,7 +280,7 @@ button:hover {
     }
 }
 
-@media screen and (max-width: 830px) {
+@media screen and (max-width: 1000px) {
     .bloc1 {
         flex-direction: column;
         justify-content: center;
@@ -298,7 +302,7 @@ button:hover {
     }
 
     .edit-form {
-        top: 10%;
+        /* top: 10%; */
         left: 10%;
         width: 80%;
     }
@@ -353,3 +357,101 @@ button:hover {
         text-align: center;
     }
 }
+/* ===== DELETE POPUP ===== */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+
+.popup-box {
+  background: white;
+  padding: 25px 40px;
+  border-radius: 10px;
+  width: 350px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-buttons .yes {
+  background: #d63031;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup-buttons .no {
+  background: #aaa;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup-buttons .yes:hover {
+  background: #b81e1e;
+}
+
+.popup-buttons .no:hover {
+  background: #888;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
+@media screen and (max-width: 1000px) {
+    .flight_list td[data-label="Actions"]::before {
+        display: none !important;
+    }
+}
+/* --- Fix position boutons Back / Add en mobile --- */
+@media screen and (max-width: 1000px) {
+
+  .edit-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    height: 90vh; 
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+
+  .form-buttons {
+    margin-top: auto; 
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .form-buttons button {
+    flex: 1;
+    margin: 0 5px;
+  }
+}
+
