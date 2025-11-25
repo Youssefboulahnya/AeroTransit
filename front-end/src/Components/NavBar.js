@@ -8,13 +8,7 @@ import { Link } from "react-router-dom";
 export default function NavBar() {
   // pour hider le nav barre
   const [active, setActive] = useState("navBarMenu");
-  // const showNavBar = () => {
-  //   setActive("navBarMenu showNavBar");
-  // };
 
-  // const removeNavBar = () => {
-  //   setActive("navBarMenu ");
-  // };
   function handleNavBar(){
 
   if(active==="navBarMenu showNavBar"){
@@ -38,20 +32,7 @@ export default function NavBar() {
   return (
     <div className="navBar dFlex">
       <div className="navBarOne dFlex">
-        {/* <div>
-          <SiConsul className="icon" />
-        </div>
-
-        <div className="none dFlex">
-          <li className="dFlex">
-            <BsPhoneVibrate className="icon" />
-            Support
-          </li>
-          <li className="dFlex">
-            <AiOutlineGlobal className="icon" />
-            Languages
-          </li>
-        </div> */}
+       
         <div className="atb dFlex">
           <span>
             <Link to="/Manage" className="manage">
@@ -75,9 +56,7 @@ export default function NavBar() {
                 Home
               </li>
             </Link>
-            {/* <li onClick={removeNavBar} className="listItem no">
-              Manage ticket
-            </li> */}
+            
             <Link to="/About">
               <li onClick={handleNavBar} className="listItem">
                 About

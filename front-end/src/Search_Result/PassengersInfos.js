@@ -6,26 +6,25 @@ const FlightPassengers = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // 🟡 Booking récupéré AVANT TOUT RETURN
+  //  Booking récupéré AVANT TOUT RETURN
   const booking = state?.booking;
 
-  // 🟡 Variables dérivées AVANT return
+  //  Variables dérivées AVANT return
   const passengers = booking?.passengers || 0;
   const flight = booking?.flight;
   const selectedCabin = booking?.selectedCabin;
 
-  // 🟢 Tous les hooks doivent être ici
+  //  Tous les hooks doivent être ici
   const initialForms = Array.from({ length: passengers }, () => ({
     firstName: "",
     lastName: "",
     age: "",
     type: "Adult",
     idNumber: "",
-    email: "",
-    seat: "",
   }));
 
   const [forms, setForms] = useState(initialForms);
+  const [email, setEmail] = useState("");
 
   // ✔ Mise à jour d'un champ
   const updateField = (index, field, value) => {
@@ -40,11 +39,12 @@ const FlightPassengers = () => {
       state: {
         booking,
         passengersData: forms,
+        email: email,
       },
     });
   };
 
-  // 🔴 Le return conditionnel DOIT être placé APRÈS les hooks
+  //  Le return conditionnel DOIT être placé APRÈS les hooks
   if (!booking) {
     return (
       <div className="passenger-page">
@@ -119,17 +119,31 @@ const FlightPassengers = () => {
               onChange={(e) => updateField(i, "idNumber", e.target.value)}
             />
           </div>
-
-          <div className="form-group">
-            <label>Email (ticket will be sent)</label>
-            <input
-              type="email"
-              value={p.email}
-              onChange={(e) => updateField(i, "email", e.target.value)}
-            />
-          </div>
         </div>
       ))}
+
+      {/* Single email field for all passengers */}
+      <div
+        className="email-section"
+        style={{
+          marginTop: "2rem",
+          padding: "1.5rem",
+          background: "#f9f9f9",
+          borderRadius: "8px",
+        }}
+      >
+        <h3>Contact Information</h3>
+        <div className="form-group">
+          <label>Email (tickets will be sent here)</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@email.com"
+            style={{ width: "100%" }}
+          />
+        </div>
+      </div>
 
       <div className="next-section">
         <button className="next-btn" onClick={handleNext}>

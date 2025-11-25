@@ -129,7 +129,7 @@ h2 {
   color: var(--blackColor);
 }
 
-/* ----------------------------------------------------- */
+/* ##############style de la barre navigateur */
 
 .navBar {
   position: fixed;
@@ -286,7 +286,7 @@ h2 {
 
 
 
-/* ----------------------------------------------------------------------------- */
+/* ##############style de la section home */
 
 .home {
   padding-top: 10rem;
@@ -302,7 +302,7 @@ h2 {
 
   }
 
-  .homeImages {
+  /* .homeImages {
     width: 100%;
     margin: 1rem auto 0;
     position: relative;
@@ -317,13 +317,13 @@ h2 {
       }
     }
 
-  }
+  } */
 
-  .plane {
+  /* .plane {
     position: absolute;
     width: 100%;
     top: -10%;
-  }
+  } */
 
 }
 
@@ -962,13 +962,13 @@ h2 {
       line-height: 4rem;
     }
 
-    .homeImages {
+    /* .homeImages {
       .videoDiv {
         .video {
           border-radius: 50%;
         }
       }
-    }
+    } */
   }
 
   .search {
@@ -1046,7 +1046,7 @@ h2 {
       width: 80%;
     }
 
-    .homeImages {
+    /* .homeImages {
       .videoDiv {
         width: 100%;
 
@@ -1060,7 +1060,7 @@ h2 {
         width: 95%;
         top: -8%;
       }
-    }
+    } */
 
   }
 
@@ -1260,7 +1260,7 @@ h2 {
 
     }
 
-    .homeImages {
+    /* .homeImages {
 
       .videoDiv {
         transform: translateX(6%);
@@ -1278,9 +1278,8 @@ h2 {
       .plane {
         width: 100%;
         top: -14%;
-        /* left:-8% */
       }
-    }
+    } */
   }
 
 
@@ -1368,7 +1367,7 @@ h2 {
       line-height: 6rem;
     }
 
-    .homeImages {
+    /* .homeImages {
       .videoDiv {
         width: 90%;
         height: 25%;
@@ -1387,7 +1386,7 @@ h2 {
 
       }
 
-    }
+    } */
   }
 
   .search {
@@ -1410,10 +1409,10 @@ h2 {
 
         }
 
-        .exception {
+        /* .exception {
           display: grid !important;
           grid-template-columns: repeat(2, 1fr) !important;
-        }
+        } */
       }
     }
   }
@@ -1460,7 +1459,14 @@ h2 {
 
 
       }
+      .logoDiv {
+        .Logo {
+          max-width: 15%;
+
+        }
+      }
     }
+    
 
     .navBarOne {
       .atb {

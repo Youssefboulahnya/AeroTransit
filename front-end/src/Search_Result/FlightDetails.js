@@ -48,7 +48,7 @@ const FlightDetails = () => {
   const navigate = useNavigate();
 
   /* HOOKS — ALWAYS AT THE TOP */
-  const [selectedCabin, setSelectedCabin] = useState("Economy");
+  const selectedCabin = flight?.cabine || "Economy";
 
   const pricing = useMemo(() => {
     if (!flight)
@@ -58,11 +58,12 @@ const FlightDetails = () => {
     const cabinMultiplier = CABINS[selectedCabin].multiplier;
     const basePerPassenger = Math.round(base * cabinMultiplier);
 
-    const subtotal = basePerPassenger * 1; // always 1 passenger now
+    const passengersCount = parseInt(flight.passengers) || 1;
+    const subtotal = basePerPassenger * passengersCount;
     const taxes = Math.round(subtotal * TAX_RATE);
     const total = subtotal + taxes;
 
-    return { basePerPassenger, subtotal, taxes, total };
+    return { basePerPassenger, subtotal, taxes, total, passengersCount };
   }, [selectedCabin, flight]);
 
   /* SAFETY REDIRECT */
@@ -78,7 +79,7 @@ const FlightDetails = () => {
     const bookingSummary = {
       flight,
       selectedCabin,
-      passengers: 1, // always 1 passenger now
+      passengers: pricing.passengersCount,
       seatPreference: "Any", // removed from UI but needed for next page
       pricing,
     };
@@ -121,20 +122,18 @@ const FlightDetails = () => {
           </div>
         </div>
 
-        {/* ---- CABIN CHOICE ---- */}
+        {/* ---- SELECTED CABIN INFO ---- */}
         <div className="booking-controls">
           <div className="control">
-            <label>Select cabin</label>
-            <div className="cabin-tabs">
-              {["Business", "Economy"].map((c) => (
-                <button
-                  key={c}
-                  className={`cabin-tab ${selectedCabin === c ? "active" : ""}`}
-                  onClick={() => setSelectedCabin(c)}
-                >
-                  {CABINS[c].label}
-                </button>
-              ))}
+            <label>Selected cabin</label>
+            <div
+              style={{
+                padding: "0.5rem 0",
+                fontWeight: "600",
+                color: "var(--PrimaryColor)",
+              }}
+            >
+              {CABINS[selectedCabin].label}
             </div>
           </div>
         </div>
@@ -181,7 +180,10 @@ const FlightDetails = () => {
         <h3>Fare summary</h3>
 
         <div className="fare-row">
-          <div>Base ({pricing.basePerPassenger}€ × 1 passenger)</div>
+          <div>
+            Base ({pricing.basePerPassenger}€ × {pricing.passengersCount}{" "}
+            passenger{pricing.passengersCount > 1 ? "s" : ""})
+          </div>
           <div>{pricing.subtotal} €</div>
         </div>
 

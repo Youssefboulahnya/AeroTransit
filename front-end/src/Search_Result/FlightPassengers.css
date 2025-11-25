@@ -1,6 +1,6 @@
 .passenger-page {
   width: 100%;
-  padding: 150px 0 80px;
+  padding: 180px 0 80px;
   background: #f4f7fc;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   border-radius: 14px;
   width: 85%;
   max-width: 900px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
@@ -32,7 +32,7 @@
   padding: 25px 30px;
   border-radius: 16px;
   margin-bottom: 25px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 .passenger-card h3 {
@@ -84,4 +84,99 @@
 
 .next-btn:hover {
   background: #072d6b;
+}
+
+/* Tablet (768px - 1024px) */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .passenger-page {
+    padding: 160px 0 60px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .passenger-card,
+  .flight-summary,
+  .next-section {
+    width: 90%;
+  }
+}
+
+/* Mobile (up to 768px) */
+@media screen and (max-width: 768px) {
+  .passenger-page {
+    padding: 180px 0 50px;
+  }
+
+  .title {
+    font-size: 22px;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .flight-summary {
+    width: 90%;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 15px 20px;
+  }
+
+  .passenger-card {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 16px;
+    /* Prevents zoom on iOS */
+  }
+
+  .next-section {
+    width: 90%;
+  }
+
+  .next-btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
+/* Small mobile (up to 480px) */
+@media screen and (max-width: 480px) {
+  .passenger-page {
+    padding: 160px 0 40px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .flight-summary,
+  .passenger-card,
+  .next-section {
+    width: 95%;
+  }
+
+  .passenger-card {
+    padding: 15px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+  .next-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
 }

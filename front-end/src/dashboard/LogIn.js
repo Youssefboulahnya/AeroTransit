@@ -5,7 +5,7 @@ import api from "../api"; // your Axios instance
 
 export default function LogIn() {
   const [show, setShow] = useState("password");
-  const [ID_admin, setIDAdmin] = useState("");
+  const [Email_admin, setEmailAdmin] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export default function LogIn() {
     e.preventDefault();
     setError(null);
 
-    if (!ID_admin || !password) {
+    if (!Email_admin || !password) {
       setError("Please provide both ID and password.");
       return;
     }
@@ -28,15 +28,16 @@ export default function LogIn() {
 
     try {
       const res = await api.post("/admin-login", {
-        ID_admin,
+        Email_admin,
         password,
       });
 
       const data = res.data;
 
       if (res.status === 200 && data.message === "Access granted!") {
-        // 👉 Save admin ID in localStorage
-        localStorage.setItem("admin_id", ID_admin);
+        //  Save admin email in localStorage
+        // ############################################# faut savoir que ca
+        localStorage.setItem("admin_email", Email_admin);  
 
         // Login success → go to dashboard home
         navigate("/dashboard/Home");
@@ -61,12 +62,12 @@ export default function LogIn() {
           <h1>AeroTransit Management Login</h1>
 
           <div className="label_input">
-            <label>Your ID</label>
+            <label>Your Email</label>
             <input
-              type="text"
-              placeholder="Your ID..."
-              value={ID_admin}
-              onChange={(e) => setIDAdmin(e.target.value)}
+              type="email"
+              placeholder="Your email..."
+              value={Email_admin}
+              onChange={(e) => setEmailAdmin(e.target.value)}
             />
           </div>
 
