@@ -22,6 +22,8 @@ import FlightDetails from "./Search_Result/FlightDetails";
 import FlightPassengers from "./Search_Result/PassengersInfos";
 import Payment from "./Search_Result/Payment";
 import { Route, Routes, useLocation } from "react-router-dom";
+import BookingConfirmation from "./Search_Result/BookingConfirmation";
+
 // import ManageBooking from "./Pages/ManageBooking";
 
 // import Footer from "./Components/Footerr";
@@ -71,6 +73,7 @@ function App() {
         <Route path="/flight-details" element={<FlightDetails />} />
         <Route path="/flight-passengers" element={<FlightPassengers />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/booking-confirmation" element={<BookingConfirmation />} />
       </Routes>
       {!hideNavAndFooter && <Footerr />}
       {/* <LogIn/> */}
