@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Passenger;
+use App\Models\Reservation;
+use App\Models\Flight;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 
@@ -11,52 +13,79 @@ class PassengerController extends Controller
     public function storePassengers(Request $request)
 {
     $reservation_ID = $request->reservation_ID;
-    $Flight_ID = $request->Flight_ID;
-    $passengersData = $request->passengers; // array of passengers
+    $Flight_ID      = $request->Flight_ID;
+    $passengers     = $request->passengers;
 
-    $createdPassengers = [];
+    
+    $reservation = Reservation::findOrFail($reservation_ID);
+    $flight      = Flight::findOrFail($Flight_ID);
 
-    foreach ($passengersData as $p) {
-        // generate unique ticket number
-        $ticketSerial = $this->generateTicketNumber();
+    $created = [];
 
-        // create passenger
-        $passenger = Passenger::create([
-            'reservation_ID'      => $reservation_ID,
-            'Flight_ID'           => $Flight_ID,
-            'ticket_serial_number'=> $ticketSerial,
-            'first_name'          => $p['first_name'],
-            'last_name'           => $p['last_name'],
-            'Passport_ID'         => $p['Passport_ID'],
-            'type'                => $p['type'],
-            'Numero_place'        => $p['Numero_place'] ?? null,
-        ]);
+    foreach ($passengers as $p) {
 
-        // calculate ticket price based on passenger type
-        $price = $passenger->type === 'child'
-            ? $passenger->flight->price
-            : $passenger->flight->price + 30;
+    // 1. Validate seat not taken
+    $seatTaken = Passenger::where('Flight_ID', $Flight_ID)
+                          ->where('Numero_place', $p['Numero_place'])
+                          ->exists();
 
-        // create ticket
-        Ticket::create([
-            'ticket_serial_number' => $ticketSerial,
-            'Passenger_ID'         => $passenger->Passagère_ID,
-            'Flight_ID'            => $Flight_ID,
-            'price'                => $price,
-        ]);
-
-        $createdPassengers[] = $passenger;
+    if ($seatTaken) {
+        return response()->json([
+            'error' => "Seat {$p['Numero_place']} is already reserved."
+        ], 422);
     }
 
-    return response()->json([
-        'message' => 'Passengers and tickets created successfully.',
-        'passengers' => $createdPassengers,
+    // 2. Validate class seat range
+    $seat = $p['Numero_place'];
+    $businessMax = $flight->places_business_classe;
+    $economyStart = $businessMax + 1;
+    $economyEnd = $businessMax + $flight->places_economy_classe;;
+
+    if ($reservation->class === 'business') {
+        if ($seat < 1 || $seat > $businessMax) {
+            return response()->json([
+                'error' => "Seat $seat invalid for Business class. Allowed: 1 to $businessMax."
+            ], 422);
+        }
+    }
+
+    if ($reservation->class === 'economy') {
+        if ($seat < $economyStart || $seat > $economyEnd) {
+            return response()->json([
+                'error' => "Seat $seat invalid for Economy. Allowed: $economyStart to $economyEnd."
+            ], 422);
+        }
+    }
+
+    // 3. Generate ticket serial
+    $ticketSerial = $this->generateTicketNumber();
+
+    // 4. Create passenger
+    $passenger = Passenger::create([
+        'reservation_ID'       => $reservation_ID,
+        'Flight_ID'            => $Flight_ID,
+        'ticket_serial_number' => $ticketSerial,
+        'first_name'           => $p['first_name'],
+        'last_name'            => $p['last_name'],
+        'Passport_ID'          => $p['Passport_ID'],
+        'type'                 => $p['type'],
+        'Numero_place'         => $seat,
+    ]);
+
+    // 5. Create corresponding ticket here
+    Ticket::create([
+        'ticket_serial_number' => $ticketSerial,
+        'Flight_ID'            => $Flight_ID,
+        'Passenger_ID'         => $passenger->id,
+        'price'                => $passenger->calculer_prix(), 
     ]);
 }
 
 
+    return response()->json($created, 201);
+}
     /**
-     * Generate a unique random ticket serial number.
+     * Generate a unique random ticket_serial_number.
      */
     private function generateTicketNumber()
 {

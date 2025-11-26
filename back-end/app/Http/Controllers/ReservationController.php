@@ -74,4 +74,20 @@ public function getFlightDetails($reservationId)
     ]);
 }
 
+public function updateEmail(Request $request, $reservation_ID)
+{
+    $request->validate([
+        'email' => 'required|email'
+    ]);
+
+    $reservation = Reservation::findOrFail($reservation_ID);
+    $reservation->email = $request->email;
+    $reservation->save();
+
+    return response()->json([
+        'message' => 'Email updated successfully.',
+        'reservation' => $reservation
+    ]);
+}
+
 }
