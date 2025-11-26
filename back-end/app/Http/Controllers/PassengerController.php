@@ -15,10 +15,10 @@ class PassengerController extends Controller
     $reservation_ID = $request->reservation_ID;
     $Flight_ID      = $request->Flight_ID;
     $passengers     = $request->passengers;
-
     
     $reservation = Reservation::findOrFail($reservation_ID);
     $flight      = Flight::findOrFail($Flight_ID);
+    
 
     $created = [];
 
