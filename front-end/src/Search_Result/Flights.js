@@ -1,140 +1,158 @@
-import React, { useEffect, useState } from "react";
-import "./Flights.css";
-import co_logo from "../pictures/iconV2.png";
-import { useNavigate, useLocation } from "react-router-dom";
-import api from "../api"; // your axios instance
+import { RxCalendar } from "react-icons/rx";
+import { FaPlaneDeparture } from "react-icons/fa";
+import { FaPlaneArrival } from "react-icons/fa6";
+import { FiUser } from "react-icons/fi";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Flights_infos = () => {
+export default function Search() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = location.state || {};
+  const [color1, setColor1] = useState("singleBtn");
+  const [color2, setColor2] = useState("singleBtn");
 
-  const { origin, destination, departure, passengers, cabine, reservation_id } =
-    searchParams;
+  const [search, setSearch] = useState({
+    cabine: "",
+    origin: "",
+    destination: "",
+    departure: "",
+    passengers: 1,
+  });
 
-  const [flights, setFlights] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const condition =
+    search.cabine === "" ||
+    search.origin === "" ||
+    search.destination === "" ||
+    search.departure === "";
 
-  useEffect(() => {
-    const fetchFlights = async () => {
-      if (!origin || !destination || !departure) return;
-
-      setLoading(true);
-      setError("");
-
-      try {
-        const res = await api.post("/flights/search", {
-          coming_from: origin,
-          going_to: destination,
-          check_in: departure,
-        });
-
-        if (res.data.flights.length === 0) {
-          setError("No flights available for these criteria.");
-        }
-
-        setFlights(res.data.flights);
-      } catch (err) {
-        console.error("Error fetching flights:", err);
-        setError(
-          err.response?.data?.message ||
-            "Something went wrong while fetching flights."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFlights();
-  }, [origin, destination, departure]);
-
-  const handleSelect = async (flight) => {
-    if (!reservation_id) {
-      console.error("No reservation ID found to assign flight.");
-      return;
-    }
-
-    try {
-      const res = await api.put(
-        `/reservations/${reservation_id}/assign-flight`,
-        {
-          ID_flight: flight.ID_flight,
-        }
-      );
-
-      // Navigate to next page or show success message
-      navigate("/flight-details", {
-        state: {
-          ...flight,
-          passengers: passengers || 1,
-          cabine: cabine || "Economy",
-          reservation_id,
-        },
-      });
-    } catch (err) {
-      console.error("Error assigning flight:", err);
-      alert(
-        err.response?.data?.message ||
-          "Something went wrong while assigning flight."
-      );
-    }
+  const handleSearch = () => {
+    navigate("/flights", {
+      state: {
+        ...search,
+      },
+    });
   };
 
   return (
-    <div className="flights-page">
-      <div className="flights-container">
-        <h2 className="title-center">Direct flights operated by AeroTransit</h2>
+    <div className="search container section">
+      <div className="sectionContainer grid">
+        <div className="btns dFlex">
+          <div
+            className={color1}
+            onClick={() => {
+              setColor1("singleBtn clicked");
+              setColor2("singleBtn");
+              setSearch({ ...search, cabine: "Business" });
+            }}
+          >
+            <span>Business</span>
+          </div>
 
-        <div
-          className="search-summary"
-          style={{ textAlign: "center", marginBottom: "20px", color: "#666" }}
-        >
-          Searching for: <strong>{origin}</strong> to{" "}
-          <strong>{destination}</strong> on <strong>{departure}</strong> (
-          {passengers} passengers)
+          <div
+            className={color2}
+            onClick={() => {
+              setColor2("singleBtn clicked");
+              setColor1("singleBtn");
+              setSearch({ ...search, cabine: "Economy" });
+            }}
+          >
+            <span>Economy</span>
+          </div>
         </div>
 
-        {loading ? (
-          <div style={{ textAlign: "center", padding: "2rem" }}>
-            Loading flights...
-          </div>
-        ) : error ? (
-          <div
-            className="no-flights"
-            style={{ textAlign: "center", padding: "2rem" }}
-          >
-            <h3>{error}</h3>
-            <p>Try changing your search criteria.</p>
-          </div>
-        ) : (
-          flights.map((flight) => (
-            <div key={flight.ID_flight} className="flight-card">
-              <div className="flight-left">
-                <img src={co_logo} alt="AeroTransit" className="flight-logo" />
-                <div>
-                  <strong>{flight.company || "AeroTransit"}</strong>
-                  <p className="flight-info">
-                    {flight.temps_aller} → {flight.temps_arriver}
-                  </p>
+        <div className="searchInputs dFlex">
+          <div className="into">
+            {/* Coming from */}
+            <div className="border">
+              <div className="singleInput dFlex">
+                <div className="iconDiv">
+                  <FaPlaneDeparture className="icon" />
+                </div>
+                <div className="texts">
+                  <h4>Coming from</h4>
+                  <input
+                    value={search.origin}
+                    type="text"
+                    placeholder="From..."
+                    onChange={(e) =>
+                      setSearch({ ...search, origin: e.target.value })
+                    }
+                  />
                 </div>
               </div>
+            </div>
 
-              <div className="flight-right">
-                <strong className="price">{flight.price} €</strong>
-                <button
-                  className="select-btn"
-                  onClick={() => handleSelect(flight)}
-                >
-                  Select
-                </button>
+            {/* Going to */}
+            <div className="border">
+              <div className="singleInput dFlex">
+                <div className="iconDiv">
+                  <FaPlaneArrival className="icon" />
+                </div>
+                <div className="texts">
+                  <h4>Going to</h4>
+                  <input
+                    value={search.destination}
+                    type="text"
+                    placeholder="To..."
+                    onChange={(e) =>
+                      setSearch({ ...search, destination: e.target.value })
+                    }
+                  />
+                </div>
               </div>
             </div>
-          ))
-        )}
+
+            {/* Check in */}
+            <div className="border">
+              <div className="singleInput dFlex">
+                <div className="iconDiv">
+                  <RxCalendar className="icon" />
+                </div>
+                <div className="texts">
+                  <h4>Check in</h4>
+                  <input
+                    value={search.departure}
+                    type="date"
+                    onChange={(e) =>
+                      setSearch({ ...search, departure: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Passengers */}
+            <div className="border">
+              <div className="singleInput dFlex">
+                <div className="iconDiv">
+                  <FiUser className="icon" />
+                </div>
+                <div className="texts">
+                  <h4>Passengers</h4>
+                  <input
+                    value={search.passengers}
+                    type="number"
+                    min="1"
+                    onChange={(e) =>
+                      setSearch({ ...search, passengers: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* BUTTON */}
+          <button
+            disabled={condition}
+            className={
+              condition ? "btnDisabled btnBlock dFlex" : "btn btnBlock dFlex"
+            }
+            onClick={handleSearch}
+          >
+            Searching
+          </button>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Flights_infos;
+}

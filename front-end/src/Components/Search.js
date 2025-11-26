@@ -52,7 +52,7 @@ const handleSearch = async () => {
 
 
   return (
-    <div className="search container section">
+    <div className="search container section" id="search">
       <div className="sectionContainer grid">
         <div className="btns dFlex">
           <div

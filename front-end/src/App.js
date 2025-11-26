@@ -7,6 +7,7 @@ import Search from "./Components/Search";
 import Feedback from "./Components/Feedback";
 import Support from "./Components/Support";
 import World from "./Components/World";
+import Statistics from "./Components/Statistics";
 import About from "./Pages/About";
 import Seats from "./Pages/Seats";
 import Manage from "./Pages/Manage";
@@ -44,6 +45,7 @@ function App() {
               <Infos />
               <Lounge />
               <World />
+              <Statistics />
               <Feedback />
             </>
           }
