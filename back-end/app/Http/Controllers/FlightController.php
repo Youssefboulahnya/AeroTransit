@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Flight;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -123,23 +124,48 @@ public function delete_flight($id)
     ], 200);
 }
 
+
+
+        //the flights selecting page
 public function searchFlights(Request $request)
 {
-    //verifier si l'origin n'est pas la destination
+    // Validate the request
     $request->validate([
-        'coming_from' => 'required|string',
-        'going_to'    => 'required|string',
+        'coming_from'    => 'required|string',
+        'going_to'       => 'required|string|different:coming_from',
+        'check_in'       => 'required|date',
+        'passenger_nbr'  => 'required|integer|min:1',
+        'class'          => 'required|in:business,economy',
     ]);
-    //filtrer les vols
-    $flights = Flight::where('origin', $request->coming_from)->where('destination', $request->going_to)->where('temps_aller', '>=', $request->check_in)->where('status', 'scheduled')->get();
-    //si aucune vol n'était sélectionné 
+
+    // Assign validated values to local variables
+    $coming_from   = $request->coming_from;
+    $going_to      = $request->going_to;
+    $check_in      = $request->check_in;
+    $passenger_nbr = $request->passenger_nbr;
+    $classe        = strtolower($request->class); // business or economy
+
+    // Filter flights by origin, destination, date, and status
+    $flights = Flight::where('origin', $coming_from)
+        ->where('destination', $going_to)
+        ->where('temps_aller', '>=', $check_in)
+        ->where('status', 'scheduled')
+        ->get();
+
+    // Filter flights based on available seats in the chosen class
+    $flights = $flights->filter(function($flight) use ($passenger_nbr, $classe) {
+        return $flight->places_disponible_par_classe($classe) >= $passenger_nbr;
+    });
+
+    // Check if no flights match the criteria
     if ($flights->isEmpty()) {
         return response()->json([
             'message' => 'No flights available for the selected route.',
             'flights' => []
         ], 404);  
     }
-    //sinon l'envoi d'une reponse JSON
+
+    // Return the filtered flights
     return response()->json([
         'flights' => $flights
     ]);

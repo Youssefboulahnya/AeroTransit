@@ -33,7 +33,7 @@ public function choisir_Flight(Request $request, $reservation_id)
     ]);
 
     $reservation = Reservation::findOrFail($reservation_id);
-    $reservation->flight_id = $request->flight_id;
+    $reservation->ID_flight = $request->ID_flight;
     $reservation->save();
 
     return response()->json([

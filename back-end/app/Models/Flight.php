@@ -32,4 +32,44 @@ class Flight extends Model
     {
         return $this->places_business_classe + $this->places_business_economy;
     }
+
+
+    public function places_disponible(): int
+    {
+        $reserved = $this->reservations()->sum('passenger_nbr'); // sum of all passengers already reserved
+        return $this->places_total() - $reserved;
+    }
+
+    public function places_disponible_par_classe(string $class): int
+{
+    // Number of passengers already reserved in this class
+    $reserved = $this->reservations()
+                     ->where('class', strtolower($class))
+                     ->sum('passenger_nbr');
+
+    if (strtolower($class) === 'business') {
+        return $this->places_business_classe - $reserved;
+    }
+
+    if (strtolower($class) === 'economy') {
+        return $this->places_business_economy - $reserved;
+    }
+
+    // If class string is wrong, return 0
+
+
+    
+    return 0;
+}
+
+
+//relation flights --- reservations
+
+public function reservations()
+{
+    return $this->hasMany(\App\Models\Reservation::class, 'ID_flight', 'ID_flight');
+}
+
+
+
 }
