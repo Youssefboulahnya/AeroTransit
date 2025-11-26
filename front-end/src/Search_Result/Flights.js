@@ -28,6 +28,9 @@ const Flights_infos = () => {
           coming_from: origin,
           going_to: destination,
           check_in: departure,
+          passenger_nbr: passengers, // ✅ send passengers
+          class: cabine?.toLowerCase(), // ✅ send class (business/economy)
+          reservation_id, // optional: reservation reference
         });
 
         if (res.data.flights.length === 0) {
@@ -47,7 +50,7 @@ const Flights_infos = () => {
     };
 
     fetchFlights();
-  }, [origin, destination, departure]);
+  }, [origin, destination, departure, passengers, cabine, reservation_id]);
 
   const handleSelect = async (flight) => {
     if (!reservation_id) {
@@ -63,7 +66,6 @@ const Flights_infos = () => {
         }
       );
 
-      // Navigate to next page or show success message
       navigate("/flight-details", {
         state: {
           ...flight,

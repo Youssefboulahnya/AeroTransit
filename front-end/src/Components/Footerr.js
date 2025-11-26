@@ -60,7 +60,7 @@ export default function Footer() {
             <span className="linkTitle">Other Informations</span>
 
             <li>
-              <Link to="/">Destination</Link>
+              <a href="#search">Search Flight</a>
             </li>
 
             <li>
