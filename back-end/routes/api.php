@@ -21,6 +21,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::post('/reservations', [ReservationController::class, 'store_reservation']); // create partial reservation
     Route::put('/reservations/{id}/assign-flight', [ReservationController::class, 'choisir_Flight']); // assign flight
     Route::post('/flights/search', [FlightController::class, 'searchFlights']);
+    Route::get('/reservations/{id}/flight-details', [ReservationController::class, 'getFlightDetails']);
 
 
 

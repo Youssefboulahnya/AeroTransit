@@ -42,4 +42,36 @@ public function choisir_Flight(Request $request, $reservation_id)
     ]);
 }
 
+
+
+public function getFlightDetails($reservationId)
+{
+    // Find the reservation
+    $reservation = Reservation::with('flight')->findOrFail($reservationId);
+
+    // If there is no flight assigned yet
+    if (!$reservation->ID_flight || !$reservation->flight) {
+        return response()->json([
+            'message' => 'No flight assigned to this reservation yet.'
+        ], 404);
+    }
+
+    $flight = $reservation->flight;
+
+    return response()->json([
+        'flight' => [
+            'origin'        => $flight->origin,
+            'destination'   => $flight->destination,
+            'temps_aller'   => $flight->temps_aller,
+            'temps_arriver' => $flight->temps_arriver,
+            'price'         => $flight->price,
+        ],
+        'reservation' => [
+            'class'         => $reservation->class,
+            'passenger_nbr' => $reservation->passenger_nbr,
+            'reservation_id'=> $reservation->reservation_ID,
+        ]
+    ]);
+}
+
 }
