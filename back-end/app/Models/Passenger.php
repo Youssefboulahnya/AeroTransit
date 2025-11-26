@@ -59,7 +59,7 @@ class Passenger extends Model
 
     // Apply conditions based on passenger type
     if ($this->type === 'adult') {
-        $finalPrice = $basePrice + 30; // Adult pays 30 more
+        $finalPrice = $basePrice + $basePrice*0.5 ; // Adult pays 30 more
     } 
     else if ($this->type === 'child') {
         $finalPrice = $basePrice; // Child pays base price

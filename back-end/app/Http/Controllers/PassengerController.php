@@ -69,7 +69,22 @@ class PassengerController extends Controller
 
             // Update ticket with passenger ID and calculate price
             $ticket->passenger_ID = $passenger->Passagère_ID;
-            $ticket->prix = $passenger->calculer_prix();
+            $basePrice = $passenger->calculer_prix(); 
+            $flightPrice = $flight->price;
+            if ($ticket->classe === 'business' && $passenger->type === 'adult') {
+                $finalPrice = $basePrice + ($flightPrice * 0.15);
+            }
+            else if ($ticket->classe === 'economy' && $passenger->type === 'adult') {
+                     $finalPrice = $basePrice + ($flightPrice * 0.05);
+            }
+            else {
+                    // Children always pay base price
+                    $finalPrice = $basePrice;
+                }
+
+            // Save ticket price
+            $ticket->prix = $finalPrice;
+
             $ticket->save();
 
             $created[] = $passenger;
