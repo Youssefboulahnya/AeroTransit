@@ -12,17 +12,32 @@ const CABINS = {
       "1 cabin bag (8kg)",
       "2 checked bags (32kg each)",
       "Priority boarding",
+      "Lounge access",
+      "Fast track security",
     ],
-    meals: "Halal meal available, premium meals with dessert.",
-    services: ["Wide seats", "Entertainment screen", "Fast boarding"],
+    meals: "Premium halal meal available, hot meals, dessert, tea & coffee.",
+    services: [
+      "Wide seats with extra legroom",
+      "Large entertainment screen",
+      "Priority boarding",
+      "USB & power outlet",
+      "Premium customer service",
+    ],
   },
+
   Economy: {
     label: "Economy Class",
     multiplier: 1.0,
-    desc: "Standard seating with meal included.",
+    desc: "Standard seating with a free meal included.",
     baggage: ["1 cabin bag (8kg)", "1 checked bag (23kg)"],
-    meals: "Standard halal-friendly meal available.",
-    services: ["Standard seating", "USB charging"],
+    meals:
+      "Standard halal-friendly meal available. Vegetarian option included.",
+    services: [
+      "Standard seating",
+      "USB charging",
+      "Music & Movies",
+      "Reading light",
+    ],
   },
 };
 
@@ -32,13 +47,16 @@ const FlightDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { flight, cabine, passengers } = state;
+  // ⭐ Fix : reconstruire flight correctement
+  const { cabine, passengers, ...flight } = state;
 
   const selectedCabin = cabine || "Economy";
 
+  const cabinData = CABINS[selectedCabin]; // ⭐ accès direct
+
   const pricing = useMemo(() => {
     const base = flight.price;
-    const multiplier = CABINS[selectedCabin].multiplier;
+    const multiplier = cabinData.multiplier;
 
     const basePerPassenger = Math.round(base * multiplier);
     const subtotal = basePerPassenger * passengers;
@@ -63,6 +81,7 @@ const FlightDetails = () => {
 
   return (
     <div className="details-page">
+      {/* ---- TOP BAR ---- */}
       <div className="top-selected-bar">
         <img src={co_logo} alt="AeroTransit" className="top-selected-logo" />
 
@@ -79,6 +98,7 @@ const FlightDetails = () => {
         </div>
       </div>
 
+      {/* ---- BOOKING DETAILS ---- */}
       <div className="details-card">
         <h2>Booking details</h2>
 
@@ -97,13 +117,56 @@ const FlightDetails = () => {
         <div className="booking-controls">
           <div className="control">
             <label>Selected cabin</label>
-            <div style={{ padding: "0.5rem 0", fontWeight: "600" }}>
-              {CABINS[selectedCabin].label}
+            <div
+              style={{
+                padding: "0.5rem 0",
+                fontWeight: "600",
+                color: "var(--PrimaryColor)",
+              }}
+            >
+              {cabinData.label}
             </div>
           </div>
         </div>
       </div>
 
+      {/* ---- NEW SECTION : BAGGAGE / MEALS / SERVICES ---- */}
+      <div className="details-extra">
+        <h2>Cabin Benefits</h2>
+
+        {/* Description */}
+        <p className="muted">{cabinData.desc}</p>
+
+        <div className="extra-grid">
+          {/* BAGGAGE */}
+          <div className="extra-card">
+            <h3>Baggage Allowance</h3>
+            <ul>
+              {cabinData.baggage.map((b, i) => (
+                <li key={i}>✔ {b}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* MEALS */}
+          <div className="extra-card">
+            <h3>Meals</h3>
+            <p>{cabinData.meals}</p>
+          </div>
+
+          {/* SERVICES */}
+          <div className="extra-card">
+            <h3>On-board Services</h3>
+            <ul>
+              {cabinData.services.map((s, i) => (
+                <li key={i}>✔ {s}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* ---- PRICE SUMMARY ---- */}
       <div className="fare-breakdown">
         <h3>Fare summary</h3>
 

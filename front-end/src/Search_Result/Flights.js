@@ -28,8 +28,8 @@ const Flights_infos = () => {
           coming_from: origin,
           going_to: destination,
           check_in: departure,
-          passenger_nbr: passengers, // ✅ send passengers
-          class: cabine?.toLowerCase(), // ✅ send class (business/economy)
+          passenger_nbr: passengers, // 
+          class: cabine?.toLowerCase(), // 
           reservation_id, // optional: reservation reference
         });
 
@@ -52,36 +52,17 @@ const Flights_infos = () => {
     fetchFlights();
   }, [origin, destination, departure, passengers, cabine, reservation_id]);
 
-  const handleSelect = async (flight) => {
-    if (!reservation_id) {
-      console.error("No reservation ID found to assign flight.");
-      return;
-    }
+const handleSelect = (flight) => {
+  navigate("/flight-details", {
+    state: {
+      ...flight,
+      passengers: passengers || 1,
+      cabine: cabine || "Economy",
+      reservation_id,
+    },
+  });
+};
 
-    try {
-      const res = await api.put(
-        `/reservations/${reservation_id}/assign-flight`,
-        {
-          ID_flight: flight.ID_flight,
-        }
-      );
-
-      navigate("/flight-details", {
-        state: {
-          ...flight,
-          passengers: passengers || 1,
-          cabine: cabine || "Economy",
-          reservation_id,
-        },
-      });
-    } catch (err) {
-      console.error("Error assigning flight:", err);
-      alert(
-        err.response?.data?.message ||
-          "Something went wrong while assigning flight."
-      );
-    }
-  };
 
   return (
     <div className="flights-page">
