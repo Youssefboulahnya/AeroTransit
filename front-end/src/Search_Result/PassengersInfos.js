@@ -6,19 +6,16 @@ const FlightPassengers = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  //  Booking récupéré AVANT TOUT RETURN
   const booking = state?.booking;
 
-  //  Variables dérivées AVANT return
   const passengers = booking?.passengers || 0;
   const flight = booking?.flight;
   const selectedCabin = booking?.selectedCabin;
 
-  //  Tous les hooks doivent être ici
   const initialForms = Array.from({ length: passengers }, () => ({
     firstName: "",
     lastName: "",
-    age: "",
+
     type: "Adult",
     idNumber: "",
   }));
@@ -44,7 +41,6 @@ const FlightPassengers = () => {
     });
   };
 
-  //  Le return conditionnel DOIT être placé APRÈS les hooks
   if (!booking) {
     return (
       <div className="passenger-page">
@@ -58,10 +54,7 @@ const FlightPassengers = () => {
       <h2 className="title">Passengers Information</h2>
 
       <div className="flight-summary">
-        <div>
-          <strong>{flight.company}</strong> — {flight.departure} →{" "}
-          {flight.arrival}
-        </div>
+        
         <span>Cabin: {selectedCabin}</span>
       </div>
 
@@ -90,15 +83,6 @@ const FlightPassengers = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group">
-              <label>Age</label>
-              <input
-                type="number"
-                value={p.age}
-                onChange={(e) => updateField(i, "age", e.target.value)}
-              />
-            </div>
-
             <div className="form-group">
               <label>Type</label>
               <select

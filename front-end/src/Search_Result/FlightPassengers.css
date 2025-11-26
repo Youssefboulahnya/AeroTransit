@@ -21,7 +21,9 @@
   max-width: 900px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
   margin-bottom: 30px;
 }
 

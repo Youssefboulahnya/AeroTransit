@@ -6,7 +6,7 @@ import "./FlightDetails.css";
 const CABINS = {
   Business: {
     label: "Business Class",
-    multiplier: 1.4,
+    serviceRate: 0.15,
     desc: "Extra comfort, premium meals and lounge access.",
     baggage: [
       "1 cabin bag (8kg)",
@@ -27,7 +27,7 @@ const CABINS = {
 
   Economy: {
     label: "Economy Class",
-    multiplier: 1.0,
+    serviceRate: 0.05,
     desc: "Standard seating with a free meal included.",
     baggage: ["1 cabin bag (8kg)", "1 checked bag (23kg)"],
     meals:
@@ -41,36 +41,38 @@ const CABINS = {
   },
 };
 
-const TAX_RATE = 0.1;
-
 const FlightDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // ⭐ Fix : reconstruire flight correctement
-  const { cabine, passengers, ...flight } = state;
+  const { cabine, passengers, children = 0, ...flight } = state;
 
   const selectedCabin = cabine || "Economy";
+  const cabinData = CABINS[selectedCabin];
 
-  const cabinData = CABINS[selectedCabin]; // ⭐ accès direct
-
+  // ⭐ Prix service (enfant gratuit)
   const pricing = useMemo(() => {
-    const base = flight.price;
-    const multiplier = cabinData.multiplier;
+    const flightPrice = flight.price;
+    const serviceRate = cabinData.serviceRate;
 
-    const basePerPassenger = Math.round(base * multiplier);
-    const subtotal = basePerPassenger * passengers;
-    const taxes = Math.round(subtotal * TAX_RATE);
-    const total = subtotal + taxes;
+    const servicePerAdult = Math.round(flightPrice * serviceRate);
+    const servicePerChild = 0; // ⭐ ENFANT GRATUIT
 
-    return { basePerPassenger, subtotal, taxes, total };
-  }, [flight, passengers, selectedCabin]);
+    return {
+      servicePerAdult,
+      servicePerChild,
+    };
+  }, [flight, selectedCabin]);
 
   const handleNext = () => {
     navigate("/flight-passengers", {
       state: {
         booking: {
-          flight,
+          flight: {
+            ...flight,
+            departure: flight.temps_aller,
+            arrival: flight.temps_arriver,
+          },
           selectedCabin,
           passengers,
           pricing,
@@ -79,19 +81,18 @@ const FlightDetails = () => {
     });
   };
 
+
   return (
     <div className="details-page">
       {/* ---- TOP BAR ---- */}
       <div className="top-selected-bar">
         <img src={co_logo} alt="AeroTransit" className="top-selected-logo" />
-
         <div className="top-selected-text">
           <strong>AeroTransit</strong>
           <div className="small">
             {flight.temps_aller} → {flight.temps_arriver}
           </div>
         </div>
-
         <div className="top-selected-right">
           <div className="small">Base price</div>
           <div className="price-small">{flight.price} €</div>
@@ -130,15 +131,12 @@ const FlightDetails = () => {
         </div>
       </div>
 
-      {/* ---- NEW SECTION : BAGGAGE / MEALS / SERVICES ---- */}
+      {/* ---- BENEFITS ---- */}
       <div className="details-extra">
         <h2>Cabin Benefits</h2>
-
-        {/* Description */}
         <p className="muted">{cabinData.desc}</p>
 
         <div className="extra-grid">
-          {/* BAGGAGE */}
           <div className="extra-card">
             <h3>Baggage Allowance</h3>
             <ul>
@@ -148,13 +146,11 @@ const FlightDetails = () => {
             </ul>
           </div>
 
-          {/* MEALS */}
           <div className="extra-card">
             <h3>Meals</h3>
             <p>{cabinData.meals}</p>
           </div>
 
-          {/* SERVICES */}
           <div className="extra-card">
             <h3>On-board Services</h3>
             <ul>
@@ -166,22 +162,23 @@ const FlightDetails = () => {
         </div>
       </div>
 
-      {/* ---- PRICE SUMMARY ---- */}
+      {/* ---- SERVICE PRICE (ADULT + CHILD FREE) ---- */}
       <div className="fare-breakdown">
-        <h3>Fare summary</h3>
+        <h3>Cabin Services Price</h3>
 
         <div className="fare-row">
-          Base ({pricing.basePerPassenger}€ × {passengers} passenger
-          {passengers > 1 ? "s" : ""})<span>{pricing.subtotal} €</span>
+          Service price per adult ({pricing.servicePerAdult}€)
+          <span>{pricing.servicePerAdult} €</span>
         </div>
 
         <div className="fare-row">
-          Taxes (10%) <span>{pricing.taxes} €</span>
+          Service price per child (free)
+          <span>0 €</span>
         </div>
 
-        <div className="fare-row total">
-          Total <span>{pricing.total} €</span>
-        </div>
+        <p style={{ marginTop: "10px", color: "#666", fontSize: "14px" }}>
+          * These service fees apply <strong>per passenger</strong>.
+        </p>
       </div>
 
       <div className="bottom-actions">
