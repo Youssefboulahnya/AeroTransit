@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\PassengerController;
 
 Route::post('/admin-login', [AdminController::class, 'login']); //anyone can access the log in page
 
@@ -22,6 +23,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::put('/reservations/{id}/assign-flight', [ReservationController::class, 'choisir_Flight']); // assign flight
     Route::post('/flights/search', [FlightController::class, 'searchFlights']);
     Route::get('/reservations/{id}/flight-details', [ReservationController::class, 'getFlightDetails']);
+    Route::post('/passengers/store', [PassengerController::class, 'storePassengers']);
 
 
 
