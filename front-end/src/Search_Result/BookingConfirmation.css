@@ -330,7 +330,7 @@
     background: var(--HoverColor);
 }
 
-/* Tablet */
+/* Tablet or small lap*/
 @media screen and (max-width: 1024px) and (min-width: 769px) {
     .confirmation-page {
         padding: 160px 20px 60px;

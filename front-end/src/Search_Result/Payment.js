@@ -51,7 +51,7 @@ const Payment = () => {
       setPaymentData({ ...paymentData, [name]: value });
     }
 
-    // Clear error for this field
+    
     setErrors({ ...errors, [name]: "" });
   };
 
@@ -129,7 +129,7 @@ const Payment = () => {
             <p>
               {booking.flight.departure} → {booking.flight.arrival}
             </p>
-            <p>Date: {booking.flight.departureDate}</p>
+            <p >{booking.flight.departureDate}</p>
             <p>Cabin: {booking.selectedCabin}</p>
           </div>
 
@@ -196,7 +196,7 @@ const Payment = () => {
                 name="cardName"
                 value={paymentData.cardName}
                 onChange={handleInputChange}
-                placeholder="JOHN DOE"
+                placeholder="BOULAHNIYA YOUSSEF"
                 className={errors.cardName ? "error" : ""}
               />
               {errors.cardName && (

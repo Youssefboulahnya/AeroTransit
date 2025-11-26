@@ -74,7 +74,7 @@
 }
 
 .next-btn {
-  background: #0a3d91;
+  background: #000000;
   border: none;
   padding: 14px 48px;
   color: white;
@@ -85,7 +85,7 @@
 }
 
 .next-btn:hover {
-  background: #072d6b;
+  background: #ec9600;
 }
 
 /* Tablet (768px - 1024px) */

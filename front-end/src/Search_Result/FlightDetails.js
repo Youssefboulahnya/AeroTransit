@@ -56,7 +56,7 @@ const FlightDetails = () => {
     const serviceRate = cabinData.serviceRate;
 
     const servicePerAdult = Math.round(flightPrice * serviceRate);
-    const servicePerChild = 0; // ⭐ ENFANT GRATUIT
+    const servicePerChild = 0; // ⭐ ENFANT GRATUIT ICI ON N'AJOUTE PAS A LA FIN LE PRIX DE SERVIE POUR CHILD (FREE)
 
     return {
       servicePerAdult,

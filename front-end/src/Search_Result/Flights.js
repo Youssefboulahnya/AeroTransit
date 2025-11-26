@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Flights.css";
 import co_logo from "../pictures/iconV2.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import api from "../api"; // your axios instance
+import api from "../api";//ok the api is workin
 
 const Flights_infos = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ const Flights_infos = () => {
           coming_from: origin,
           going_to: destination,
           check_in: departure,
-          passenger_nbr: passengers, // 
-          class: cabine?.toLowerCase(), // 
-          reservation_id, // optional: reservation reference
+          passenger_nbr: passengers, 
+          class: cabine?.toLowerCase(), 
+          reservation_id, 
         });
 
         if (res.data.flights.length === 0) {

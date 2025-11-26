@@ -20,7 +20,6 @@ import ProtectedRoute from "./dashboard/ProtectedRoute";
 import Flights from "./Search_Result/Flights";
 import FlightDetails from "./Search_Result/FlightDetails";
 import FlightPassengers from "./Search_Result/PassengersInfos";
-import SeatSelection from "./Search_Result/SeatSelection";
 import Payment from "./Search_Result/Payment";
 import { Route, Routes, useLocation } from "react-router-dom";
 // import Footer from "./Components/Footerr";
@@ -68,7 +67,6 @@ function App() {
         <Route path="/Flights" element={<Flights />} />
         <Route path="/flight-details" element={<FlightDetails />} />
         <Route path="/flight-passengers" element={<FlightPassengers />} />
-        <Route path="/seat-selection" element={<SeatSelection />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>
       {!hideNavAndFooter && <Footerr />}
