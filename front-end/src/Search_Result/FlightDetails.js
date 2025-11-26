@@ -45,12 +45,12 @@ const FlightDetails = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { cabine, passengers, children = 0, ...flight } = state;
+  const { cabine, passengers, reservation_id, children = 0, ...flight } = state;
+
 
   const selectedCabin = cabine || "Economy";
   const cabinData = CABINS[selectedCabin];
 
-  // ⭐ Prix service (enfant gratuit)
   const pricing = useMemo(() => {
     const flightPrice = flight.price;
     const serviceRate = cabinData.serviceRate;
@@ -64,22 +64,24 @@ const FlightDetails = () => {
     };
   }, [flight, selectedCabin]);
 
-  const handleNext = () => {
-    navigate("/flight-passengers", {
-      state: {
-        booking: {
-          flight: {
-            ...flight,
-            departure: flight.temps_aller,
-            arrival: flight.temps_arriver,
-          },
-          selectedCabin,
-          passengers,
-          pricing,
+const handleNext = () => {
+  navigate("/flight-passengers", {
+    state: {
+      booking: {
+        flight: {
+          ...flight,
+          departure: flight.temps_aller,
+          arrival: flight.temps_arriver,
         },
+        selectedCabin,
+        passengers,
+        pricing,
+        reservation_id: state.reservation_id, 
       },
-    });
-  };
+    },
+  });
+};
+
 
 
   return (

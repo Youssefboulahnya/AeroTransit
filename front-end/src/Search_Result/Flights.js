@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Flights.css";
 import co_logo from "../pictures/iconV2.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import api from "../api";//ok the api is workin
+import api from "../api";
 
 const Flights_infos = () => {
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ const Flights_infos = () => {
           coming_from: origin,
           going_to: destination,
           check_in: departure,
-          passenger_nbr: passengers, 
-          class: cabine?.toLowerCase(), 
-          reservation_id, 
+          passenger_nbr: passengers,
+          class: cabine?.toLowerCase(),
+          reservation_id,
         });
 
         if (res.data.flights.length === 0) {
@@ -52,17 +52,30 @@ const Flights_infos = () => {
     fetchFlights();
   }, [origin, destination, departure, passengers, cabine, reservation_id]);
 
-const handleSelect = (flight) => {
-  navigate("/flight-details", {
-    state: {
-      ...flight,
-      passengers: passengers || 1,
-      cabine: cabine || "Economy",
-      reservation_id,
-    },
-  });
-};
+  const handleSelect = async (flight) => {
+    try {
+      // Call API to assign flight to the reservation
+      await api.put(`/reservations/${reservation_id}/assign-flight`, {
+        ID_flight: flight.ID_flight,
+      });
 
+      // Navigate to flight details page with all info
+      navigate("/flight-details", {
+        state: {
+          ...flight,
+          passengers: passengers || 1,
+          cabine: cabine || "Economy",
+          reservation_id,
+        },
+      });
+    } catch (err) {
+      console.error("Error assigning flight:", err);
+      alert(
+        err.response?.data?.message ||
+          "Failed to assign flight to the reservation."
+      );
+    }
+  };
 
   return (
     <div className="flights-page">
