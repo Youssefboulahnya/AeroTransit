@@ -19,7 +19,7 @@ const Payment = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Calculate total price
+  // Calculate total price (unchanged)
   const calculateTotal = () => {
     if (!booking) return 0;
     const basePrice = booking.flight.price;
@@ -30,19 +30,30 @@ const Payment = () => {
     return subtotal + taxes;
   };
 
+  // Cabin service fee (5% economy, 15% business, child = free)
+  const cabinServiceFee = passengersData.reduce((sum, p) => {
+    const percent =
+      booking.selectedCabin === "Business"
+        ? p.type === "Child"
+          ? 0
+          : 0.15
+        : p.type === "Child"
+        ? 0
+        : 0.05;
+
+    return sum + booking.flight.price * percent;
+  }, 0);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Format card number with spaces
     if (name === "cardNumber") {
       const formatted = value
         .replace(/\s/g, "")
         .replace(/(\d{4})/g, "$1 ")
         .trim();
       setPaymentData({ ...paymentData, [name]: formatted });
-    }
-    // Format expiry date
-    else if (name === "expiryDate") {
+    } else if (name === "expiryDate") {
       const formatted = value
         .replace(/\D/g, "")
         .replace(/(\d{2})(\d{0,2})/, "$1/$2");
@@ -51,7 +62,6 @@ const Payment = () => {
       setPaymentData({ ...paymentData, [name]: value });
     }
 
-    
     setErrors({ ...errors, [name]: "" });
   };
 
@@ -88,14 +98,13 @@ const Payment = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      // Navigate to confirmation page
       navigate("/booking-confirmation", {
         state: {
           booking,
           passengersData,
           email,
           paymentData,
-          totalAmount: calculateTotal(),
+          totalAmount: calculateTotal(), // unchanged
         },
       });
     }
@@ -129,7 +138,7 @@ const Payment = () => {
             <p>
               {booking.flight.departure} → {booking.flight.arrival}
             </p>
-            <p >{booking.flight.departureDate}</p>
+            <p>{booking.flight.departureDate}</p>
             <p>Cabin: {booking.selectedCabin}</p>
           </div>
 
@@ -153,14 +162,18 @@ const Payment = () => {
               <span>Base Price × {passengersData.length}</span>
               <span>{booking.flight.price * passengersData.length} €</span>
             </div>
+
             <div className="price-row">
               <span>Cabin ({booking.selectedCabin})</span>
               <span>×{booking.selectedCabin === "Business" ? 2 : 1}</span>
             </div>
+
+            {/* ✔ REPLACED TAXES BLOCK */}
             <div className="price-row">
-              <span>Taxes (15%)</span>
-              <span>{Math.round((calculateTotal() * 0.15) / 1.15)} €</span>
+              <span>Cabin Service Fee</span>
+              <span>{cabinServiceFee.toFixed(2)} €</span>
             </div>
+
             <div className="price-row total">
               <span>Total</span>
               <span>{calculateTotal()} €</span>

@@ -12,7 +12,6 @@ const BookingConfirmation = () => {
   const email = state?.email || "";
   const totalAmount = state?.totalAmount || 0;
 
-  // Generate booking ID on component mount
   useEffect(() => {
     const generateBookingId = () => {
       const date = new Date();
@@ -53,7 +52,6 @@ const BookingConfirmation = () => {
   return (
     <div className="confirmation-page">
       <div className="confirmation-container">
-        {/* Success Header */}
         <div className="success-header">
           <div className="success-icon">
             <svg
@@ -71,17 +69,16 @@ const BookingConfirmation = () => {
               />
             </svg>
           </div>
-          <h1>Paiement Réussi !</h1>
+          <h1>Payment Successful!</h1>
           <p className="success-subtitle">
-            Votre réservation a été confirmée avec succès
+            Your booking has been successfully confirmed
           </p>
         </div>
 
-        {/* Booking Credentials Card */}
         <div className="credentials-card">
-          <h2>Informations de Connexion</h2>
+          <h2>Login Information</h2>
           <p className="credentials-intro">
-            Utilisez ces informations pour gérer votre réservation :
+            Use this information to manage your booking:
           </p>
 
           <div className="credential-item">
@@ -123,7 +120,7 @@ const BookingConfirmation = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-              ID de Réservation
+              Booking ID
             </div>
             <div className="credential-value booking-id">{bookingId}</div>
           </div>
@@ -136,20 +133,29 @@ const BookingConfirmation = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-              <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+              <path
+                d="M12 16V12M12 8H12.01"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
             <p>
-              Conservez ces informations précieusement. Vous en aurez besoin
-              pour accéder à la gestion de votre réservation et télécharger vos
-              billets.
+              Keep this information safe. You will need it to access your
+              booking management area and get your tickets.
             </p>
           </div>
         </div>
 
-        {/* Booking Summary */}
         <div className="booking-details-card">
-          <h3>Résumé de la Réservation</h3>
+          <h3>Booking Summary</h3>
 
           <div className="detail-section">
             <h4>
@@ -165,30 +171,35 @@ const BookingConfirmation = () => {
                   fill="currentColor"
                 />
               </svg>
-              Détails du Vol
+              Flight Details
             </h4>
+
             <div className="detail-row">
-              <span className="label">Compagnie</span>
+              <span className="label">Airline</span>
               <span className="value">{booking.flight.company}</span>
             </div>
+
             <div className="detail-row">
-              <span className="label">Itinéraire</span>
+              <span className="label">Route</span>
               <span className="value">
                 {booking.flight.origin} → {booking.flight.destination}
               </span>
             </div>
+
             <div className="detail-row">
-              <span className="label">Horaires</span>
+              <span className="label">Schedule</span>
               <span className="value">
                 {booking.flight.departure} → {booking.flight.arrival}
               </span>
             </div>
+
             <div className="detail-row">
               <span className="label">Date</span>
               <span className="value">{booking.flight.departureDate}</span>
             </div>
+
             <div className="detail-row">
-              <span className="label">Classe</span>
+              <span className="label">Class</span>
               <span className="value">{booking.selectedCabin}</span>
             </div>
           </div>
@@ -207,27 +218,27 @@ const BookingConfirmation = () => {
                   fill="currentColor"
                 />
               </svg>
-              Passagers ({passengersData.length})
+              Passengers ({passengersData.length})
             </h4>
+
             {passengersData.map((passenger, index) => (
               <div key={index} className="detail-row">
                 <span className="label">
                   {passenger.firstName} {passenger.lastName}
                 </span>
-                <span className="value">Siège {passenger.seat}</span>
+                <span className="value">Seat {passenger.seat}</span>
               </div>
             ))}
           </div>
 
           <div className="detail-section total-section">
             <div className="detail-row total-row">
-              <span className="label">Montant Total Payé</span>
+              <span className="label">Total Amount Paid</span>
               <span className="value total-amount">{totalAmount} €</span>
             </div>
           </div>
         </div>
 
-        {/* Call to Action */}
         <div className="cta-section">
           <button onClick={handleManageBooking} className="manage-booking-btn">
             <svg
@@ -242,16 +253,16 @@ const BookingConfirmation = () => {
                 fill="currentColor"
               />
             </svg>
-            Gérer Ma Réservation
+            Manage My Booking
           </button>
 
           <p className="cta-description">
-            Accédez à votre espace de gestion pour télécharger vos billets,
-            modifier votre réservation ou ajouter des services supplémentaires.
+            Access your management space to get your tickets, modify your
+            booking, or add extra services.
           </p>
 
           <button onClick={() => navigate("/")} className="home-link-btn">
-            Retour à l'accueil
+            Return to Home
           </button>
         </div>
       </div>
