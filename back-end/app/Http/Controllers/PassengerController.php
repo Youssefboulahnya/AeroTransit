@@ -85,7 +85,7 @@ class PassengerController extends Controller
     ]);
 
     // 7️⃣ Update ticket with passenger_ID
-    $ticket->passenger_ID = $passenger->passenger_ID;
+    $ticket->passenger_ID = $passenger->Passagère_ID;
     $ticket->save();
 
 
