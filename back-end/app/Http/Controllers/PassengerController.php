@@ -38,7 +38,7 @@ class PassengerController extends Controller
         $seat = $p['Numero_place'];
         $businessMax = $flight->places_business_classe;
         $economyStart = $businessMax + 1;
-        $economyEnd = $businessMax + $flight->places_economy_classe;
+        $economyEnd = $businessMax + $flight->places_business_economy;
 
         if ($reservation->class === 'business' && ($seat < 1 || $seat > $businessMax)) {
             return response()->json([
