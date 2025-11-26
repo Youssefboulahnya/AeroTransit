@@ -22,6 +22,7 @@ class ReservationController extends Controller
 
     return response()->json([
         'message' => 'Reservation created successfully',
+        'reservation_ID' => $reservation->reservation_ID,
         'reservation' => $reservation
     ], 201);
 }
