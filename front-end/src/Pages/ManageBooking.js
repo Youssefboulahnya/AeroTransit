@@ -1,50 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ManageBooking.css";
 
-const ManageBooking = () => {
+export default function ManageBooking() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const mockBooking = {
-    reservationId: "AF78923",
-    email: "user@example.com",
-    flight: {
-      origin: "CDG",
-      destination: "JFK",
-      date: "2025-12-15",
-      time: "10:30 AM",
-      company: "Air France",
-      duration: "8h 15m",
-    },
-    passengers: [
-      {
-        id: 1,
-        firstName: "John",
-        lastName: "Doe",
-        type: "Adult",
-        seat: "12A",
-        passportId: "A12345678",
-        ticketId: "TKT-001",
-        price: 725,
-      },
-      {
-        id: 2,
-        firstName: "Jane",
-        lastName: "Doe",
-        type: "Adult",
-        seat: "12B",
-        passportId: "B98765432",
-        ticketId: "TKT-002",
-        price: 725,
-      },
-    ],
-    totalPrice: 1450,
-  };
+  const reservation_ID = location.state?.reservation_ID;
+  const email = location.state?.email;
 
-  const booking = location.state?.booking || mockBooking;
-
-  const passengers = booking?.passengers || [];
+  const [booking, setBooking] = useState(null);
+  const [localPassengers, setLocalPassengers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -55,9 +23,69 @@ const ManageBooking = () => {
   const [showDeleteRefundModal, setShowDeleteRefundModal] = useState(false);
   const [deletingPassenger, setDeletingPassenger] = useState(null);
 
+  const [deleteRefundAmount, setDeleteRefundAmount] = useState(null);
+  const [reservationRefundAmount, setReservationRefundAmount] = useState(null);
+
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
-  const [localPassengers, setLocalPassengers] = useState(passengers);
+  useEffect(() => {
+    let mounted = true;
+    async function fetchTickets() {
+      if (!reservation_ID) {
+        if (!mounted) return;
+        setError("No reservation ID found.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `http://localhost:8000/api/reservation/${encodeURIComponent(
+            reservation_ID
+          )}/tickets`
+        );
+        const data = await res.json();
+
+        if (!data.success) {
+          setError(data.message || "Failed to load reservation.");
+        } else {
+          const formattedPassengers = data.tickets.map((t, index) => ({
+            id: index + 1,
+            firstName: t.passenger_first_name || "",
+            lastName: t.passenger_last_name || "",
+            type: t.passenger_type || "",
+            seat: t.seat_number || "",
+            passportId: t.passport_ID || "",
+            ticketId: t.ticket_serial_number || "",
+            price: Number(t.prix) || 0,
+          }));
+
+          if (!mounted) return;
+          setBooking({
+            reservationId: data.reservation_ID,
+            flight: data.flight,
+            passengers: formattedPassengers,
+            totalPrice: formattedPassengers.reduce(
+              (sum, p) => sum + Number(p.price || 0),
+              0
+            ),
+          });
+
+          setLocalPassengers(formattedPassengers);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Server error.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    fetchTickets();
+    return () => {
+      mounted = false;
+    };
+  }, [reservation_ID]);
 
   const handleLogout = () => {
     navigate("/");
@@ -67,20 +95,67 @@ const ManageBooking = () => {
     setShowConfirmModal(true);
   };
 
-  const confirmCancellation = () => {
+  const confirmCancellation = async () => {
     setShowConfirmModal(false);
-    setShowRefundModal(true);
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/reservation/${encodeURIComponent(
+          reservation_ID
+        )}/delete`,
+        { method: "DELETE" }
+      );
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (e) {
+        data = {};
+      }
+
+      if (!res.ok) {
+        alert(
+          `Cancellation failed (status ${res.status})${
+            data?.message ? `: ${data.message}` : ""
+          }`
+        );
+        return;
+      }
+
+      const backendAmount =
+        data?.refund_amount ??
+        data?.refund ??
+        data?.total_price_refund ??
+        data?.totalPrice ??
+        data?.payment?.prix_total ??
+        null;
+
+      const amountToShow =
+        backendAmount != null
+          ? Number(backendAmount)
+          : Number(booking?.totalPrice || 0);
+
+      setReservationRefundAmount(amountToShow);
+
+      setBooking(null);
+      setLocalPassengers([]);
+
+      setShowRefundModal(true);
+    } catch (err) {
+      console.error("Cancel error:", err);
+      alert("Cancellation failed (network error).");
+    }
   };
 
-  const closeConfirmModal = () => {
-    setShowConfirmModal(false);
-  };
-
+  const closeConfirmModal = () => setShowConfirmModal(false);
   const handleCloseRefundModal = () => {
     setShowRefundModal(false);
+    setReservationRefundAmount(null);
     navigate("/");
   };
 
+  // -----------------------------
+  // EDIT PASSENGER
+  // -----------------------------
   const handleEditPassenger = (id) => {
     const p = localPassengers.find((x) => x.id === id);
     if (!p) return;
@@ -88,18 +163,57 @@ const ManageBooking = () => {
     setShowEditModal(true);
   };
 
-  const handleSavePassenger = (e) => {
-    e.preventDefault();
-    setLocalPassengers((prev) =>
-      prev.map((p) => (p.id === editingPassenger.id ? editingPassenger : p))
-    );
-    setShowEditModal(false);
-    setEditingPassenger(null);
-  };
-
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditingPassenger((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSavePassenger = async (e) => {
+    e.preventDefault();
+    if (!editingPassenger) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/passenger/update/${encodeURIComponent(
+          editingPassenger.ticketId
+        )}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            first_name: editingPassenger.firstName,
+            last_name: editingPassenger.lastName,
+            passport_ID: editingPassenger.passportId,
+          }),
+        }
+      );
+
+      const text = await res.text();
+      let data = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { raw: text };
+      }
+
+      if (!res.ok) {
+        alert(
+          `Update failed (status ${res.status})\n${
+            data?.message || data?.raw || JSON.stringify(data)
+          }`
+        );
+        return;
+      }
+
+      setLocalPassengers((prev) =>
+        prev.map((p) => (p.id === editingPassenger.id ? editingPassenger : p))
+      );
+      setShowEditModal(false);
+      setEditingPassenger(null);
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Update failed (network error).");
+    }
   };
 
   const closeEditModal = () => {
@@ -114,13 +228,53 @@ const ManageBooking = () => {
     setShowDeleteConfirmModal(true);
   };
 
-  const confirmDeletePassenger = () => {
+  const confirmDeletePassenger = async () => {
     if (!deletingPassenger) return;
-    setLocalPassengers((prev) =>
-      prev.filter((p) => p.id !== deletingPassenger.id)
-    );
-    setShowDeleteConfirmModal(false);
-    setShowDeleteRefundModal(true);
+
+    try {
+      const url = `http://localhost:8000/api/ticket/${encodeURIComponent(
+        deletingPassenger.ticketId
+      )}/delete`;
+      const res = await fetch(url, { method: "DELETE" });
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
+      if (!res.ok) {
+        alert(
+          `Deletion failed (status ${res.status})${
+            data?.message ? `: ${data.message}` : ""
+          }`
+        );
+        setShowDeleteConfirmModal(false);
+        setDeletingPassenger(null);
+        return;
+      }
+
+      setLocalPassengers((prev) =>
+        prev.filter((p) => p.id !== deletingPassenger.id)
+      );
+
+      const backendAmount =
+        data?.refund_amount ?? data?.refund ?? data?.deleted_price ?? null;
+      const amountToShow =
+        backendAmount != null
+          ? Number(backendAmount)
+          : Number(deletingPassenger.price || 0);
+
+      setDeleteRefundAmount(amountToShow);
+      setShowDeleteConfirmModal(false);
+      setShowDeleteRefundModal(true);
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Deletion failed (network error).");
+      setShowDeleteConfirmModal(false);
+      setDeletingPassenger(null);
+    }
   };
 
   const closeDeleteConfirmModal = () => {
@@ -131,95 +285,110 @@ const ManageBooking = () => {
   const closeDeleteRefundModal = () => {
     setShowDeleteRefundModal(false);
     setDeletingPassenger(null);
+    setDeleteRefundAmount(null);
   };
-// simpl e model to download the information ticket in text file
-  const handleDownloadTicket = (passenger) => {
-    const ticketContent = `
-      ###TICKET CONFIRMATION###
-      
-      Reservation ID: ${booking.reservationId}
-      Ticket ID: ${passenger.ticketId || "N/A"}
-      Flight: ${booking.flight.origin} -> ${booking.flight.destination}
-      Date: ${booking.flight.date} ${booking.flight.time}
-      
-      Passenger: ${passenger.firstName} ${passenger.lastName}
-      Passport/ID: ${passenger.passportId}
-      Seat: ${passenger.seat}
-      Price: $${passenger.price}
-      
-      Thank you for flying with us!
-      -----AeeroTransit-----
+
+  // -----------------------------
+  // DOWNLOAD TICKET
+  // -----------------------------
+  const handleDownloadTicket = (p) => {
+    const flight = booking?.flight || {};
+    const content = `
+--- TICKET INFORMATION ---
+Reservation: ${booking?.reservationId}
+Ticket: ${p.ticketId}
+Flight: ${flight.origin || ""} -> ${flight.destination || ""}
+Departure: ${flight.temps_aller || ""} → Arrival: ${flight.temps_arriver || ""}
+Passenger: ${p.firstName} ${p.lastName}
+Passport: ${p.passportId}
+Seat: ${p.seat}
+Price: ${p.price}
+--------------------------
     `;
 
-    const blob = new Blob([ticketContent], { type: "text/plain" });
+    const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `Ticket_${passenger.lastName}_${booking.reservationId}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `TICKET_${p.ticketId}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
     setShowDownloadModal(true);
   };
 
-  const closeDownloadModal = () => {
-    setShowDownloadModal(false);
-  };
+  const closeDownloadModal = () => setShowDownloadModal(false);
+
+  // -----------------------------
+  // RENDER TIKETS
+  // -----------------------------
+  if (loading) return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
+  if (error)
+    return <h2 style={{ textAlign: "center", color: "red" }}>{error}</h2>;
+  if (!booking)
+    return (
+      <h2 style={{ textAlign: "center", color: "red" }}>
+        Reservation Not Found
+      </h2>
+    );
 
   return (
     <div className="manage-booking-container">
       <div className="booking-header">
         <h1>
-          Welcome to your management interface {booking.reservationId} for
-          trajet {booking.flight.origin} to {booking.flight.destination}
+          Welcome to your management interface {booking.reservationId} for trip{" "}
+          {booking.flight?.origin} → {booking.flight?.destination}
         </h1>
       </div>
 
       <div className="tickets-section">
-        {localPassengers.map((passenger) => (
-          <div className="ticket-card" key={passenger.id}>
+        {localPassengers.map((p) => (
+          <div key={p.id} className="ticket-card">
             <div className="ticket-details">
               <div className="ticket-row">
-                <strong>Trip:</strong> {booking.flight.origin} ✈{" "}
-                {booking.flight.destination}
+                <strong>Ticket ID:</strong> {p.ticketId}
               </div>
               <div className="ticket-row">
-                <strong>Date:</strong> {booking.flight.date}{" "}
-                {booking.flight.time}
+                <strong>Passenger:</strong> {p.firstName} {p.lastName}
               </div>
               <div className="ticket-row">
-                <strong>Ticket ID:</strong> {passenger.ticketId || "N/A"}
+                <strong>Type:</strong> {p.type}
               </div>
               <div className="ticket-row">
-                <strong>Passenger:</strong> {passenger.firstName}{" "}
-                {passenger.lastName}
+                <strong>Passport:</strong> {p.passportId}
               </div>
               <div className="ticket-row">
-                <strong>ID/Passport:</strong> {passenger.passportId}
+                <strong>Seat:</strong> {p.seat}
               </div>
               <div className="ticket-row">
-                <strong>Price:</strong> ${passenger.price}
+                <strong>Price:</strong> {p.price}€
+              </div>
+              <div className="ticket-row">
+                <strong>Departure:</strong> {booking.flight?.temps_aller}
+              </div>
+              <div className="ticket-row">
+                <strong>Arrival:</strong> {booking.flight?.temps_arriver}
               </div>
             </div>
 
             <div className="ticket-actions">
               <button
                 className="action-btn btn-download"
-                onClick={() => handleDownloadTicket(passenger)}
+                onClick={() => handleDownloadTicket(p)}
               >
                 Download
               </button>
               <button
                 className="action-btn btn-edit"
-                onClick={() => handleEditPassenger(passenger.id)}
+                onClick={() => handleEditPassenger(p.id)}
               >
-                Edit Personal Data
+                Edit
               </button>
               <button
                 className="action-btn btn-delete"
-                onClick={() => handleDeletePassenger(passenger.id)}
+                onClick={() => handleDeletePassenger(p.id)}
               >
                 Delete
               </button>
@@ -317,6 +486,7 @@ const ManageBooking = () => {
         </div>
       )}
 
+      {/* Delete confirmation */}
       {showDeleteConfirmModal && deletingPassenger && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -343,13 +513,18 @@ const ManageBooking = () => {
         </div>
       )}
 
-      {showDeleteRefundModal && deletingPassenger && (
+      {showDeleteRefundModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Passenger Deleted</h3>
             <p>
-              Merci, vous allez recevoir le prix du billet (
-              {deletingPassenger.price}) dans votre compte bancaire.
+              Thank you — you will receive{" "}
+              <strong>
+                {deleteRefundAmount != null
+                  ? deleteRefundAmount.toFixed(2)
+                  : "0.00"}
+              </strong>{" "}
+              € to your account within <strong>42–48 hours</strong>.
             </p>
             <button
               className="action-btn btn-confirm"
@@ -379,10 +554,17 @@ const ManageBooking = () => {
       {showRefundModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Réservation Annulée</h3>
+            <h3>Reservation Cancelled</h3>
             <p>
-              Merci, vous allez recevoir le prix de la réservation (
-              {booking.totalPrice}) dans votre compte bancaire.
+              The total reservation amount of{" "}
+              <strong>
+                {reservationRefundAmount != null
+                  ? reservationRefundAmount.toFixed(2)
+                  : (booking?.totalPrice ?? 0).toFixed?.(2) ??
+                    booking?.totalPrice}
+              </strong>{" "}
+              € will be refunded to your account within{" "}
+              <strong>24-48 hours</strong>.
             </p>
             <button
               className="action-btn btn-confirm"
@@ -395,6 +577,4 @@ const ManageBooking = () => {
       )}
     </div>
   );
-};
-
-export default ManageBooking;
+}

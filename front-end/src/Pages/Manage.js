@@ -39,10 +39,31 @@ export default function Manage() {
         return;
       }
 
+      const returnedReservationId =
+        data.reservation_ID ||
+        data.reservation?.reservation_ID ||
+        reservationId ||
+        null;
+
+      if (returnedReservationId) {
+        try {
+          localStorage.setItem("reservation_ID", returnedReservationId);
+        } catch (err) {
+         
+        }
+      }
+      try {
+        localStorage.setItem("reservation_email", email);
+      } catch (err) {
+        // ignore
+      }
+
       // SUCCESS → redirect to ManageBooking page
-      navigate("/ManageBooking", {
+      navigate("/Manage/dashboard", {
         state: {
-          reservation: data.reservation,
+          reservation_ID: returnedReservationId,
+          email,
+          reservation: data.reservation || null,
         },
       });
     } catch (error) {
@@ -87,7 +108,6 @@ export default function Manage() {
             Show the serial
           </span>
 
-          {/* ERROR MESSAGE */}
           {errorMessage && (
             <p
               style={{
