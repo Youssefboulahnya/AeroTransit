@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./FlightPassengers.css";
-import api from "../api"; 
+import api from "../api";
 
 const FlightPassengers = () => {
   const { state } = useLocation();
@@ -32,17 +32,15 @@ const FlightPassengers = () => {
   }, [passengers]);
 
   const [forms, setForms] = useState([]);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Prevent reset
   useEffect(() => {
     if (forms.length === 0) {
       setForms(initialForms);
     }
   }, [initialForms]);
-
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const updateField = (index, field, value) => {
     const updated = [...forms];
@@ -55,6 +53,7 @@ const FlightPassengers = () => {
     setLoading(true);
 
     try {
+      // Prepare passengers payload
       const passengersPayload = forms.map((p) => ({
         first_name: p.firstName,
         last_name: p.lastName,
@@ -63,21 +62,32 @@ const FlightPassengers = () => {
         Numero_place: p.seat ? parseInt(p.seat) : null,
       }));
 
+      // 1️⃣ Store passengers
       await api.post("/passengers/store", {
         reservation_ID: booking.reservation_id,
         Flight_ID: flight.ID_flight,
         passengers: passengersPayload,
       });
 
-      await api.put(`/reservations/${booking.reservation_id}/email`, {
-        email,
+      // 2️⃣ Store email in reservation
+      await api.put(`/reservations/${booking.reservation_id}/email`, { email });
+
+      // 3️⃣ Create payment row
+      const paymentResponse = await api.post("/payments/create", {
+        reservation_ID: booking.reservation_id,
       });
 
+      // 4️⃣ Move to Payment page with payment data
       navigate("/payment", {
-        state: { booking, passengersData: forms, email },
+        state: {
+          booking,
+          passengersData: forms,
+          email,
+          paymentDataFromDB: paymentResponse.data,
+        },
       });
     } catch (err) {
-      console.error("Error storing passengers:", err);
+      console.error("Error:", err);
       setError(
         err.response?.data?.message ||
           err.response?.data?.error ||
@@ -166,7 +176,6 @@ const FlightPassengers = () => {
                   onChange={(e) => updateField(i, "seat", e.target.value)}
                   placeholder="ex:20"
                 />
-                {/* ---------------------------------------------------------------------- */}
               </div>
             </div>
 
