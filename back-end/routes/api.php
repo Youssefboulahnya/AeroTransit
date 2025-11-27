@@ -32,6 +32,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::get('/reservation/{reservation_ID}/tickets', [ReservationController::class, 'getTickets']);
     Route::put('/passenger/update/{ticketSerial}', [ReservationController::class, 'updatePassengerInfo']);
     Route::delete('/reservation/{reservationId}/delete', [ReservationController::class, 'deleteReservation']);
+    Route::delete('/ticket/{ticketSerial}/delete', [ReservationController::class, 'deleteTicket']);
 
 
 
