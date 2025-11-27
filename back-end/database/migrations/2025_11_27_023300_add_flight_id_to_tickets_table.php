@@ -12,12 +12,17 @@ return new class extends Migration
     public function up()
 {
     Schema::table('tickets', function (Blueprint $table) {
+        // 1️⃣ Add the Flight_ID column first
+        $table->unsignedBigInteger('Flight_ID');
+
+        // 2️⃣ Then add the foreign key constraint
         $table->foreign('Flight_ID')
               ->references('ID_flight')
               ->on('flights')
               ->onDelete('cascade');
     });
 }
+
 
 public function down()
 {
