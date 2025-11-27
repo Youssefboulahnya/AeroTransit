@@ -28,7 +28,7 @@ class PassengerController extends Controller
             $seat = $p['Numero_place'];
             $businessMax = $flight->places_business_classe;
             $economyStart = $businessMax + 1;
-            $economyEnd = $businessMax + $flight->places_economy_classe;
+            $economyEnd = $businessMax + $flight->places_business_economy;
 
             // Validate seat range
             if ($reservation->class === 'business' && ($seat < 1 || $seat > $businessMax)) {
@@ -70,12 +70,12 @@ class PassengerController extends Controller
             // Update ticket with passenger ID and calculate price
             $ticket->passenger_ID = $passenger->Passagère_ID;
             $basePrice = $passenger->calculer_prix(); 
-            $flightPrice = $flight->price;
+            
             if ($ticket->classe === 'business' && $passenger->type === 'adult') {
-                $finalPrice = $basePrice + ($flightPrice * 0.15);
+                $finalPrice = $basePrice + ($basePrice * 0.15);
             }
             else if ($ticket->classe === 'economy' && $passenger->type === 'adult') {
-                     $finalPrice = $basePrice + ($flightPrice * 0.05);
+                     $finalPrice = $basePrice + ($basePrice * 0.05);
             }
             else {
                     // Children always pay base price
