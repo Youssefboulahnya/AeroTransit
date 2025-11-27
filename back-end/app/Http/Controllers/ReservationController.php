@@ -91,4 +91,22 @@ public function updateEmail(Request $request, $reservation_ID)
     ]);
 }
 
+
+public function getConfirmationData($reservationId)
+{
+    $reservation = Reservation::find($reservationId);
+
+    if (!$reservation) {
+        return response()->json([
+            'message' => 'Reservation not found.',
+        ], 404);
+    }
+
+    return response()->json([
+        'email'           => $reservation->email,
+        'reservation_ID'  => $reservation->reservation_ID,
+    ], 200);
+}
+
+
 }

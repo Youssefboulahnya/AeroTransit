@@ -41,4 +41,5 @@ class PaymentController extends Controller
             'prix_total'     => $prix_total,
         ], 201);
     }
+
 }

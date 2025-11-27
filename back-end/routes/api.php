@@ -27,6 +27,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::post('/passengers/store', [PassengerController::class, 'storePassengers']);
     Route::put('/reservations/{reservation_ID}/email', [ReservationController::class, 'updateEmail']);
     Route::post('/payments/create', [PaymentController::class, 'createPayment']);
+    Route::get('/reservation/confirmation/{reservationId}', [ReservationController::class, 'getConfirmationData']);
 
 
 
