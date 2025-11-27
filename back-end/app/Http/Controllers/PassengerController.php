@@ -103,7 +103,7 @@ class PassengerController extends Controller
         ], 422);
     }
 }
-   
+
     private function generateTicketNumber()
 {
     do {

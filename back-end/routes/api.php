@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PassengerController;
+use App\Http\Controllers\PaymentController;
 
 Route::post('/admin-login', [AdminController::class, 'login']); //anyone can access the log in page
 
@@ -25,6 +26,7 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::get('/reservations/{id}/flight-details', [ReservationController::class, 'getFlightDetails']);
     Route::post('/passengers/store', [PassengerController::class, 'storePassengers']);
     Route::put('/reservations/{reservation_ID}/email', [ReservationController::class, 'updateEmail']);
+    Route::post('/payments/create', [PaymentController::class, 'createPayment']);
 
 
 
