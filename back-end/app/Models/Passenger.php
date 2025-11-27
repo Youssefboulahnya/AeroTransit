@@ -48,21 +48,28 @@ class Passenger extends Model
 
     public function calculer_prix(): float
 {
-    // Check that the relationships exist
+    // Make sure the ticket and flight exist
     if (!$this->ticket || !$this->ticket->flight) {
         return 0.0;
     }
 
-    // Base price from flight
     $basePrice = (float) $this->ticket->flight->price;
     $finalPrice = $basePrice;
 
-    // Apply conditions based on passenger type
+    // Adult vs Child pricing
     if ($this->type === 'adult') {
-        $finalPrice = $basePrice + $basePrice*0.5 ; // Adult pays 30 more
-    } 
-    else if ($this->type === 'child') {
-        $finalPrice = $basePrice; // Child pays base price
+        // Base adult markup: 50% of base price
+        $finalPrice = $basePrice + ($basePrice * 0.5);
+
+        // Extra depending on ticket class
+        if ($this->ticket->classe === 'business') {
+            $finalPrice += $basePrice * 0.15;
+        } elseif ($this->ticket->classe === 'economy') {
+            $finalPrice += $basePrice * 0.05;
+        }
+    } elseif ($this->type === 'child') {
+        // Children always pay base price
+        $finalPrice = $basePrice;
     }
 
     // Save the calculated price in the ticket
@@ -71,6 +78,7 @@ class Passenger extends Model
 
     return $finalPrice;
 }
+
 
 
 }

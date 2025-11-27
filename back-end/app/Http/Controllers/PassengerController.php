@@ -51,6 +51,7 @@ class PassengerController extends Controller
             $ticket = Ticket::create([
                 'ticket_serial_number' => $ticketSerial,
                 'reservation_ID'       => $reservation_ID,
+                'Flight_ID'            => $Flight_ID,  
                 'classe'               => $reservation->class,
                 'prix'                 => 0, // temp, will calculate later
             ]);
@@ -69,21 +70,11 @@ class PassengerController extends Controller
 
             // Update ticket with passenger ID and calculate price
             $ticket->passenger_ID = $passenger->Passagère_ID;
-            $basePrice = $passenger->calculer_prix(); 
             
-            if ($ticket->classe === 'business' && $passenger->type === 'adult') {
-                $finalPrice = $basePrice + ($basePrice * 0.15);
-            }
-            else if ($ticket->classe === 'economy' && $passenger->type === 'adult') {
-                     $finalPrice = $basePrice + ($basePrice * 0.05);
-            }
-            else {
-                    // Children always pay base price
-                    $finalPrice = $basePrice;
-                }
+            
 
             // Save ticket price
-            $ticket->prix = $finalPrice;
+            $ticket->prix = $passenger->calculer_prix();
 
             $ticket->save();
 

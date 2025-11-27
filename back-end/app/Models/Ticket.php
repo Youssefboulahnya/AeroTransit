@@ -13,6 +13,7 @@ class Ticket extends Model
     protected $fillable = [
         'ticket_serial_number',
         'reservation_ID',
+        'Flight_ID',
         'prix',
         'classe',
         
