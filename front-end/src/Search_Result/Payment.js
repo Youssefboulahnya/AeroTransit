@@ -9,6 +9,7 @@ const Payment = () => {
   const booking = state?.booking;
   const passengersData = state?.passengersData || [];
   const email = state?.email || "";
+  const paymentResponse = state?.paymentDataFromDB;
 
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
@@ -19,30 +20,15 @@ const Payment = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Calculate total price (unchanged)
-  const calculateTotal = () => {
-    if (!booking) return 0;
-    const basePrice = booking.flight.price;
-    const cabinMultiplier = booking.selectedCabin === "Business" ? 2 : 1;
-    const numPassengers = passengersData.length;
-    const subtotal = basePrice * cabinMultiplier * numPassengers;
-    const taxes = Math.round(subtotal * 0.15);
-    return subtotal + taxes;
-  };
+  if (!booking || !paymentResponse) {
+    return (
+      <div className="payment-page">
+        <h2>Missing payment or booking data.</h2>
+      </div>
+    );
+  }
 
-  // Cabin service fee (5% economy, 15% business, child = free)
-  const cabinServiceFee = passengersData.reduce((sum, p) => {
-    const percent =
-      booking.selectedCabin === "Business"
-        ? p.type === "Child"
-          ? 0
-          : 0.15
-        : p.type === "Child"
-        ? 0
-        : 0.05;
-
-    return sum + booking.flight.price * percent;
-  }, 0);
+  const totalFromBackend = paymentResponse.prix_total;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -104,26 +90,17 @@ const Payment = () => {
           passengersData,
           email,
           paymentData,
-          totalAmount: calculateTotal(), // unchanged
+          totalAmount: totalFromBackend, // real total from backend
         },
       });
     }
   };
-
-  if (!booking) {
-    return (
-      <div className="payment-page">
-        <h2>No booking data found.</h2>
-      </div>
-    );
-  }
 
   return (
     <div className="payment-page">
       <h2 className="page-title">Payment</h2>
 
       <div className="payment-container">
-        {/* Booking Summary */}
         <div className="booking-summary-card">
           <h3>Booking Summary</h3>
 
@@ -146,7 +123,7 @@ const Payment = () => {
             <h4>Passengers ({passengersData.length})</h4>
             {passengersData.map((passenger, index) => (
               <p key={index}>
-                {passenger.firstName} {passenger.lastName} - Seat{" "}
+                {passenger.firstName} {passenger.lastName} – Seat{" "}
                 {passenger.seat}
               </p>
             ))}
@@ -158,30 +135,13 @@ const Payment = () => {
           </div>
 
           <div className="price-breakdown">
-            <div className="price-row">
-              <span>Base Price × {passengersData.length}</span>
-              <span>{booking.flight.price * passengersData.length} €</span>
-            </div>
-
-            <div className="price-row">
-              <span>Cabin ({booking.selectedCabin})</span>
-              <span>×{booking.selectedCabin === "Business" ? 2 : 1}</span>
-            </div>
-
-            {/* ✔ REPLACED TAXES BLOCK */}
-            <div className="price-row">
-              <span>Cabin Service Fee</span>
-              <span>{cabinServiceFee.toFixed(2)} €</span>
-            </div>
-
             <div className="price-row total">
               <span>Total</span>
-              <span>{calculateTotal()} €</span>
+              <span>{totalFromBackend} €</span>
             </div>
           </div>
         </div>
 
-        {/* Payment Form */}
         <div className="payment-form-card">
           <h3>Payment Details</h3>
 
@@ -250,7 +210,7 @@ const Payment = () => {
             </div>
 
             <button type="submit" className="pay-btn">
-              Pay {calculateTotal()} € →
+              Pay {totalFromBackend} € →
             </button>
           </form>
         </div>
