@@ -109,4 +109,32 @@ public function getConfirmationData($reservationId)
 }
 
 
+
+// Manage your Booking login page
+
+public function Manage_your_booking_login(Request $request)
+{
+    $request->validate([
+        'email'          => 'required|email',
+        'reservation_ID' => 'required|integer',
+    ]);
+
+    $reservation = Reservation::where('email', $request->email)->where('reservation_ID', $request->reservation_ID)->first();
+
+    if (!$reservation) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid email or reservation ID.',
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Login successful.',
+        'reservation' => $reservation,
+    ], 200);
+}
+
+
+
 }
