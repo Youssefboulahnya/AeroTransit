@@ -6,7 +6,6 @@ const ManageBooking = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Mock data if not provided via state (for direct access testing)
   const mockBooking = {
     reservationId: "AF78923",
     email: "user@example.com",
@@ -26,6 +25,7 @@ const ManageBooking = () => {
         type: "Adult",
         seat: "12A",
         passportId: "A12345678",
+        ticketId: "TKT-001",
         price: 725,
       },
       {
@@ -35,6 +35,7 @@ const ManageBooking = () => {
         type: "Adult",
         seat: "12B",
         passportId: "B98765432",
+        ticketId: "TKT-002",
         price: 725,
       },
     ],
@@ -43,7 +44,6 @@ const ManageBooking = () => {
 
   const booking = location.state?.booking || mockBooking;
 
-  // <<< CORRECTION : define passengers used in JSX
   const passengers = booking?.passengers || [];
 
   const [showRefundModal, setShowRefundModal] = useState(false);
@@ -51,10 +51,11 @@ const ManageBooking = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPassenger, setEditingPassenger] = useState(null);
 
-  // Delete flow states
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showDeleteRefundModal, setShowDeleteRefundModal] = useState(false);
   const [deletingPassenger, setDeletingPassenger] = useState(null);
+
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const [localPassengers, setLocalPassengers] = useState(passengers);
 
@@ -106,7 +107,6 @@ const ManageBooking = () => {
     setEditingPassenger(null);
   };
 
-  // Delete Passenger Handlers
   const handleDeletePassenger = (id) => {
     const p = localPassengers.find((x) => x.id === id);
     if (!p) return;
@@ -132,6 +132,41 @@ const ManageBooking = () => {
     setShowDeleteRefundModal(false);
     setDeletingPassenger(null);
   };
+// simpl e model to download the information ticket in text file
+  const handleDownloadTicket = (passenger) => {
+    const ticketContent = `
+      ###TICKET CONFIRMATION###
+      
+      Reservation ID: ${booking.reservationId}
+      Ticket ID: ${passenger.ticketId || "N/A"}
+      Flight: ${booking.flight.origin} -> ${booking.flight.destination}
+      Date: ${booking.flight.date} ${booking.flight.time}
+      
+      Passenger: ${passenger.firstName} ${passenger.lastName}
+      Passport/ID: ${passenger.passportId}
+      Seat: ${passenger.seat}
+      Price: $${passenger.price}
+      
+      Thank you for flying with us!
+      -----AeeroTransit-----
+    `;
+
+    const blob = new Blob([ticketContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Ticket_${passenger.lastName}_${booking.reservationId}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setShowDownloadModal(true);
+  };
+
+  const closeDownloadModal = () => {
+    setShowDownloadModal(false);
+  };
 
   return (
     <div className="manage-booking-container">
@@ -155,6 +190,9 @@ const ManageBooking = () => {
                 {booking.flight.time}
               </div>
               <div className="ticket-row">
+                <strong>Ticket ID:</strong> {passenger.ticketId || "N/A"}
+              </div>
+              <div className="ticket-row">
                 <strong>Passenger:</strong> {passenger.firstName}{" "}
                 {passenger.lastName}
               </div>
@@ -167,6 +205,12 @@ const ManageBooking = () => {
             </div>
 
             <div className="ticket-actions">
+              <button
+                className="action-btn btn-download"
+                onClick={() => handleDownloadTicket(passenger)}
+              >
+                Download
+              </button>
               <button
                 className="action-btn btn-edit"
                 onClick={() => handleEditPassenger(passenger.id)}
@@ -198,7 +242,6 @@ const ManageBooking = () => {
         </div>
       </div>
 
-      {/* Global Cancel Confirmation */}
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -222,7 +265,6 @@ const ManageBooking = () => {
         </div>
       )}
 
-      {/* Edit Passenger Modal */}
       {showEditModal && editingPassenger && (
         <div className="modal-overlay">
           <div className="modal-content modal-edit">
@@ -275,7 +317,6 @@ const ManageBooking = () => {
         </div>
       )}
 
-      {/* Delete Passenger Confirmation Modal */}
       {showDeleteConfirmModal && deletingPassenger && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -302,7 +343,6 @@ const ManageBooking = () => {
         </div>
       )}
 
-      {/* Delete Passenger Refund Modal */}
       {showDeleteRefundModal && deletingPassenger && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -321,7 +361,21 @@ const ManageBooking = () => {
         </div>
       )}
 
-      {/* Global Refund Modal */}
+      {showDownloadModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Download Ticket</h3>
+            <p>Ticket has been downloaded.</p>
+            <button
+              className="action-btn btn-confirm"
+              onClick={closeDownloadModal}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
       {showRefundModal && (
         <div className="modal-overlay">
           <div className="modal-content">
