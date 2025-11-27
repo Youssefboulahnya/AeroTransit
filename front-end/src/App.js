@@ -24,7 +24,7 @@ import Payment from "./Search_Result/Payment";
 import { Route, Routes, useLocation } from "react-router-dom";
 import BookingConfirmation from "./Search_Result/BookingConfirmation";
 
-// import ManageBooking from "./Pages/ManageBooking";
+import ManageBooking from "./Pages/ManageBooking";
 
 // import Footer from "./Components/Footerr";
 
@@ -56,7 +56,7 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/Seats" element={<Seats />} />
         <Route path="/Manage" element={<Manage />} />
-        {/* <Route path="/manage/dashboard" element={<ManageBooking />} /> */}
+        <Route path="/Manage/dashboard" element={<ManageBooking />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/Rules" element={<ProgRules />} />
         <Route path="/FAQ" element={<FAQ />} />

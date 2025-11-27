@@ -1,0 +1,206 @@
+.manage-booking-container {
+  padding: 120px 20px 60px;
+  background-color: #f4f7fc;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.booking-header {
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.booking-header h1 {
+  font-size: 2rem;
+  color: #0a3d91;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.tickets-section {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ticket-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  border-left: 5px solid #0a3d91;
+}
+
+.ticket-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticket-row {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.ticket-row strong {
+  color: #0a3d91;
+  margin-right: 8px;
+}
+
+.ticket-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-edit {
+  background-color: #0a3d91;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #072d6b;
+}
+
+.btn-delete {
+  background-color: white;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+}
+
+.btn-delete:hover {
+  background-color: #ffebee;
+}
+
+.booking-actions-footer {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.danger-zone {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-change {
+  background-color: #fff;
+  border: 1px solid #0a3d91;
+  color: #0a3d91;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+.btn-cancel {
+  background-color: #fff;
+  border: 1px solid #d32f2f;
+  color: #d32f2f;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h3 {
+  color: #0a3d91;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.modal-content p {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.btn-confirm {
+  background-color: #0a3d91;
+  color: white;
+  padding: 10px 30px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+}
+
+.btn-confirm:hover {
+  background-color: #072d6b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ticket-details {
+    align-items: center;
+    width: 100%;
+  }
+
+  .ticket-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+
+  .booking-actions-footer {
+    justify-content: center;
+  }
+}
