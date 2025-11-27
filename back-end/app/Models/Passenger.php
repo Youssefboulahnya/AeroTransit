@@ -57,17 +57,15 @@ class Passenger extends Model
     $finalPrice = $basePrice;
 
     // 
-    if ($this->type === 'adult') {
-        // Base adult markup: 50% of base price
-        $finalPrice = $basePrice + ($basePrice * 0.5);
+    
 
         // Extra depending on ticket class
-        if ($this->ticket->classe === 'business') {
+        if ($this->ticket->classe === 'business' && $this->type === 'adult') {
             $finalPrice += $finalPrice * 0.15;
-        } elseif ($this->ticket->classe === 'economy') {
+        } elseif ($this->ticket->classe === 'economy' && $this->type === 'adult') {
             $finalPrice += $finalPrice * 0.05;
         }
-    } elseif ($this->type === 'child') {
+        else {
         // Children always pay base price
         $finalPrice = $basePrice;
     }
