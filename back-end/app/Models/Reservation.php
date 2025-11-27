@@ -25,6 +25,24 @@ class Reservation extends Model
     {
         return $this->belongsTo(\App\Models\Flight::class, 'ID_flight', 'ID_flight');
     }
+    //relation reservations --- tickets
+    public function tickets()
+{
+    return $this->hasMany(Ticket::class, 'reservation_ID', 'reservation_ID');
+}
+// Reservation.php
+public function passengers()
+{
+    return $this->hasMany(Passenger::class, 'reservation_ID', 'reservation_ID');
+}
+
+public function payment()
+{
+    return $this->hasOne(Payment::class, 'reservation_ID', 'reservation_ID');
+}
+
+
+
 
     public function estComplete(): bool
     {

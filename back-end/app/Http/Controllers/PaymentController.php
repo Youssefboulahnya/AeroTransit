@@ -16,7 +16,7 @@ class PaymentController extends Controller
 
         $reservation_ID = $request->reservation_ID;
 
-        // 1️⃣ Collect all tickets for this reservation
+        // Collect all tickets for this reservation
         $tickets = Ticket::where('reservation_ID', $reservation_ID)->get();
 
         if ($tickets->isEmpty()) {

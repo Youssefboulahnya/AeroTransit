@@ -28,6 +28,10 @@ Route::post('/admin-login', [AdminController::class, 'login']); //anyone can acc
     Route::put('/reservations/{reservation_ID}/email', [ReservationController::class, 'updateEmail']);
     Route::post('/payments/create', [PaymentController::class, 'createPayment']);
     Route::get('/reservation/confirmation/{reservationId}', [ReservationController::class, 'getConfirmationData']);
+    Route::post('/reservation/login', [ReservationController::class, 'Manage_your_booking_login']);
+    Route::get('/reservation/{reservation_ID}/tickets', [ReservationController::class, 'getTickets']);
+    Route::put('/passenger/update/{ticketSerial}', [ReservationController::class, 'updatePassengerInfo']);
+    Route::delete('/reservation/{reservationId}/delete', [ReservationController::class, 'deleteReservation']);
 
 
 
