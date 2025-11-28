@@ -307,24 +307,25 @@ public function deleteTicket($ticketSerialNumber)
 public function getAllReservationsAdmin()
 {
     $data = Reservation::select(
-            'reservations.id as reservation_id',
+            'reservations.reservation_ID',
             'tickets.ticket_serial_number',
             'flights.origin',
             'flights.destination',
-            'tickets.price',
+            'tickets.prix',
             'passengers.first_name',
             'passengers.last_name',
             'passengers.type',
-            'passengers.passportID'
+            'passengers.Passport_ID'
         )
-        ->join('tickets', 'tickets.reservation_id', '=', 'reservations.id')
+        ->join('tickets', 'tickets.reservation_ID', '=', 'reservations.reservation_ID')
         ->join('passengers', 'passengers.ticket_serial_number', '=', 'tickets.ticket_serial_number')
-        ->join('flights', 'flights.id', '=', 'reservations.flight_id')
-        ->orderBy('reservations.id', 'asc')
+        ->join('flights', 'flights.ID_flight', '=', 'reservations.ID_flight')
+        ->orderBy('reservations.reservation_ID', 'asc')
         ->get();
 
     return response()->json($data);
 }
+
 
 
 
