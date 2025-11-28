@@ -8,11 +8,6 @@ export default function ReservationList() {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deletePopup, setDeletePopup] = useState({
-    show: false,
-    id: null,
-    type: null,
-  }); // type: 'reservation' or 'ticket'
 
   const formatDate = (d) => (d && d.includes("T") ? d.replace("T", " ") : d);
 
@@ -60,23 +55,6 @@ export default function ReservationList() {
     fetchReservations();
   }, []);
 
-  const confirmDelete = (id) => setDeletePopup({ show: true, id });
-
-  const deleteReservation = async () => {
-    try {
-      
-      await api.delete(`/ticket/${deletePopup.id}/delete`);
-
-      setReservations((prev) =>
-        prev.filter((r) => r.uniqueId !== deletePopup.id)
-      );
-      setDeletePopup({ show: false, id: null });
-    } catch (err) {
-      console.error("Delete error:", err);
-     
-    }
-  };
-
   if (loading)
     return <p style={{ textAlign: "center" }}>Loading reservations...</p>;
 
@@ -114,7 +92,6 @@ export default function ReservationList() {
             <th>Last Name</th>
             <th>Type</th>
             <th>Passport/ID</th>
-            <th>Actions</th>
           </tr>
         </thead>
 
@@ -130,41 +107,10 @@ export default function ReservationList() {
               <td data-label="Last Name">{r.lastName}</td>
               <td data-label="Type">{r.type}</td>
               <td data-label="Passport/ID">{r.passportId}</td>
-
-              <td data-label="Actions" className="actions">
-                <span
-                  className="delete"
-                  onClick={() => confirmDelete(r.ticket_serial)}
-                >
-                  Delete
-                </span>
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* DELETE POPUP */}
-      {deletePopup.show && (
-        <div className="overlay">
-          <div className="popup-box">
-            <h3>Do you want to delete this ticket?</h3>
-
-            <div className="popup-buttons">
-              <button
-                className="no"
-                onClick={() => setDeletePopup({ show: false, id: null })}
-              >
-                No
-              </button>
-
-              <button className="yes" onClick={deleteReservation}>
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

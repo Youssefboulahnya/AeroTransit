@@ -64,7 +64,7 @@ export default function ManageBooking() {
           }));
 
           if (!mounted) return; //  pour empecher le code de s'executer si le composant n'exist plus
-
+          //RESRVATION INFOS TO BE USED HERE
           setBooking({
             reservationId: data.reservation_ID,
             flight: data.flight,
@@ -74,7 +74,7 @@ export default function ManageBooking() {
               0
             ),
           });
-
+          //data a utiliser pour les ticket(stock celle envoyer sous form de request json en state)
           setLocalPassengers(formattedPassengers);
         }
       } 
@@ -131,13 +131,9 @@ export default function ManageBooking() {
         );
         return;
       }
-
+//backup amount after reservation cancel
       const backendAmount =
-        data?.refund_amount ??
-        data?.refund ??
-        data?.total_price_refund ??
-        data?.totalPrice ??
-        data?.payment?.prix_total ??
+        data?.prix_total ??
         null;
 
       const amountToShow =
@@ -146,7 +142,7 @@ export default function ManageBooking() {
           : Number(booking?.totalPrice || 0);
 
       setReservationRefundAmount(amountToShow);
-
+//apres la suppression de la reservation on vide les infos des tickets
       setBooking(null);
       setLocalPassengers([]);
 
@@ -243,6 +239,7 @@ export default function ManageBooking() {
     if (!deletingPassenger) return;
 
     try {
+      //suppression du ticket
       const url = `http://localhost:8000/api/ticket/${encodeURIComponent(
         deletingPassenger.ticketId
       )}/delete`;
@@ -255,7 +252,7 @@ export default function ManageBooking() {
         data = {};
       }
 
-      if (!res.ok) {
+      if (!res.ok) { //ou bien !data.status
         alert(
           `Deletion failed (status ${res.status})${
             data?.message ? `: ${data.message}` : ""
@@ -307,7 +304,7 @@ export default function ManageBooking() {
     const content = `
 ------- TICKET INFORMATION -------
 Reservation: ${booking?.reservationId}
-Ticket: ${p.ticketId}
+Ticket: ${p.ticketId} 
 Flight: ${flight.origin || ""} -> ${flight.destination || ""}
 Departure: ${flight.temps_aller || ""} → Arrival: ${flight.temps_arriver || ""}
 Passenger: ${p.firstName} ${p.lastName}
@@ -331,7 +328,7 @@ Price: ${p.price}
     setShowDownloadModal(true);
   };
 
-  const closeDownloadModal = () => setShowDownloadModal(false);
+  const closeDownloadModal = () => setShowDownloadModal(false); // ok
 
   // -----------------------------
   // RENDER TIKETS
@@ -341,9 +338,16 @@ Price: ${p.price}
     return <h2 style={{ textAlign: "center", color: "red" }}>{error}</h2>;
   if (!booking)
     return (
-      <h2 style={{ textAlign: "center", color: "red" }}>
-        Reservation Not Found
-      </h2>
+      <>
+        <h2
+          style={{ textAlign: "center", color: "red" ,cursor:"pointer"}}
+          onClick={() => {
+            return navigate("/");
+          }}
+        >
+          Reservation Not Found, Please Back To The Home Page.
+        </h2>
+      </>
     );
 
   return (
