@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../pictures/iconV3.png";
+import Logoo from "../pictures/iconV2.png";
 import "./ReservationList.css";
 import api from "../api";
 
@@ -33,7 +33,7 @@ export default function ReservationList() {
     <div className="dashboard">
       <div className="bloc1">
         <div className="bloc1_1">
-          <img src={Logo} alt="logo" className="Logo1" />
+          <img src={Logoo} alt="logo" className="Logo1" />
         </div>
         <div className="bloc1_2">Reservations List</div>
       </div>
