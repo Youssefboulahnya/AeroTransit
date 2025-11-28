@@ -53,7 +53,7 @@ export default function infos() {
       id: 6,
       title: "Baggage Informations",
       infoContent:
-        "Acceptance of passenger baggage is subject to general conditions relating to the number of pieces, volume, packaging and/or nature of the baggage contents",
+        "Acceptance of passenger baggage is subject to general conditions relating to the number of pieces, volume and nature of the baggage contents",
       iconName: BsLuggage,
       style_classes: "iconDiv dFlex colorFive",
     },
@@ -93,7 +93,6 @@ export default function infos() {
             </h2>
           </div>
           <div className="cardsDiv grid">
-            {/*  */}{" "}
             {infos.map((element) => {
               return (
                 <div className="singleCard grid">

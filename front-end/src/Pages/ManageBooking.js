@@ -7,7 +7,7 @@ export default function ManageBooking() {
   const navigate = useNavigate();
 
   const reservation_ID = location.state?.reservation_ID;
-  const email = location.state?.email;
+  // const email = location.state?.email;
 
   const [booking, setBooking] = useState(null);
   const [localPassengers, setLocalPassengers] = useState([]);
@@ -31,14 +31,16 @@ export default function ManageBooking() {
   useEffect(() => {
     let mounted = true;
     async function fetchTickets() {
+
       if (!reservation_ID) {
         if (!mounted) return;
-        setError("No reservation ID found.");
+        setError("No reservation found, please Back to the Home page"); //la reservation a etait supprimer ou il n'existe pas
         setLoading(false);
         return;
       }
 
       try {
+        //on utilise le id de la reservatio stocker en localstorage pour acceder a api du tickets de cette reservation 
         const res = await fetch(
           `http://localhost:8000/api/reservation/${encodeURIComponent(
             reservation_ID
@@ -48,7 +50,8 @@ export default function ManageBooking() {
 
         if (!data.success) {
           setError(data.message || "Failed to load reservation.");
-        } else {
+        } 
+        else {
           const formattedPassengers = data.tickets.map((t, index) => ({
             id: index + 1,
             firstName: t.passenger_first_name || "",
@@ -60,7 +63,8 @@ export default function ManageBooking() {
             price: Number(t.prix) || 0,
           }));
 
-          if (!mounted) return;
+          if (!mounted) return; //  pour empecher le code de s'executer si le composant n'exist plus
+
           setBooking({
             reservationId: data.reservation_ID,
             flight: data.flight,
@@ -73,13 +77,16 @@ export default function ManageBooking() {
 
           setLocalPassengers(formattedPassengers);
         }
-      } catch (err) {
+      } 
+      catch (err) {
         console.error(err);
         setError("Server error.");
-      } finally {
+      } 
+      finally {
         if (mounted) setLoading(false);
       }
     }
+
 
     fetchTickets();
     return () => {
@@ -87,16 +94,20 @@ export default function ManageBooking() {
     };
   }, [reservation_ID]);
 
+  //vers home page
   const handleLogout = () => {
     navigate("/");
   };
 
+  //supprimer un vol
   const handleCancelFlight = () => {
+    // setShowRefundModal(true); <-- je l'active demain
     setShowConfirmModal(true);
   };
 
   const confirmCancellation = async () => {
     setShowConfirmModal(false);
+    // supprimer la reservation en database
     try {
       const res = await fetch(
         `http://localhost:8000/api/reservation/${encodeURIComponent(
@@ -111,7 +122,7 @@ export default function ManageBooking() {
       } catch (e) {
         data = {};
       }
-
+      //  cancellation failed 
       if (!res.ok) {
         alert(
           `Cancellation failed (status ${res.status})${
@@ -294,7 +305,7 @@ export default function ManageBooking() {
   const handleDownloadTicket = (p) => {
     const flight = booking?.flight || {};
     const content = `
---- TICKET INFORMATION ---
+------- TICKET INFORMATION -------
 Reservation: ${booking?.reservationId}
 Ticket: ${p.ticketId}
 Flight: ${flight.origin || ""} -> ${flight.destination || ""}
@@ -303,7 +314,8 @@ Passenger: ${p.firstName} ${p.lastName}
 Passport: ${p.passportId}
 Seat: ${p.seat}
 Price: ${p.price}
---------------------------
+#######AeroTransit was here########
+-----------------------------------
     `;
 
     const blob = new Blob([content], { type: "text/plain" });
@@ -416,6 +428,17 @@ Price: ${p.price}
           <div className="modal-content">
             <h3>Confirmation</h3>
             <p>Are you sure you want to cancel this booking?</p>
+            <p>
+              The total reservation amount of{" "}
+              <strong>
+                {reservationRefundAmount != null
+                  ? reservationRefundAmount.toFixed(2)
+                  : (booking?.totalPrice ?? 0).toFixed?.(2) ??
+                    booking?.totalPrice}
+              </strong>{" "}
+              € will be refunded to your account within{" "}
+              <strong>24-48 hours</strong>.
+            </p>
             <div className="modal-actions">
               <button
                 className="action-btn btn-confirm"

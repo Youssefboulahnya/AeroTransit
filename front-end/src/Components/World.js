@@ -7,7 +7,6 @@ import petra from "../pictures/petra.jpg";
 import nablus from "../pictures/nablus.jpg";
 import luxor from "../pictures/luxor.jpg";
 import diriyah from "../pictures/diriyah.jpg";
-
 import lisbon from "../pictures/lisbon.jpg";
 import marseille from "../pictures/marseille.jpg";
 import porto from "../pictures/porto.jpg";

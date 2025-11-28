@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../pictures/iconV3.png";
 import "./DashboardHome.css";
 import api from "../api";
 
 export default function DashboardHome() {
+  const navigate = useNavigate();
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -188,7 +190,6 @@ export default function DashboardHome() {
         </div>
         <div className="bloc1_2">AeroTransit Dashboard</div>
       </div>
-
       <button
         className="add_flight"
         onClick={() => {
@@ -207,6 +208,31 @@ export default function DashboardHome() {
         }}
       >
         Add Flight
+      </button>
+
+      <button
+        className="add_flight"
+        style={{
+          right: "130px",
+          background: "#007bff",
+          color: "white",
+          borderColor: "black",
+        }}
+        onClick={() => navigate("/dashboard/reservations")}
+      >
+        Reservations List
+      </button>
+      <button
+        className="add_flight"
+        style={{
+          right: "280px",
+          background: "#d63031",
+          color: "white",
+          borderColor: "#007bff",
+        }}
+        onClick={() => navigate("/")}
+      >
+        LogOut
       </button>
 
       <table className="flight_list">

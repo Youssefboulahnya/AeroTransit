@@ -4,7 +4,7 @@ import { FaPlaneArrival } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // 👈 IMPORTANT : ton instance axios
+import api from "../api"; 
 
 export default function Search() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Search() {
     search.origin === "" ||
     search.destination === "" ||
     search.departure === "";
-
+//envoie de json vers le back
 const handleSearch = async () => {
   try {
     const res = await api.post("/reservations", {
@@ -35,15 +35,15 @@ const handleSearch = async () => {
       class: search.cabine.toLowerCase(),
     });
 
-    const reservation = res.data.reservation;
+    const reservation = res.data.reservation; //IMPORTANT BECAUSE HERE WE USE API.POST SO THE SERVER WELL ANSWER US WITH JSON RESPONSE(reservation_id)
 
     // Navigate to flights list and send search filters + reservation ID
     navigate("/flights", {
       state: {
         ...search,
-        reservation_id: reservation.reservation_ID, // IMPORTANT
+        reservation_id: reservation.reservation_ID, // IMPORTANT BECAUSE HERE WE SAVE THE ID RESERVATION FOR THE NEXT TASKS
       },
-    });
+    });//WE SEND THE ID RESERVATION WITH THE usenavigate TO THE flight-list SPA
   } catch (error) {
     console.log("Erreur réservation :", error.response?.data || error);
   }

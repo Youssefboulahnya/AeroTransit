@@ -6,7 +6,7 @@ import { MdManageAccounts } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 export default function NavBar() {
-  // pour hider le nav barre
+  // pour hider le nav barre avec le scroll
   const [active, setActive] = useState("navBarMenu");
 
   function handleNavBar(){
@@ -20,6 +20,7 @@ export default function NavBar() {
   }
 
   const [bg, addBg] = useState("navBarTwo");
+// -------------------------------------
   const addBgColor = () => {
     if (window.scrollY >= 10) {
       addBg("navBarTwo navbar_With_Bg");
@@ -27,6 +28,7 @@ export default function NavBar() {
       addBg("navBarTwo navbar_With_Bg");
     }
   };
+// ----------------------------------------
   window.addEventListener("scroll", addBgColor);
 
   return (

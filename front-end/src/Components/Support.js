@@ -4,7 +4,7 @@ export default function Support() {
     <div className="support container section">
       <div className="sectionContainer">
         <div className="titlesDiv">
-          <small>travel assistance</small>
+          <small>Assistance</small>
 
           <h2>Plan your travel with confidence</h2>
           <p>
@@ -32,7 +32,7 @@ export default function Support() {
               <p>
                 Travel with total security. Our comprehensive insurance plans
                 protect you from unexpected events, so you can focus on what
-                truly matters — experiencing your journey to the fullest.
+                truly matters - experiencing your journey to the fullest.
               </p>
             </div>
 

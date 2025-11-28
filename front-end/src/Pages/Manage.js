@@ -13,8 +13,11 @@ export default function Manage() {
     setShow(show === "password" ? "text" : "password");
   }
 
+  //fct handleLogin pour atteindre la reponce de l'api pour verifier les condition d'auth
   const handleLogin = async (e) => {
-    e.preventDefault();
+
+    e.preventDefault(); //on a deja vu ca en react pour empecher le submit de reloader la page
+
     setErrorMessage("");
 
     try {
@@ -39,6 +42,7 @@ export default function Manage() {
         return;
       }
 
+//on a trouve deja un probleme ici pour cela on a fait trois forme(et deux noms la nomination juste est reservation_ID) de recevoire le id de la reservation 
       const returnedReservationId =
         data.reservation_ID ||
         data.reservation?.reservation_ID ||
@@ -49,24 +53,28 @@ export default function Manage() {
         try {
           localStorage.setItem("reservation_ID", returnedReservationId);
         } catch (err) {
-         
+          console.log(err);//j'ai l'utiliser au debut pour fixer erreur qui vienne depuis le back(nomminnation etait diffrenet entre back et front)
         }
       }
       try {
         localStorage.setItem("reservation_email", email);
-      } catch (err) {
-        // ignore
+      } 
+      catch (err) {
+        // ignore (car pas de probleme ici en avant le probleme ete pour le id)
       }
 
       // SUCCESS → redirect to ManageBooking page
+      //l'email reste deja en front dans state email
       navigate("/Manage/dashboard", {
         state: {
           reservation_ID: returnedReservationId,
           email,
-          reservation: data.reservation || null,
+          reservation: data.reservation || null, //check routes 
         },
       });
-    } catch (error) {
+    } 
+    //l'envoi vers le back ne se fait pas 
+    catch (error) {
       setErrorMessage("Connection error. Please try again.");
     }
   };
@@ -107,7 +115,7 @@ export default function Manage() {
             />
             Show the serial
           </span>
-
+          {/* soit connection failed or invalaid auth */}
           {errorMessage && (
             <p
               style={{

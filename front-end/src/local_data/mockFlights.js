@@ -1,3 +1,5 @@
+
+//BEFORE THE BACKEND 
 export const mockFlights = [
   {
     id: 1,

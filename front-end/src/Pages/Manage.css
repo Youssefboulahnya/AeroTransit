@@ -1,7 +1,8 @@
 .Manage_ {
     background-image: url("../pictures/get_in.png");
     background-size: cover;
-    background-size: 100% 100%;
+    /* force couvre image */
+    background-size: 100% 100%; 
     height: 100vh;
     width: 100vw;
     box-sizing: border-box;

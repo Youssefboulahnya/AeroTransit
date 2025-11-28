@@ -23,6 +23,7 @@ import FlightPassengers from "./Search_Result/PassengersInfos";
 import Payment from "./Search_Result/Payment";
 import { Route, Routes, useLocation } from "react-router-dom";
 import BookingConfirmation from "./Search_Result/BookingConfirmation";
+import ReservationList from "./dashboard/ReservationList";
 
 import ManageBooking from "./Pages/ManageBooking";
 
@@ -66,6 +67,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/reservations"
+          element={
+            <ProtectedRoute>
+              <ReservationList />
             </ProtectedRoute>
           }
         />
