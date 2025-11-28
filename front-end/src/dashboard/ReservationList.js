@@ -2,48 +2,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../pictures/iconV3.png";
 import "./ReservationList.css";
-import api from "../api"; //voila api j'ai l'import alors si tu construit le route fait gitpush et dit moi
+import api from "../api";
 
 export default function ReservationList() {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const formatDate = (d) => (d && d.includes("T") ? d.replace("T", " ") : d);
-
   const fetchReservations = async () => {
     try {
-      const res = await api.get("/reservations");
+      const res = await api.get("/admin/reservations/all");
 
-      const flattened = [];
-
-      const data = Array.isArray(res.data)
-        ? res.data
-        : res.data.reservations || [];
-
-      data.forEach((r) => {
-        if (r.tickets && r.tickets.length > 0) {
-          r.tickets.forEach((t) => {
-            flattened.push({
-              reservation_ID: r.reservation_ID || r._id,
-              ticket_serial: t.ticket_serial_number,
-              origin: r.flight?.origin || "N/A",
-              destination: r.flight?.destination || "N/A",
-              price: t.prix,
-              firstName: t.passenger_first_name,
-              lastName: t.passenger_last_name,
-              type: t.passenger_type,
-              passportId: t.passport_ID,
-              uniqueId: t.ticket_serial_number,
-            });
-          });
-        } else {
-          // If no tickets, maybe just show reservation info? But user asked for ticket details.
-          // We'll skip empty reservations or handle them if needed.
-        }
-      });
-
-      setReservations(flattened);
+      // Backend already gives a flat array, so set it directly
+      setReservations(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error loading reservations:", err);
     } finally {
@@ -97,16 +68,16 @@ export default function ReservationList() {
 
         <tbody>
           {reservations.map((r, index) => (
-            <tr key={r.uniqueId || index}>
+            <tr key={index}>
               <td data-label="Res. ID">{r.reservation_ID}</td>
-              <td data-label="Ticket Serial">{r.ticket_serial}</td>
+              <td data-label="Ticket Serial">{r.ticket_serial_number}</td>
               <td data-label="Origin">{r.origin}</td>
               <td data-label="Destination">{r.destination}</td>
-              <td data-label="Price">{r.price} €</td>
-              <td data-label="First Name">{r.firstName}</td>
-              <td data-label="Last Name">{r.lastName}</td>
+              <td data-label="Price">{r.prix} €</td>
+              <td data-label="First Name">{r.first_name}</td>
+              <td data-label="Last Name">{r.last_name}</td>
               <td data-label="Type">{r.type}</td>
-              <td data-label="Passport/ID">{r.passportId}</td>
+              <td data-label="Passport/ID">{r.Passport_ID}</td>
             </tr>
           ))}
         </tbody>
