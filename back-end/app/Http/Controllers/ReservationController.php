@@ -304,6 +304,53 @@ public function deleteTicket($ticketSerialNumber)
     ]);
 }
 
+public function getAllReservationsAdmin()
+{
+    $data = Reservation::select(
+            'reservations.id as reservation_id',
+            'tickets.ticket_serial_number',
+            'flights.origin',
+            'flights.destination',
+            'tickets.price',
+            'passengers.first_name',
+            'passengers.last_name',
+            'passengers.type',
+            'passengers.passportID'
+        )
+        ->join('tickets', 'tickets.reservation_id', '=', 'reservations.id')
+        ->join('passengers', 'passengers.ticket_serial_number', '=', 'tickets.ticket_serial_number')
+        ->join('flights', 'flights.id', '=', 'reservations.flight_id')
+        ->orderBy('reservations.id', 'asc')
+        ->get();
+
+    return response()->json($data);
+}
+
+
+public function adminDeleteReservation($reservationId)
+{
+    $reservation = Reservation::find($reservationId);
+
+    if (!$reservation) {
+        return response()->json(['error' => 'Reservation not found'], 404);
+    }
+
+    // Delete passengers → tickets → finally reservation
+    foreach ($reservation->tickets as $ticket) {
+        Passenger::where('ticket_serial_number', $ticket->ticket_serial_number)->delete();
+        $ticket->delete();
+    }
+
+    $reservation->delete();
+    Payment::where('reservation_id', $reservationId)->delete();
+
+    return response()->json(['message' => 'Reservation deleted successfully']);
+}
+
+
+
+
+
 
 
 
