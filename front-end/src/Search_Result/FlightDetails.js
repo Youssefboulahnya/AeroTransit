@@ -42,7 +42,7 @@ const CABINS = {
 };
 
 const FlightDetails = () => {
-  const { state } = useLocation();
+  const { state } = useLocation();//recuperation des data
   const navigate = useNavigate();
 
   const { cabine, passengers, reservation_id, children = 0, ...flight } = state;
@@ -50,13 +50,13 @@ const FlightDetails = () => {
 
   const selectedCabin = cabine || "Economy";
   const cabinData = CABINS[selectedCabin];
-
+//calcul
   const pricing = useMemo(() => {
     const flightPrice = flight.price;
     const serviceRate = cabinData.serviceRate;
 
     const servicePerAdult = Math.round(flightPrice * serviceRate);
-    const servicePerChild = 0; // ⭐ ENFANT GRATUIT ICI ON N'AJOUTE PAS A LA FIN LE PRIX DE SERVIE POUR CHILD (FREE)
+    const servicePerChild = 0; //  ENFANT GRATUIT ICI ON N'AJOUTE PAS A LA FIN LE PRIX DE SERVIE POUR CHILD (FREE)
 
     return {
       servicePerAdult,

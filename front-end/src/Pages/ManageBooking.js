@@ -315,28 +315,28 @@ Price: ${p.price}
 -----------------------------------
     `;
 
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const blob = new Blob([content], { type: "text/plain" });//creation de fichier text contenant le variable en dessus "content"
+    const url = URL.createObjectURL(blob);////creer un url a ce fichier en utilisant ""creatObjectURL"
+    const a = document.createElement("a");//creer un element de type link et de ledonner comme href ce url cree
     a.href = url;
-    a.download = `TICKET_${p.ticketId}.txt`;
+    a.download = `TICKET_${p.ticketId}.txt`;//le nom du fichier telecharger
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);//apres utilisation de lien temmporaire en le detruite apres telechargement pour eviter occupation de la memoire
 
     setShowDownloadModal(true);
   };
 
   const closeDownloadModal = () => setShowDownloadModal(false); // ok
 
-  // -----------------------------
+
   // RENDER TIKETS
-  // -----------------------------
+
   if (loading) return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
   if (error)
     return <h2 style={{ textAlign: "center", color: "red" }}>{error}</h2>;
-  if (!booking)
+  if (!booking) //aucun reponse deopuis le back
     return (
       <>
         <h2
@@ -545,13 +545,13 @@ Price: ${p.price}
           <div className="modal-content">
             <h3>Passenger Deleted</h3>
             <p>
-              Thank you — you will receive{" "}
+              Thank you - you will receive{" "}
               <strong>
                 {deleteRefundAmount != null
                   ? deleteRefundAmount.toFixed(2)
                   : "0.00"}
               </strong>{" "}
-              € to your account within <strong>42–48 hours</strong>.
+              € to your account within <strong>42-48 hours</strong>.
             </p>
             <button
               className="action-btn btn-confirm"

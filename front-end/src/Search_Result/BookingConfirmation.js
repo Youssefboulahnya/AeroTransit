@@ -70,7 +70,7 @@ const BookingConfirmation = () => {
         setReservationId(incomingId);
       } catch (error) {
         console.error("Error fetching confirmation data:", error);
-        // si fetch échoue, on laisse reservationId pour affichage mais on notifie l'erreur
+        // si fetch echoue, on laisse reservationId pour affichage mais on notifie l'erreur
       } finally {
         setLoading(false);
       }
@@ -122,6 +122,7 @@ const BookingConfirmation = () => {
       <div className="confirmation-container">
         <div className="success-header">
           <div className="success-icon">
+            {/* sucess */}
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -218,7 +219,7 @@ const BookingConfirmation = () => {
             {passengersData.map((p, index) => (
               <div key={index} className="detail-row">
                 <span className="label">
-                  {p.first_name || p.firstName || "—"}{" "}
+                  {p.first_name || p.firstName || "-"}{" "}
                   {p.last_name || p.lastName || ""}
                 </span>
                 <span className="value">

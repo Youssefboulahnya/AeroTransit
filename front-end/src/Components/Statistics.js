@@ -6,27 +6,25 @@ export default function Statistics() {
     <div className="statistics section">
       <div className="sectionContainer container">
         <div className="statsContainer grid">
-
           <div className="singleStat">
-            <span className="statNumber">1000+</span>
-            <span className="statLabel">Flights Booked</span>
+            <span className="statNumber">5+</span>
+            <span className="statLabel">Flights Available</span>
           </div>
 
           <div className="singleStat">
-            <span className="statNumber">950+</span>
-            <span className="statLabel">Flights Completed</span>
+            <span className="statNumber">1+</span>
+            <span className="statLabel">Flights Arrived</span>
           </div>
 
           <div className="singleStat">
-            <span className="statNumber">5000+</span>
+            <span className="statNumber">23+</span>
             <span className="statLabel">Reservations</span>
           </div>
 
           <div className="singleStat">
-            <span className="statNumber">20000+</span>
+            <span className="statNumber">40+</span>
             <span className="statLabel">Passengers</span>
           </div>
-          
         </div>
       </div>
     </div>
