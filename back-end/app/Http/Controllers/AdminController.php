@@ -60,27 +60,28 @@ class AdminController extends Controller
 }
 
 
-public function getDashboardStats()
-    {
-        // Number of flights still scheduled (future or not yet arrived)
-        $scheduledFlights = Flight::where('temps_arriver', '>', now())->count();
+public function getAdminStats()
+{
+    // Number of scheduled flights
+    $scheduledFlights = Flight::where('status', 'scheduled')->count();
 
-        // Number of flights that have already arrived
-        $arrivedFlights = Flight::where('temps_arriver', '<=', now())->count();
+    // Number of arrived flights
+    $arrivedFlights = Flight::where('status', 'arrived')->count();
 
-        // Total number of reservations
-        $totalReservations = Reservation::count();
+    // Total reservations
+    $totalReservations = Reservation::count();
 
-        // Total number of passengers
-        $totalPassengers = Passenger::count();
+    // Total passengers
+    $totalPassengers = Passenger::count();
 
-        return response()->json([
-            'scheduled_flights'   => $scheduledFlights,
-            'arrived_flights'     => $arrivedFlights,
-            'reservations_count'  => $totalReservations,
-            'passengers_count'    => $totalPassengers,
-        ]);
-    }
+    return response()->json([
+        'scheduled_flights'   => $scheduledFlights,
+        'arrived_flights'     => $arrivedFlights,
+        'total_reservations'  => $totalReservations,
+        'total_passengers'    => $totalPassengers,
+    ]);
+}
+
 
 
 
