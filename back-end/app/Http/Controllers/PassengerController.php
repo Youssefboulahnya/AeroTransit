@@ -30,7 +30,7 @@ class PassengerController extends Controller
             $economyStart = $businessMax + 1;
             $economyEnd = $businessMax + $flight->places_business_economy;
 
-            // Validate seat range
+            // verifier le numero de la place choisi
             if ($reservation->class === 'business' && ($seat < 1 || $seat > $businessMax)) {
                 throw new \Exception("Seat $seat invalid for Business class. Allowed: 1 to $businessMax.");
             }
@@ -38,7 +38,7 @@ class PassengerController extends Controller
                 throw new \Exception("Seat $seat invalid for Economy. Allowed: $economyStart to $economyEnd.");
             }
 
-            // Check if seat taken
+            // verifier si la pace est deja reserve
             $seatTaken = Passenger::where('Flight_ID', $Flight_ID)
                                   ->where('Numero_place', $seat)
                                   ->exists();
@@ -46,7 +46,7 @@ class PassengerController extends Controller
                 throw new \Exception("Seat $seat is already reserved.");
             }
 
-            // Create ticket first
+            // creation du ticket
             $ticketSerial = $this->generateTicketNumber();
             $ticket = Ticket::create([
                 'ticket_serial_number' => $ticketSerial,
@@ -56,7 +56,7 @@ class PassengerController extends Controller
                 'prix'                 => 0, // temp, will calculate later
             ]);
 
-            // Create passenger
+            //creation du passager
             $passenger = Passenger::create([
                 'reservation_ID'       => $reservation_ID,
                 'Flight_ID'            => $Flight_ID,
@@ -68,7 +68,7 @@ class PassengerController extends Controller
                 'Numero_place'         => $seat,
             ]);
 
-            // Update ticket with passenger ID and calculate price
+            // lie le ticket au passager
             $ticket->passenger_ID = $passenger->Passagère_ID;
             
             
@@ -81,7 +81,7 @@ class PassengerController extends Controller
             $created[] = $passenger;
         }
 
-        DB::commit(); // Everything ok, commit
+        DB::commit(); 
 
         return response()->json([
             'message' => 'All passengers created successfully',

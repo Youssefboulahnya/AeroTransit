@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $table = 'reservations'; // optional if table name follows Laravel convention
-    protected $primaryKey = 'reservation_ID'; // set primary key
+    protected $table = 'reservations'; 
+    protected $primaryKey = 'reservation_ID'; // cle primaire
 
     protected $fillable = [
         'ID_flight',
@@ -20,22 +20,22 @@ class Reservation extends Model
         // if you want to link to a flight
     ];
 
-    // Optional: relation to Flight
+    // reservation --- flights
     public function flight()
     {
         return $this->belongsTo(\App\Models\Flight::class, 'ID_flight', 'ID_flight');
     }
-    //relation reservations --- tickets
+    // reservations --- tickets
     public function tickets()
 {
     return $this->hasMany(Ticket::class, 'reservation_ID', 'reservation_ID');
 }
-// Reservation.php
+// reservations --- passengers
 public function passengers()
 {
     return $this->hasMany(Passenger::class, 'reservation_ID', 'reservation_ID');
 }
-
+// reservations --- payments
 public function payment()
 {
     return $this->hasOne(Payment::class, 'reservation_ID', 'reservation_ID');

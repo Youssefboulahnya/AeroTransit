@@ -15,9 +15,7 @@ class FlightController extends Controller
         $flights = Flight::all();
         return response()->json($flights);
     }
-    /**
-     * Display a listing of the resource.
-     */
+    
 
     // the modifier_flight function
 
@@ -57,10 +55,10 @@ class FlightController extends Controller
     public function creer_flight(Request $request)
 {
     try {
-        // ✅ Log the incoming request for debugging
+        
         Log::info('Create flight request data:', $request->all());
 
-        // ✅ Validate the request
+        
         $validated = $request->validate([
             'origin'        => 'required|string',
             'destination'   => 'required|string|different:origin',
@@ -85,14 +83,14 @@ class FlightController extends Controller
         ], 201);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
-        // Return validation errors
+        
         Log::warning('Validation failed for flight creation', ['errors' => $e->errors()]);
         return response()->json([
             'message' => 'Validation error',
             'errors' => $e->errors()
         ], 422);
     } catch (\Exception $e) {
-        // Catch all other errors (DB connection, foreign key, etc.)
+        
         Log::error('Flight creation failed', ['exception' => $e->getMessage()]);
         return response()->json([
             'message' => 'Failed to create flight',
@@ -105,20 +103,19 @@ class FlightController extends Controller
 
 public function delete_flight($id)
 {
-    // 1. Look for the flight
+    // chercher le flight
     $flight = Flight::find($id);
 
-    // 2. If it does not exist
+    // si il n'exist pas
     if (!$flight) {
         return response()->json([
             'message' => 'Flight not found'
         ], 404);
     }
 
-    // 3. Delete the flight
-    $flight->delete();
+    // supprimer le flight
 
-    // 4. Return a success response
+    // JSON response
     return response()->json([
         'message' => 'Flight deleted successfully'
     ], 200);
@@ -126,10 +123,10 @@ public function delete_flight($id)
 
 
 
-        //the flights selecting page
+        //partie de selectio du flight par le client
 public function searchFlights(Request $request)
 {
-    // Validate the request
+    
     $request->validate([
         'coming_from'    => 'required|string',
         'going_to'       => 'required|string|different:coming_from',
@@ -138,7 +135,7 @@ public function searchFlights(Request $request)
         'class'          => 'required|in:business,economy',
     ]);
 
-    // Assign validated values to local variables
+    
     $coming_from   = $request->coming_from;
     $going_to      = $request->going_to;
     $check_in      = $request->check_in;
@@ -165,7 +162,7 @@ public function searchFlights(Request $request)
         ], 404);  
     }
 
-    // Return the filtered flights
+    // JSON response of the flights list 
     return response()->json([
         'flights' => $flights
     ]);

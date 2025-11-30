@@ -18,12 +18,12 @@ class Ticket extends Model
         'classe',
         
     ];
-
+    // tickets --- passengers
     public function passenger()
     {
         return $this->hasOne(Passenger::class, 'ticket_serial_number', 'ticket_serial_number');
     }
-
+    // tickets --- flights
     public function flight()
     {
         return $this->belongsTo(Flight::class, 'Flight_ID', 'ID_flight');

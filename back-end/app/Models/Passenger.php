@@ -21,7 +21,7 @@ class Passenger extends Model
         'Numero_place',
     ];
 
-    // Relationships
+    // Relations
     public function reservation()
     {
         return $this->belongsTo(Reservation::class, 'reservation_ID', 'reservation_ID');
@@ -38,7 +38,7 @@ class Passenger extends Model
     }
 
 
-    //methode retourn le type d'un passager
+    //savoir le type d'un passager
     public function type(): string
     {
         return $this->type; 
@@ -48,7 +48,7 @@ class Passenger extends Model
 
     public function calculer_prix(): float
 {
-    // Make sure the ticket and flight exist
+    // savoir si le ticket exist
     if (!$this->ticket || !$this->ticket->flight) {
         return 0.0;
     }
@@ -56,17 +56,16 @@ class Passenger extends Model
     $basePrice = (float) $this->ticket->flight->price;
     $finalPrice = $basePrice;
 
-    // 
     
 
-        // Extra depending on ticket class
+        // calculons les offres en se basant sur les classes reserve
         if ($this->ticket->classe === 'business' && $this->type === 'adult') {
             $finalPrice += $finalPrice * 0.15;
         } elseif ($this->ticket->classe === 'economy' && $this->type === 'adult') {
             $finalPrice += $finalPrice * 0.05;
         }
         else {
-        // Children always pay base price
+        // children pay le prix du vol
         $finalPrice = $basePrice;
     }
 

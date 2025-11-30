@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Ticket;
 class ReservationController extends Controller
 {
+    //collection de donnes du client dans la page Acceuil
     public function store_reservation(Request $request)
 {
     $validated = $request->validate([
@@ -29,7 +30,7 @@ class ReservationController extends Controller
         'reservation' => $reservation
     ], 201);
 }
-
+    //completer la ligne de la reservation par le choix du client du vol
 public function choisir_Flight(Request $request, $reservation_id)
 {
     $request->validate([
@@ -47,7 +48,7 @@ public function choisir_Flight(Request $request, $reservation_id)
 }
 
 
-
+    //la page suivante affichant les informations du vol et la classe choisi par le client
 public function getFlightDetails($reservationId)
 {
     // Find the reservation
@@ -78,6 +79,7 @@ public function getFlightDetails($reservationId)
     ]);
 }
 
+    //completer la derniere case de la ligne de la reservation par l'email du client
 public function updateEmail(Request $request, $reservation_ID)
 {
     $request->validate([
@@ -94,7 +96,7 @@ public function updateEmail(Request $request, $reservation_ID)
     ]);
 }
 
-
+    //la page de la confirmation
 public function getConfirmationData($reservationId)
 {
     $reservation = Reservation::find($reservationId);
@@ -117,6 +119,7 @@ public function getConfirmationData($reservationId)
 
 public function Manage_your_booking_login(Request $request)
 {
+    //validation des inputs
     $request->validate([
         'email'          => 'required|email',
         'reservation_ID' => 'required|integer',
@@ -138,7 +141,7 @@ public function Manage_your_booking_login(Request $request)
     ], 200);
 }
 
-
+    //afficher les tickets de chaque passager
 public function getTickets($reservation_ID)
 {
     // Retrieve the reservation along with its tickets, passengers, and flight
@@ -186,7 +189,7 @@ public function getTickets($reservation_ID)
     ]);
 }
 
-
+    //modification d'un passager
 public function updatePassengerInfo(Request $request, $ticketSerial)
 {
     // Validate input

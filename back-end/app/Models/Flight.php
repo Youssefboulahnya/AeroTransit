@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flight extends Model
 {
-    // Specify the primary key if it's not the default 'id'
+    // cle primaire
     protected $primaryKey = 'ID_flight';
 
-    // The attributes that are mass assignable
+    // les attributs
     protected $fillable = [
         'origin',
         'destination',
@@ -22,8 +22,8 @@ class Flight extends Model
         
     ];
 
-    // If you don't want Laravel to auto-manage timestamps (created_at, updated_at)
-    public $timestamps = true; // or false if you don't have those columns
+   
+    public $timestamps = true; 
 
      protected $appends = ['seats'];
 
@@ -36,16 +36,14 @@ class Flight extends Model
 
     public function places_disponible(): int
     {
-        $reserved = $this->reservations()->sum('passenger_nbr'); // sum of all passengers already reserved
+        $reserved = $this->reservations()->sum('passenger_nbr'); 
         return $this->places_total() - $reserved;
     }
 
     public function places_disponible_par_classe(string $class): int
 {
-    // Number of passengers already reserved in this class
-    $reserved = $this->reservations()
-                     ->where('class', strtolower($class))
-                     ->sum('passenger_nbr');
+    // nombre des passageres dans cette classe
+    $reserved = $this->reservations()->where('class', strtolower($class))->sum('passenger_nbr');
 
     if (strtolower($class) === 'business') {
         return $this->places_business_classe - $reserved;
@@ -55,20 +53,20 @@ class Flight extends Model
         return $this->places_business_economy - $reserved;
     }
 
-    // If class string is wrong, return 0
-
 
     
     return 0;
 }
 
 
-//relation flights --- reservations
+// flights --- reservations
 
 public function reservations()
 {
     return $this->hasMany(\App\Models\Reservation::class, 'ID_flight', 'ID_flight');
 }
+
+
 
 
 

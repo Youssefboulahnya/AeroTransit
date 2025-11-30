@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Admin extends Model
 {
-    use HasFactory; // <--- ADD THIS
+    use HasFactory; 
     
 
     protected $table = 'admins';
 
-    // Tell Laravel the primary key is ID_admin
+    // cle primaire 
     protected $primaryKey = 'ID_admin';
 
     protected $fillable = [
@@ -20,6 +20,6 @@ class Admin extends Model
         'password',
     ];
 
-    // Disable timestamps if you don't have created_at / updated_at
+    
     public $timestamps = false;
 }
